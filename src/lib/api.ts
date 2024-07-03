@@ -3,23 +3,13 @@ import fs from "fs";
 import matter from "gray-matter";
 import {join} from "path";
 
-const postsDirectory = join(process.cwd(), "_posts");
+const postsDirectory = join(process.cwd(), "posts");
 
-function getPostSlugs(dir: string = postsDirectory, slugs: string[] = []): string[] {
-  const entries = fs.readdirSync(dir, { withFileTypes: true });
-
-  for (const entry of entries) {
-    const fullPath = join(dir, entry.name);
-    if (entry.isDirectory()) {
-      getPostSlugs(fullPath, slugs);
-    } else if (entry.isFile() && entry.name.endsWith('.md') && !entry.name.startsWith('.')) {
-      const relativePath = fullPath.replace(`${postsDirectory}/`, '');
-      slugs.push(relativePath);
-    }
-  }
-  // return fs.readdirSync(postsDirectory);
-  return slugs;
+// mdファイルを全探索
+export function getPostSlugs(){
+  return fs.readdirSync(postsDirectory, { recursive: true, encoding: "utf8" }).filter(file => file.endsWith('.md'));
 }
+
 export function getPostBySlug(slug: string) {
   const realSlug = slug.replace(/\.md$/, "");
   const fullPath = join(postsDirectory, `${realSlug}.md`);
@@ -27,6 +17,19 @@ export function getPostBySlug(slug: string) {
   const { data, content } = matter(fileContents);
 
   return { ...data, slug: realSlug, content } as Post;
+}
+
+export function getPostById(id: string){
+  const slugs = getPostSlugs();
+  const slug = slugs.find(slug => slug.endsWith(`${id}.md`))
+  if(!slug){
+    throw new Error(`No post with id ${id} found.`);
+  }
+  const fullPath = join(postsDirectory, slug);
+  const fileContents = fs.readFileSync(fullPath, "utf8");
+  const { data, content } = matter(fileContents);
+
+  return { ...data, slug: slug.replace(/\.md$/, ""), content } as Post;
 }
 
 export function getAllPosts(): Post[] {

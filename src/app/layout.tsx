@@ -6,6 +6,7 @@ import cn from "classnames";
 import { ThemeSwitcher } from "./_components/theme-switcher";
 
 import "./globals.css";
+import React from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
