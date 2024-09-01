@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  web:
+    container_name: web
+    image: node:18-alpine
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - '3004:3000'
+    tty: true
+    environment:
+      NODE_ENV: development
+    command: sh -c "yarn install && yarn dev"

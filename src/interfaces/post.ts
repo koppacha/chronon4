@@ -1,6 +1,9 @@
 import { type Author } from "./author";
 
 export type Post = {
+  id: string;
+  tags: any;
+  categories: any;
   number: string;
   slug: string;
   title: string;

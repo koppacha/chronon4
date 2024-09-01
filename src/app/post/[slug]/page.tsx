@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import {getAllPosts, getPostById, getPostBySlug} from "@/lib/api";
+import {getAllPosts, getPostById, getPostBySlug, getPostsByDateRange} from "@/lib/api";
 import { CMS_NAME } from "@/lib/constants";
 import markdownToHtml from "@/lib/markdownToHtml";
 import Alert from "@/app/_components/alert";
@@ -8,8 +8,9 @@ import Container from "@/app/_components/container";
 import Header from "@/app/_components/header";
 import { PostBody } from "@/app/_components/post-body";
 import { PostHeader } from "@/app/_components/post-header";
-import fs from "fs";
 import Link from "next/link";
+import {hidden} from "next/dist/lib/picocolors";
+import RelatedList from "@/app/_components/related-list";
 
 export default async function Post({ params }: Params) {
 
@@ -23,28 +24,37 @@ export default async function Post({ params }: Params) {
   const next = zeroPad(Number(params.slug) + 1)
   const prev = zeroPad(Number(params.slug) - 1)
 
-  if (!post) {
-    return notFound();
+  const hiddenFlg = (post.tags?.includes("準非公開の記事") || (Number(params.slug) < 6955))
+
+  if (!post || hiddenFlg) {
+    return notFound()
   }
 
   const content = await markdownToHtml(post.content || "");
 
+  // @ts-ignore
   return (
     <main>
       <Container>
         <Header />
-        <article className="mb-32 max-w-2xl mx-auto">
+        <article className="article">
           <PostHeader
-            id={post.number}
+            id={post.slug}
             title={post.title}
             coverImage={post.coverImage}
             date={post.date}
             author={post.author}
+            tags={post.tags}
+            categories={post.categories}
           />
-          <PostBody content={content} />
+          <PostBody content={content} date={post.date} />
         </article>
-        <Link href={`/posts/${next}`}>Next</Link>
-        <Link href={`/posts/${prev}`}>Prev</Link>
+        <div className="grid-container">
+          <div className="grid-item"><Link href={`/post/${prev}`}>前の記事へ</Link></div>
+          <div className="grid-item"><Link href={`/post/${next}`}>次の記事へ</Link></div>
+        </div>
+        <br style={{ clear: "both" }}/>
+        <RelatedList slug={params.slug}/>
       </Container>
     </main>
   );
