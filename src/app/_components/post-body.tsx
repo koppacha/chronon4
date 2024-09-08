@@ -48,7 +48,7 @@ export function PostBody({ content, date }: Props) {
         <div className="content-body">
             <div
                 className={markdownStyles["markdown"]}
-                dangerouslySetInnerHTML={{ __html: processedContent }}
+                dangerouslySetInnerHTML={{ __html: processedContent.replace(/\n/g, "<br />") }}
             />
         </div>
     );

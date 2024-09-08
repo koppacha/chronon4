@@ -2,27 +2,43 @@
 @import url('https://fonts.googleapis.com/css2?family=Hina+Mincho&family=Zen+Maru+Gothic:wght@300;400;500;700;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@300;400;500;700;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+Antique:wght@300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&display=swap');
 
 a {
-    text-decoration: underline 1px #626262;
-    text-underline-offset: 4px;
     color: #e7e7e7;
+    text-decoration: none;
 }
 body {
-    background-color: #464646;
+    background-color: #2c2c2c;
 }
 .container {
     margin: 0 auto;
     padding: 10px;
-    max-width: 1024px;
+    max-width: 1200px;
 }
 .content-body {
-    font-family: "BIZ UDPGothic", sans-serif;
-    line-height: 1.4;
+    font-family: "Zen Kaku Gothic New", sans-serif;
+    line-height: 1.5;
     letter-spacing: 1px;
-    text-indent: 1em;
     font-weight: 400;
-    color: #d3dadc;
+    color: #dde3e5;
+}
+@media (max-width: 1200px) {
+    .content-body {
+        text-indent: 1em;
+    }
+    .content-body br {
+        display: none;
+    }
+}
+.content-body a {
+    font-size: 0.9em;
+    text-decoration: underline 1px #626262;
+    text-underline-offset: 4px;
+    color: #e7e7e7;
+}
+.content-body p {
+    margin: 0;
 }
 .category-today {
     font-family: "Zen Maru Gothic", serif;
@@ -42,6 +58,7 @@ body {
     padding: 10px;
     font-size: 110%;
     color: #e7e7e7;
+    margin-bottom: 4em;
 }
 .post-header {
     font-weight: 500;
@@ -49,7 +66,7 @@ body {
 .post-title {
     line-height: 100%;
     font-size: 2.25em;
-    font-family: "Zen Maru Gothic", serif;
+    font-family: "Zen Kaku Gothic New", sans-serif;
     font-weight: 400;
     margin: 4px 0 12px 0;
 }
@@ -76,7 +93,7 @@ blockquote p {
     margin-bottom: 2em;
 }
 .tag-block {
-    background-color: #c2c2c2;
+    background-color: #d5d5d5;
     color: #333;
     padding: 2px 12px;
     margin-right: 12px;
@@ -84,7 +101,6 @@ blockquote p {
     font-size: 0.8em;
 }
 .post-block {
-    width: 100%;
     font-size: 0.9em;
     padding: 14px;
     border-bottom: 1px solid #505050;

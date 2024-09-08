@@ -17,12 +17,30 @@ export default async function Post({ params }: Params) {
   function zeroPad(num: number): string {
     return String(num).padStart(5, "0");
   }
+  function compareDate(postDate: string) :number {
+    // 現在の日付を取得し、時間情報を削除（00:00:00に設定）
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    // postDate も時間情報を削除（00:00:00に設定）
+    const targetDate = new Date(postDate)
+    targetDate.setHours(0, 0, 0, 0)
+
+    // 日付を比較
+    if (targetDate.getTime() === today.getTime()) {
+      return 0 // 当日
+    } else if (targetDate.getTime() > today.getTime()) {
+      return 1 // 明日以降
+    } else {
+      return -1 // 昨日以前
+    }
+  }
   // URLに基づき該当記事を取得
   const post = getPostById(params.slug)
 
   // 前後記事のURLを生成
-  const next = zeroPad(Number(params.slug) + 1)
-  const prev = zeroPad(Number(params.slug) - 1)
+  const next = <div className="grid-item"><Link href={`/post/${zeroPad(Number(params.slug) + 1)}`}>次の記事へ</Link></div>
+  const prev = <div className="grid-item"><Link href={`/post/${zeroPad(Number(params.slug) - 1)}`}>前の記事へ</Link></div>
 
   const hiddenFlg = (post.tags?.includes("準非公開の記事") || (Number(params.slug) < 6955))
 
@@ -50,8 +68,8 @@ export default async function Post({ params }: Params) {
           <PostBody content={content} date={post.date} />
         </article>
         <div className="grid-container">
-          <div className="grid-item"><Link href={`/post/${prev}`}>前の記事へ</Link></div>
-          <div className="grid-item"><Link href={`/post/${next}`}>次の記事へ</Link></div>
+          {(Number(params.slug) > 6955) && prev}
+          {compareDate(post.date) < 0 && next}
         </div>
         <br style={{ clear: "both" }}/>
         <RelatedList slug={params.slug}/>
