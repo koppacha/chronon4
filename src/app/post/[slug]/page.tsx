@@ -65,7 +65,9 @@ export default async function Post({ params }: Params) {
             tags={post.tags}
             categories={post.categories}
           />
-          <PostBody content={content} date={post.date} />
+          <p>
+            <PostBody content={content} date={post.date} />
+          </p>
         </article>
         <div className="grid-container">
           {(Number(params.slug) > 6955) && prev}

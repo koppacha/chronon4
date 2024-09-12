@@ -21,7 +21,7 @@ function convertLink(content: string, date: string): string {
 
     // 通常のリンクを変換
     content = content.replace(linkRegex, (match, year, month, day, id) => {
-        return `<a href="/post/${id}">#${id} | ${year}年${month}月${day}日</a>`;
+        return `<a href="/post/${id}">#${id} / ${year}年${month}月${day}日</a>`;
     });
 
     // 画像リンクを変換
@@ -30,8 +30,11 @@ function convertLink(content: string, date: string): string {
         const imagePath = path.join(imageDir, fileName);
         return `<img src="../blog/${imagePath}" width="${width}" alt="${fileName}" />`;
     });
+    // ２連改行をpに変換
+    content = content.replace(/\n\n/g, "</p><p>")
 
-    return content;
+    // 改行をbrに変換
+    return `<p>${content.replace(/\n/g, "<br/>")}</p>`;
 }
 
 export function PostBody({ content, date }: Props) {
@@ -48,7 +51,7 @@ export function PostBody({ content, date }: Props) {
         <div className="content-body">
             <div
                 className={markdownStyles["markdown"]}
-                dangerouslySetInnerHTML={{ __html: processedContent.replace(/\n/g, "<br />") }}
+                dangerouslySetInnerHTML={{ __html: processedContent }}
             />
         </div>
     );

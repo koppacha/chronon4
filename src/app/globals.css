@@ -23,14 +23,6 @@ body {
     font-weight: 400;
     color: #dde3e5;
 }
-@media (max-width: 1200px) {
-    .content-body {
-        text-indent: 1em;
-    }
-    .content-body br {
-        display: none;
-    }
-}
 .content-body a {
     font-size: 0.9em;
     text-decoration: underline 1px #626262;
@@ -39,6 +31,19 @@ body {
 }
 .content-body p {
     margin: 0;
+}
+@media (max-width: 1200px) {
+    .content-body {
+        text-indent: 1em;
+        font-size: 0.75em;
+        letter-spacing: 0;
+    }
+    .content-body br {
+        display: none;
+    }
+    .content-body p {
+        margin: 1em 0;
+    }
 }
 .category-today {
     font-family: "Zen Maru Gothic", serif;
