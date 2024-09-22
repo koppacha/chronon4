@@ -4,14 +4,13 @@ import { Intro } from "@/app/_components/intro";
 import { MoreStories } from "@/app/_components/more-stories";
 import {getAllPosts, getRecentPostsById} from "@/lib/api";
 import {PostHeader} from "@/app/_components/post-header";
-import {PostBody} from "@/app/_components/post-body";
+import PostBody from "@/app/_components/post-body";
 
 export default function Index() {
 
     function RenderRecentPosts() {
         // 最新の7つの投稿を取得
         const posts = getRecentPostsById();
-
         return (
             <div>
                 {posts.map((post) => (

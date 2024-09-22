@@ -9,7 +9,7 @@ type Props = {
     date: string;
 };
 
-function convertLink(content: string, date: string): string {
+function convertContent(content: string, date: string): string {
     // リンク形式にマッチする正規表現
     const linkRegex = /\[\[(\d{4})-(\d{2})-(\d{2})-(\d{5})]]/g;
 
@@ -37,13 +37,13 @@ function convertLink(content: string, date: string): string {
     return `<p>${content.replace(/\n/g, "<br/>")}</p>`;
 }
 
-export function PostBody({ content, date }: Props) {
+export default function PostBody({ content, date }: Props) {
 
     const dateObj = new Date(date);
     const [processedContent, setProcessedContent] = useState("");
 
     useEffect(() => {
-        const newContent = convertLink(content, dateObj.toISOString().split('T')[0]);
+        const newContent = convertContent(content, dateObj.toISOString().split('T')[0]);
         setProcessedContent(newContent);
     }, [content]);
 

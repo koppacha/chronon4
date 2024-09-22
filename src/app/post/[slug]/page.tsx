@@ -6,11 +6,13 @@ import markdownToHtml from "@/lib/markdownToHtml";
 import Alert from "@/app/_components/alert";
 import Container from "@/app/_components/container";
 import Header from "@/app/_components/header";
-import { PostBody } from "@/app/_components/post-body";
+import PostBody from "@/app/_components/post-body";
 import { PostHeader } from "@/app/_components/post-header";
 import Link from "next/link";
 import {hidden} from "next/dist/lib/picocolors";
 import RelatedList from "@/app/_components/related-list";
+import TagList from "@/app/_components/tag-list";
+import ToggleLists from "@/app/_components/toggle-list";
 
 export default async function Post({ params }: Params) {
 
@@ -50,31 +52,28 @@ export default async function Post({ params }: Params) {
 
   const content = await markdownToHtml(post.content || "");
 
-  // @ts-ignore
   return (
-    <main>
-      <Container>
-        <Header />
-        <article className="article">
-          <PostHeader
-            id={post.slug}
-            title={post.title}
-            coverImage={post.coverImage}
-            date={post.date}
-            author={post.author}
-            tags={post.tags}
-            categories={post.categories}
-          />
-          <p>
-            <PostBody content={content} date={post.date} />
-          </p>
-        </article>
-        <div className="grid-container">
-          {(Number(params.slug) > 6955) && prev}
-          {compareDate(post.date) < 0 && next}
+      <main>
+        <Container>
+          <Header/>
+          <article className="article">
+            <PostHeader
+                id={post.slug}
+                title={post.title}
+                coverImage={post.coverImage}
+                date={post.date}
+                author={post.author}
+                tags={post.tags}
+                categories={post.categories}
+            />
+            <PostBody content={content} date={post.date}/>
+          </article>
+          <div className="grid-container">
+            {(Number(params.slug) > 6955) && prev}
+            {compareDate(post.date) < 0 && next}
         </div>
         <br style={{ clear: "both" }}/>
-        <RelatedList slug={params.slug}/>
+        <ToggleLists slug={params.slug} post={post}/>
       </Container>
     </main>
   );

@@ -75,3 +75,16 @@ export function getPostsByDateRange(startDate: string, endDate: string): Post[] 
       // 日付順にソート (降順)
       .sort((post1, post2) => (new Date(post1.date) > new Date(post2.date) ? -1 : 1));
 }
+export function getRecentPostsByTag(tag: string, n: number): Post[] {
+    const slugs = getPostSlugs();
+
+    // タグに基づいてフィルタリングし、メタ情報を取得する
+    const filteredPosts = slugs
+        .map(slug => getPostBySlug(slug))
+        .filter(post => post.tags && post.tags.includes(tag)) // tagsに該当するものをフィルタ
+        // 日付順にソート (降順)
+        .sort((post1, post2) => (new Date(post1.date) > new Date(post2.date) ? -1 : 1));
+
+    // 上位n件を返す
+    return filteredPosts.slice(0, n);
+}
