@@ -5,6 +5,7 @@ import { MoreStories } from "@/app/_components/more-stories";
 import {getAllPosts, getRecentPostsById} from "@/lib/api";
 import {PostHeader} from "@/app/_components/post-header";
 import PostBody from "@/app/_components/post-body";
+import markdownToHtml from "@/lib/markdownToHtml";
 
 export default function Index() {
 
@@ -13,7 +14,7 @@ export default function Index() {
         const posts = getRecentPostsById();
         return (
             <div>
-                {posts.map((post) => (
+                {posts.map(async (post) => (
                     <article key={post.id} className="article">
                         <PostHeader
                             id={post.slug}
@@ -24,7 +25,7 @@ export default function Index() {
                             tags={post.tags}
                             categories={post.categories}
                         />
-                        <PostBody content={post.content} date={post.date} />
+                        <PostBody content={await markdownToHtml(post.content || "")} date={post.date}/>
                     </article>
                 ))}
             </div>

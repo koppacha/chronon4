@@ -37,10 +37,15 @@ const TagList: React.FC<Props> = ({ tag }) => {
     return (
         <div>
             {posts.map((post) => (
-                <div key={post.id} className="post-block">
-                    <Link href={`/post/${String(post.id).padStart(5, "0")}`}>#{post.id}『{post.title}』（{post.date}）</Link><br/>
-                    <span className="tag-block">{post.tags.join(',')}</span> <span className="tag-block">{post.categories.join(', ')}</span>
-                </div>
+                <Link href={`/post/${String(post.id).padStart(5, "0")}`}>
+                    <div key={post.id} className="post-block">
+                        #{post.id}『{post.title}』（{post.date}）<br/>
+                        {post.tags.map((tag:string, index:number) => (
+                            <span key={index} className="tag-block">{tag}</span>
+                        ))}
+                        <span className="tag-block">{post.categories.join(', ')}</span>
+                    </div>
+                </Link>
                 ))}
         </div>
     );

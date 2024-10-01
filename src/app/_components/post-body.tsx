@@ -34,24 +34,19 @@ function convertContent(content: string, date: string): string {
     content = content.replace(/\n\n/g, "</p><p>")
 
     // 改行をbrに変換
-    return `<p>${content.replace(/\n/g, "<br/>")}</p>`;
+    return `<p>${content.replace(/(?<!<\/?(li|ol)>)\n/g, "<br/>")}</p>`;
 }
 
 export default function PostBody({ content, date }: Props) {
 
     const dateObj = new Date(date);
-    const [processedContent, setProcessedContent] = useState("");
-
-    useEffect(() => {
-        const newContent = convertContent(content, dateObj.toISOString().split('T')[0]);
-        setProcessedContent(newContent);
-    }, [content]);
+    const newContent = convertContent(content, dateObj.toISOString().split('T')[0]);
 
     return (
         <div className="content-body">
             <div
                 className={markdownStyles["markdown"]}
-                dangerouslySetInnerHTML={{ __html: processedContent }}
+                dangerouslySetInnerHTML={{ __html: newContent }}
             />
         </div>
     );
