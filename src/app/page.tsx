@@ -1,17 +1,25 @@
-import Container from "@/app/_components/container";
-import { HeroPost } from "@/app/_components/hero-post";
-import { Intro } from "@/app/_components/intro";
-import { MoreStories } from "@/app/_components/more-stories";
+import Container from "@/components/container";
+import { HeroPost } from "@/components/hero-post";
+import { Intro } from "@/components/intro";
+import { MoreStories } from "@/components/more-stories";
 import {getAllPosts, getRecentPostsById} from "@/lib/api";
-import {PostHeader} from "@/app/_components/post-header";
-import PostBody from "@/app/_components/post-body";
+import {PostHeader} from "@/components/post-header";
+import PostBody from "@/components/post-body";
 import markdownToHtml from "@/lib/markdownToHtml";
+import RelatedList from "@/components/related-list";
+import SideMenu from "@/components/side-menu";
+import {Box} from "@mui/material";
+import {Grid} from "@mui/system";
+import {headers} from "next/headers";
 
 export default function Index() {
 
-    function RenderRecentPosts() {
-        // 最新の7つの投稿を取得
-        const posts = getRecentPostsById();
+    async function RenderRecentPosts() {
+        // TODO: BaseUrlを指定しないと取得できない
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+        const res = await fetch(`${baseUrl}/api/recent`);
+        const posts = await res.json();
+
         return (
             <div>
                 {posts.map(async (post) => (
@@ -33,11 +41,16 @@ export default function Index() {
     }
 
     return (
-    <main>
-      <Container>
-        <Intro />
-        <RenderRecentPosts />
-      </Container>
-    </main>
+        <main>
+            <Box sx={{ display: "flex" }}>
+                {/* サイドメニュー */}
+                <SideMenu />
+                {/* コンテンツエリア */}
+                <Container>
+                    <Intro/>
+                    <RenderRecentPosts/>
+                </Container>
+            </Box>
+        </main>
     );
 }

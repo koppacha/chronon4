@@ -3,16 +3,16 @@ import { notFound } from "next/navigation";
 import {getAllPosts, getPostById, getPostBySlug, getPostsByDateRange} from "@/lib/api";
 import { CMS_NAME } from "@/lib/constants";
 import markdownToHtml from "@/lib/markdownToHtml";
-import Alert from "@/app/_components/alert";
-import Container from "@/app/_components/container";
-import Header from "@/app/_components/header";
-import PostBody from "@/app/_components/post-body";
-import { PostHeader } from "@/app/_components/post-header";
+import Alert from "@/components/alert";
+import Container from "@/components/container";
+import Header from "@/components/header";
+import PostBody from "@/components/post-body";
+import { PostHeader } from "@/components/post-header";
 import Link from "next/link";
 import {hidden} from "next/dist/lib/picocolors";
-import RelatedList from "@/app/_components/related-list";
-import TagList from "@/app/_components/tag-list";
-import ToggleLists from "@/app/_components/toggle-list";
+import RelatedList from "@/components/related-list";
+import TagList from "@/components/tag-list";
+import ToggleLists from "@/components/toggle-list";
 
 export default async function Post({ params }: Params) {
 

@@ -1,6 +1,6 @@
 "use client";
 
-import Footer from "@/app/_components/footer";
+import Footer from "@/components/footer";
 import { Inter } from "next/font/google";
 import cn from "classnames";
 import Script from "next/script";
@@ -9,6 +9,7 @@ import * as gtag from "../lib/gtag";
 import "./globals.css";
 import {usePathname, useRouter} from "next/navigation";
 import {useEffect} from "react";
+import SideMenu from "@/components/side-menu";
 
 const inter = Inter({ subsets: ["latin"] });
 

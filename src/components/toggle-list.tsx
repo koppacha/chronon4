@@ -1,5 +1,5 @@
-import RelatedList from "@/app/_components/related-list";
-import TagList from "@/app/_components/tag-list";
+import RelatedList from "@/components/related-list";
+import TagList from "@/components/tag-list";
 
 export default function ToggleLists({slug, post}){
     return (

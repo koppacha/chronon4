@@ -1,5 +1,5 @@
 import React from 'react';
-import {getPostById, getPostsByDateRange} from "@/lib/api";
+import {getRecentPostsByTag} from "@/lib/api";
 import Link from "next/link";
 
 type Post = {
@@ -11,30 +11,18 @@ type Post = {
 };
 
 type Props = {
-    slug: string;
+    tag: string;
 };
 
-const RelatedList: React.FC<Props> = ({ slug }) => {
+const TagList: React.FC<Props> = ({ tag }) => {
 
-    const post = getPostById(slug);
-    const postDateObj = new Date(post.date);
+    if(!tag) return <div></div>
 
-    // 90日前と90日後の日付を計算
-    const startDate = new Date(postDateObj);
-    startDate.setDate(postDateObj.getDate() - 28);
-
-    const endDate = new Date(postDateObj);
-    endDate.setDate(postDateObj.getDate() + 28);
-
-    // 日付オブジェクトをISO文字列（yyyy-mm-dd）に変換
-    const startDateString = startDate.toISOString().split('T')[0];
-    const endDateString = endDate.toISOString().split('T')[0];
-
-    // 記事を取得（2004/08/31以前と未来の日付を除外）
-    const posts = getPostsByDateRange(startDateString, endDateString)
+    // 記事を取得
+    const posts = getRecentPostsByTag(tag, 10)
         .filter((post: { date: string | number | Date; }) => {
             const postDate = new Date(post.date);
-            const minDate = new Date('2023-01-01'); // 2004/08/31以前を除外するための最小日付
+            const minDate = new Date('2004-09-01'); // 2004/08/31以前を除外するための最小日付
             const maxDate = new Date(); // 現在の日付を最大日付とする
             return postDate >= minDate && postDate <= maxDate;
         })
@@ -45,13 +33,12 @@ const RelatedList: React.FC<Props> = ({ slug }) => {
             tags: post.tags || [],
             categories: post.categories || [],
         }))
-        .sort((a: { id: number; }, b: { id: number; }) => a.id - b.id); // IDの昇順にソート
 
     return (
         <div>
             {posts.map((post) => (
                 <Link href={`/post/${String(post.id).padStart(5, "0")}`}>
-                    <div key={post.id} className={(post.id === Number(slug)) ? "post-block post-block-current" : "post-block"}>
+                    <div key={post.id} className="post-block">
                         #{post.id}『{post.title}』（{post.date}）<br/>
                         {post.tags.map((tag:string, index:number) => (
                             <span key={index} className="tag-block">{tag}</span>
@@ -64,4 +51,4 @@ const RelatedList: React.FC<Props> = ({ slug }) => {
     );
 };
 
-export default RelatedList;
+export default TagList;
