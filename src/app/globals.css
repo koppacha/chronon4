@@ -3,6 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@300;400;500;700;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+Antique:wght@300;400;500;700;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho&display=swap');
 
 a {
     color: #e7e7e7;
@@ -11,15 +12,20 @@ a {
 ol {
     margin-top: 0;
 }
+h3 {
+    color: #e7e7e7;
+}
 body {
     background-color: #2c2c2c;
+    font-family: "Zen Kaku Gothic New", sans-serif;
 }
 .container {
     margin: 0 auto;
     padding: 10px;
-    max-width: 1000px;
-    border-left: 1px solid #333333;
-    border-right: 1px solid #333333;
+    width: 1536px;
+    @media (max-width: 1535px) {
+        width: 100%;
+    }
 }
 .content-body {
     font-family: "Zen Kaku Gothic New", sans-serif;
@@ -55,10 +61,14 @@ body {
     font-weight: 400;
 }
 .category-monologue {
-    font-family: "Hina Mincho", serif;
-    font-weight: 300;
+    font-family: "Zen Kaku Gothic New", sans-serif;
+    font-weight: 400;
+}
+.info-title {
+    color: #e7e7e7;
 }
 .info-container {
+    color: #e7e7e7;
     margin: 20px;
     padding: 20px;
     border-radius: 10px;
@@ -67,11 +77,29 @@ body {
         font-size: 0.9em;
     }
 }
+.post-list {
+    list-style: none;
+    font-size: 90%;
+    width: 100%;
+    margin-left: 10px;
+    line-height: 1.5em;
+    border-bottom: 1px solid #c0c0c0;
+    margin-bottom: 7px;
+    padding-bottom: 14px;
+
+    span {
+        font-size: 90%;
+        color: #cbcbcb;
+    }
+}
 .article {
-    padding: 10px;
+    padding: 20px;
     font-size: 110%;
     color: #e7e7e7;
-    margin-bottom: 4em;
+    margin: 0 20px 4em 20px;
+    @media (max-width: 1535px) {
+        padding: 2px;
+    }
 }
 .post-header {
     font-weight: 500;
@@ -109,9 +137,10 @@ blockquote p {
     margin-bottom: 2em;
 }
 .tag-block {
+    font-family: "Zen Maru Gothic", sans-serif;
     background-color: #d5d5d5;
-    color: #444;
-    padding: 6px 9px;
+    color: #444 !important;
+    padding: 3px 9px;
     margin-right: 12px;
     border-radius: 5px;
     font-size: 0.8em;

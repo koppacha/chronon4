@@ -1,39 +1,35 @@
 import Container from "@/components/container";
-import { HeroPost } from "@/components/hero-post";
 import { Intro } from "@/components/intro";
-import { MoreStories } from "@/components/more-stories";
-import {getAllPosts, getRecentPostsById} from "@/lib/api";
 import {PostHeader} from "@/components/post-header";
 import PostBody from "@/components/post-body";
 import markdownToHtml from "@/lib/markdownToHtml";
-import RelatedList from "@/components/related-list";
 import SideMenu from "@/components/side-menu";
-import {Box} from "@mui/material";
-import {Grid} from "@mui/system";
-import {headers} from "next/headers";
+import {Box, Grid} from "@mui/material";
+import {baseUrl} from "@/lib/const";
+import {id2slug} from "@/lib/chronon4";
 
 export default function Index() {
 
     async function RenderRecentPosts() {
-        // TODO: BaseUrlを指定しないと取得できない
-        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-        const res = await fetch(`${baseUrl}/api/recent`);
-        const posts = await res.json();
-
+        const res = await fetch(`${baseUrl}/api/recent`)
+        if(!res.ok){
+            return <div>Failed to load</div>
+        }
+        const posts = await res.json()
         return (
             <div>
-                {posts.map(async (post) => (
+                {posts?.map(async (post:any) => (
                     <article key={post.id} className="article">
                         <PostHeader
-                            id={post.slug}
+                            id={post.id}
                             title={post.title}
                             coverImage={post.coverImage}
                             date={post.date}
                             author={post.author}
                             tags={post.tags}
-                            categories={post.categories}
+                            categories={post.category}
                         />
-                        <PostBody content={await markdownToHtml(post.content || "")} date={post.date}/>
+                        <PostBody category={post.category} content={await markdownToHtml(post.content || "")} date={post.date}/>
                     </article>
                 ))}
             </div>
@@ -41,16 +37,20 @@ export default function Index() {
     }
 
     return (
-        <main>
-            <Box sx={{ display: "flex" }}>
-                {/* サイドメニュー */}
-                <SideMenu />
-                {/* コンテンツエリア */}
-                <Container>
-                    <Intro/>
-                    <RenderRecentPosts/>
-                </Container>
-            </Box>
-        </main>
+        <>
+            <Container maxWidth="xl">
+                <Grid container>
+                    <Grid item xs={12}>
+                        <Intro/>
+                    </Grid>
+                    <Grid item xs={12} md={9} sx={{ order: { xs: 2, md: 1 } }}>
+                        <RenderRecentPosts/>
+                    </Grid>
+                    <Grid item xs={12} md={3} sx={{ order: { xs: 3, md: 2 } }}>
+                        <SideMenu />
+                    </Grid>
+                </Grid>
+            </Container>
+        </>
     );
 }

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { join } from "path";
 import fs from "fs";
 import matter from "gray-matter";
@@ -6,13 +6,9 @@ import matter from "gray-matter";
 // 現在のファイルのディレクトリを基準に posts のパスを設定
 const postsDirectory = join(process.cwd(), "blog");
 
-export async function GET(
-    request: Request,
-    { params }: { params: { slug: string } }
-) {
+export async function GET(request: NextRequest, { params }: {params: Promise<{ slug: string }> }): Promise<NextResponse> {
     try {
-        const { slug } = params;
-        console.log(slug)
+        const { slug } = await params;
         const realSlug = slug.replace(/\.md$/, "");
         const year = slug.split("-")[0];
         const month = slug.split("-")[1];
@@ -20,7 +16,7 @@ export async function GET(
 
         // ファイルが存在するか確認
         if (!fs.existsSync(fullPath)) {
-            return NextResponse.json({ error: `Post not found: ${fullPath}` }, { status: 404 });
+            return NextResponse.json({ error: `Post not found: ${slug}` }, { status: 404 });
         }
 
         // ファイル内容を読み込む

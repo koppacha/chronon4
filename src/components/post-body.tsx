@@ -1,10 +1,8 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import markdownStyles from "./markdown-styles.module.css";
 import path from "path";
 
 type Props = {
+    category: string;
     content: string;
     date: string;
 };
@@ -37,13 +35,14 @@ function convertContent(content: string, date: string): string {
     return `<p>${content.replace(/(?<!<\/?(li|ol)>)\n/g, "<br/>")}</p>`;
 }
 
-export default function PostBody({ content, date }: Props) {
+export default function PostBody({ category, content, date }: Props) {
 
-    const dateObj = new Date(date);
+    const categoryStyle = (category === "独り言") ? "category-monologue" : "category-today";
+    const dateObj = new Date(date ?? "2004-09-01T00:00:00.000Z");
     const newContent = convertContent(content, dateObj.toISOString().split('T')[0]);
 
     return (
-        <div className="content-body">
+        <div className={`content-body ${categoryStyle}`}>
             <div
                 className={markdownStyles["markdown"]}
                 dangerouslySetInnerHTML={{ __html: newContent }}

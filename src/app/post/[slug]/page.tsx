@@ -1,112 +1,83 @@
-import { Metadata } from "next";
-import { notFound } from "next/navigation";
-import {getAllPosts, getPostById, getPostBySlug, getPostsByDateRange} from "@/lib/api";
-import { CMS_NAME } from "@/lib/constants";
 import markdownToHtml from "@/lib/markdownToHtml";
-import Alert from "@/components/alert";
 import Container from "@/components/container";
 import Header from "@/components/header";
 import PostBody from "@/components/post-body";
 import { PostHeader } from "@/components/post-header";
 import Link from "next/link";
-import {hidden} from "next/dist/lib/picocolors";
-import RelatedList from "@/components/related-list";
-import TagList from "@/components/tag-list";
 import ToggleLists from "@/components/toggle-list";
+import {baseUrl} from "@/lib/const";
+import {Grid} from "@mui/material";
+import SideMenu from "@/components/side-menu";
 
-export default async function Post({ params }: Params) {
+export const revalidate = 2592000;
 
-  function zeroPad(num: number): string {
-    return String(num).padStart(5, "0");
+export default async function Post({ params }: { params: Promise<{ slug: string }> }) {
+
+  // 記事を取得
+  const { slug } = await params;
+  const res = await fetch(`${baseUrl}/api/single?n=${slug}`, { next: { revalidate } });
+  if (!res.ok) {
+    return <>Not Found</>;
   }
-  function compareDate(postDate: string) :number {
-    // 現在の日付を取得し、時間情報を削除（00:00:00に設定）
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
+  const post = await res.json();
 
-    // postDate も時間情報を削除（00:00:00に設定）
-    const targetDate = new Date(postDate)
-    targetDate.setHours(0, 0, 0, 0)
-
-    // 日付を比較
-    if (targetDate.getTime() === today.getTime()) {
-      return 0 // 当日
-    } else if (targetDate.getTime() > today.getTime()) {
-      return 1 // 明日以降
-    } else {
-      return -1 // 昨日以前
-    }
-  }
-  // URLに基づき該当記事を取得
-  const post = getPostById(params.slug)
-
-  // 前後記事のURLを生成
-  const next = <div className="grid-item"><Link href={`/post/${zeroPad(Number(params.slug) + 1)}`}>次の記事へ</Link></div>
-  const prev = <div className="grid-item"><Link href={`/post/${zeroPad(Number(params.slug) - 1)}`}>前の記事へ</Link></div>
-
-  const hiddenFlg = (post.tags?.includes("準非公開の記事") || (Number(params.slug) < 6955))
-
-  if (!post || hiddenFlg) {
-    return notFound()
+  // 記事が存在しない or 非公開設定の場合は 404
+  const hiddenFlg = post.tags?.includes("準非公開の記事") || Number(slug) < 6955;
+  if (!res.ok) {
+    return <>Not Found</>;
   }
 
+  // Markdown を HTML に変換
   const content = await markdownToHtml(post.content || "");
 
-  return (
-      <main>
-        <Container>
-          <Header/>
-          <article className="article">
-            <PostHeader
-                id={post.slug}
-                title={post.title}
-                coverImage={post.coverImage}
-                date={post.date}
-                author={post.author}
-                tags={post.tags}
-                categories={post.categories}
-            />
-            <PostBody content={content} date={post.date}/>
-          </article>
-          <div className="grid-container">
-            {(Number(params.slug) > 6955) && prev}
-            {compareDate(post.date) < 0 && next}
-        </div>
-        <br style={{ clear: "both" }}/>
-        <ToggleLists slug={params.slug} post={post}/>
-      </Container>
-    </main>
+  // 前後記事のURLを生成
+  const zeroPad = (num: number) => String(num).padStart(5, "0");
+  const prev = Number(slug) > 6955 && (
+      <div className="grid-item">
+        <Link href={`/post/${zeroPad(Number(slug) - 1)}`}>前の記事へ</Link>
+      </div>
   );
-}
+  const next = new Date(post.date) < new Date() && (
+      <div className="grid-item">
+        <Link href={`/post/${zeroPad(Number(slug) + 1)}`}>次の記事へ</Link>
+      </div>
+  );
 
-type Params = {
-  params: {
-    slug: string;
-  };
-};
+  return (
+      <Container maxWidth="xl">
+        <Grid container sx={{ display: "flex" }}>
+          <Grid item xs={12}>
+            <Header />
+          </Grid>
+          <Grid item xs={12} md={9} sx={{ order: { xs: 2, md: 1 } }}>
+            <article className="article">
+              <PostHeader
+                  id={post.id}
+                  title={post.title}
+                  coverImage={post.coverImage}
+                  date={post.date}
+                  author={post.author}
+                  tags={post.tags}
+                  categories={post.category}
+              />
+              {
+                hiddenFlg ?
+                    <div>この記事は非公開に設定されています。</div> :
+                    <PostBody category={post.category[0]} content={content} date={post.date} />
+              }
+            </article>
+            <div className="grid-container">
+              {prev}
+              {next}
+            </div>
+            <br style={{ clear: "both" }} />
+            <ToggleLists slug={slug} post={post} />
+          </Grid>
+          <Grid item xs={12} md={3} sx={{ order: { xs: 3, md: 2 } }}>
+            <SideMenu />
+          </Grid>
 
-export function generateMetadata({ params }: Params): Metadata {
-  const post = getPostById(params.slug);
-
-  if (!post) {
-    return notFound();
-  }
-
-  const title = `${post.title} - Chrononglyph`;
-
-  return {
-    title,
-    openGraph: {
-      title,
-      images: "",
-    },
-  };
-}
-
-export async function generateStaticParams() {
-  const posts = getAllPosts();
-
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
+        </Grid>
+      </Container>
+  )
 }

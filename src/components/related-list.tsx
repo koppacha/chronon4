@@ -21,10 +21,10 @@ const RelatedList: React.FC<Props> = ({ slug }) => {
 
     // 90日前と90日後の日付を計算
     const startDate = new Date(postDateObj);
-    startDate.setDate(postDateObj.getDate() - 90);
+    startDate.setDate(postDateObj.getDate() - 5);
 
     const endDate = new Date(postDateObj);
-    endDate.setDate(postDateObj.getDate() + 90);
+    endDate.setDate(postDateObj.getDate() + 5);
 
     // 日付オブジェクトをISO文字列（yyyy-mm-dd）に変換
     const startDateString = startDate.toISOString().split('T')[0];

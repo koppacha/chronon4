@@ -5,11 +5,9 @@ import { Inter } from "next/font/google";
 import cn from "classnames";
 import Script from "next/script";
 import * as gtag from "../lib/gtag";
-
 import "./globals.css";
 import {usePathname, useRouter} from "next/navigation";
 import {useEffect} from "react";
-import SideMenu from "@/components/side-menu";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,11 +17,12 @@ export default function RootLayout({
   const pathname = usePathname();
 
   useEffect(() => {
-    gtag.pageView(pathname);
+      if(!pathname) return;
+      gtag.pageView(pathname);
   }, [pathname]);
 
   return (
-    <html lang="js">
+    <html lang="ja">
     <head>
         <Script strategy="afterInteractive"
                 src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_MEASUREMENT_ID}`}/>
@@ -71,11 +70,10 @@ export default function RootLayout({
         />
         <meta name="theme-color" content="#000"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Chrononglyph</title>
     </head>
-    <body
-        className={cn(inter.className, "dark:bg-slate-900 dark:text-slate-400")}
-      >
-        <div className="min-h-screen">{children}</div>
+    <body>
+        {children}
         <Footer />
       </body>
     </html>
