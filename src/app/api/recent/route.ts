@@ -4,6 +4,7 @@ import matter from "gray-matter";
 import {id2slug} from "@/lib/chronon4"; // mdファイルのメタデータを解析するために使用
 
 export async function GET(req: Request) {
+
     try {
         const { searchParams } = new URL(req.url);
         const nParam = searchParams.get("n");

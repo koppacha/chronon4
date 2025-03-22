@@ -20,25 +20,19 @@ export default function Index() {
 
         async function fetchPosts() {
             try {
-                console.log("Fetching posts..."); // 🔹 実行確認用ログ
-
                 const res = await fetch(`${baseUrl}/api/recent`, {
-                    cache: "no-store", // 🔹 キャッシュを無効化
+                    cache: "no-store",
                 });
 
                 if (!res.ok) {
                     const errorData = await res.json();
                     throw new Error(`Failed to fetch: ${res.status} ${res.statusText} - ${errorData.error}`);
                 }
-
                 const data = await res.json();
-                console.log("Fetched data:", data); // 🔹 API のレスポンスを確認
 
                 if (!Array.isArray(data) || data.length === 0) {
                     throw new Error("No posts found");
                 }
-
-                // 🔹 データが変更された場合のみ `setPosts` を実行
                 setPosts((prevPosts) => {
                     if (JSON.stringify(prevPosts) === JSON.stringify(data)) {
                         console.log("Data is the same, skipping update.");
