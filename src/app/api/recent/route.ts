@@ -3,13 +3,12 @@ import { getAllPostFiles, getPostContent } from "@/lib/posts";
 import matter from "gray-matter";
 import {id2slug} from "@/lib/chronon4"; // mdファイルのメタデータを解析するために使用
 
-export const dynamic = "force-dynamic";
-
 export async function GET(req: Request) {
     try {
         const { searchParams } = new URL(req.url);
         const nParam = searchParams.get("n");
         const mParam = searchParams.get("m");
+        const aParam = searchParams.get("a");
         const fParam = searchParams.get("f");
 
         // デフォルト値を設定
@@ -18,10 +17,21 @@ export async function GET(req: Request) {
 
         // 全記事を取得
         const allPosts = await getAllPostFiles();
+        if (!allPosts || allPosts.length === 0) {
+            return NextResponse.json({ error: "No posts found" }, { status: 404 });
+        }
+        const totalPosts = allPosts.length;
 
-        // オフセットと取得数をもとにスライス範囲を計算
-        const startIndex = allPosts.length - m - n; // 開始インデックス
-        const endIndex = allPosts.length - m; // 終了インデックス
+        // 開始インデックス
+        const a = aParam && parseInt(aParam, 10);
+        const startIndex = (a >= 1 && a <= totalPosts) ?
+            Math.max(a - m, 1) - 1 :
+            totalPosts - m - n;
+
+        // 終了インデックス
+        const endIndex = (a >= 1 && a <= totalPosts) ?
+            Math.min(a + n - m, totalPosts) :
+            totalPosts - m;
 
         // 範囲を適切に制限
         const validStartIndex = Math.max(startIndex, 0);
@@ -32,14 +42,20 @@ export async function GET(req: Request) {
             .slice(validStartIndex, validEndIndex)
             .reverse();
 
+        if (selectedPosts.length === 0) {
+            return NextResponse.json({ error: "No matching posts found" }, { status: 404 });
+        }
+
         // `f` パラメータで指定されたデータを抽出
-        const allowedFields = new Set(fParam ? fParam.split('') : []); // 指定されたフィールド
-        const includeField = (field: string) => allowedFields.has(field) || !fParam; // フィールドを含むかどうか
+        const allowedFields = new Set(fParam ? fParam.split('') : []);
+        const includeField = (field: string) => allowedFields.has(field) || !fParam;
 
         // 記事内容とメタデータの取得
         const postsData = await Promise.all(
             selectedPosts.map(async (fileName) => {
                 const content = await getPostContent(fileName);
+                if (!content) return null;
+
                 const { data, content: fileContent } = matter(content);
                 const { postId } = id2slug(fileName);
 
@@ -55,9 +71,17 @@ export async function GET(req: Request) {
                 return result;
             })
         );
-        return NextResponse.json(postsData, { status: 200 });
+
+        // null のデータを除外
+        const filteredPosts = postsData.filter((post) => post !== null);
+
+        if (filteredPosts.length === 0) {
+            return NextResponse.json({ error: "No valid posts found" }, { status: 404 });
+        }
+
+        return NextResponse.json(filteredPosts, { status: 200 });
     } catch (error) {
-        console.error(error);
+        console.error("API Error:", error);
         return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
     }
 }

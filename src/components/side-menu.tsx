@@ -1,16 +1,43 @@
-import React, {Key} from "react";
+"use client" // 🔹 クライアントコンポーネントにする
+
+import React, { Key, useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import {baseUrl} from "@/lib/const";
-import {Author} from "@/interfaces/author";
-import {PostHeader} from "@/components/post-header";
-import PostBody from "@/components/post-body";
-import markdownToHtml from "@/lib/markdownToHtml";
-import {id2slug} from "@/lib/chronon4";
+import { baseUrl } from "@/lib/const";
 
-const SideMenu: React.FC = async () => {
+type Props = {
+    slug: string;
+};
 
-    const res = await fetch(`${baseUrl}/api/recent?n=365&f=tdg`)
-    const posts = await res.json()
+const SideMenu: React.FC<Props> = ({ slug }) => {
+    const [posts, setPosts] = useState<any[]>([]);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        let fetchUrl: string;
+        if (!slug) {
+            fetchUrl = `${baseUrl}/api/recent?n=90&m=10&f=tdg`;
+        } else {
+            fetchUrl = `${baseUrl}/api/recent?n=51&m=25&f=tdg&a=${slug}`;
+        }
+
+        async function fetchPosts() {
+            try {
+                const res = await fetch(fetchUrl, { cache: "no-store" });
+
+                if (!res.ok) {
+                    throw new Error(`Failed to fetch data: ${res.status}`);
+                }
+
+                const data = await res.json();
+                setPosts(data);
+            } catch (e) {
+                console.error("Error Fetching Data:", e);
+                setError("記事リストの取得に失敗しました。");
+            }
+        }
+
+        fetchPosts();
+    }, [slug]); // 🔹 `slug` が変わった場合のみ `fetch` する
 
     return (
         <Box
@@ -19,25 +46,33 @@ const SideMenu: React.FC = async () => {
                 padding: "4px",
             }}
         >
-            <h3>直近１年の記事</h3>
-            <ul>
-                {
-                    posts.map(async function(post: { id: Key; title: string; date: string; tags: any }) {
+            {error ? (
+                <div>{error}</div>
+            ) : (
+                <ul>
+                    {posts.map((post: { id: Key; title: string; date: string; tags: any }) => {
+                        const dateFormat: Intl.DateTimeFormatOptions = {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                        };
 
-                        // 年、月、日、記事番号
                         return (
-                            <a href={`/post/${post.id}`}>
-                                <li key={post.id} className="post-list">
+                            <a href={`/post/${post.id}`} key={post.id}>
+                                <li className={slug === post.id ? "post-list post-block-current" : "post-list"}>
                                     <span>#{Number(post.id)}</span>
                                     『{post.title}』
-                                    <span>({new Date(post.date).toLocaleDateString('ja-JP')}）</span><br/>
-                                    <span style={{textAlign:"right"}} className="tag-block">{post.tags[0]}</span>
+                                    <span>({new Date(post.date).toLocaleDateString("ja-JP", dateFormat)})</span>
+                                    <br />
+                                    <span style={{ textAlign: "right" }} className="tag-block">
+                                        {post.tags[0]}
+                                    </span>
                                 </li>
                             </a>
-                        )
-                    })
-                }
-            </ul>
+                        );
+                    })}
+                </ul>
+            )}
         </Box>
     );
 };

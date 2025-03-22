@@ -62,6 +62,6 @@ const RelatedList: React.FC<Props> = ({ slug }) => {
                 ))}
         </div>
     );
-};
+}
 
 export default RelatedList;

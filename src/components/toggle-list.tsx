@@ -3,7 +3,7 @@ import TagList from "@/components/tag-list";
 
 export default function ToggleLists({slug, post}){
     return (
-        <div>
+        <div style={{width:"100%"}}>
             {Array.isArray(post.tags) &&
                 post.tags.map((tag: string) => (
                     <div className="post-list" key={tag}>
@@ -13,7 +13,6 @@ export default function ToggleLists({slug, post}){
                 ))}
             <div className="post-list">
                 <div className="list-title">前後の記事</div>
-                <RelatedList slug={slug} key="related-list" />
             </div>
         </div>
     );

@@ -1,5 +1,9 @@
+"use client"; // クライアントコンポーネント化
+
+import { useEffect, useState } from "react";
 import markdownStyles from "./markdown-styles.module.css";
 import path from "path";
+import markdownToHtml from "@/lib/markdownToHtml";
 
 type Props = {
     category: string;
@@ -16,6 +20,11 @@ function convertContent(content: string, date: string): string {
 
     // dateからyyyyとmmを取得
     const [year, month] = date.split('-');
+
+    // content未定義対策
+    if (typeof content !== "string") {
+        return "";
+    }
 
     // 通常のリンクを変換
     content = content.replace(linkRegex, (match, year, month, day, id) => {
@@ -36,16 +45,24 @@ function convertContent(content: string, date: string): string {
 }
 
 export default function PostBody({ category, content, date }: Props) {
+    const [convertedContent, setConvertedContent] = useState<string>("");
+    useEffect(() => {
+        async function convertMarkdown() {
+            const htmlContent = await markdownToHtml(content);
+            const dateObj = new Date(date ?? "2004-09-01T00:00:00.000Z");
+            const finalContent = convertContent(htmlContent, dateObj.toISOString().split('T')[0]);
+            setConvertedContent(finalContent);
+        }
+        convertMarkdown();
+    }, [content, date]);
 
     const categoryStyle = (category === "独り言") ? "category-monologue" : "category-today";
-    const dateObj = new Date(date ?? "2004-09-01T00:00:00.000Z");
-    const newContent = convertContent(content, dateObj.toISOString().split('T')[0]);
 
     return (
         <div className={`content-body ${categoryStyle}`}>
             <div
                 className={markdownStyles["markdown"]}
-                dangerouslySetInnerHTML={{ __html: newContent }}
+                dangerouslySetInnerHTML={{ __html: convertedContent }}
             />
         </div>
     );
