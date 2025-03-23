@@ -55,7 +55,7 @@ export default function Index() {
             {error ? (
                 <div className="error-message">{error}</div>
             ) : (
-                <div>
+                <div style={{width:"100%"}}>
                     {posts.map((post) => (
                         <article key={post.id} className="article">
                             <PostHeader
