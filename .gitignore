@@ -43,3 +43,5 @@ next-env.d.ts
 
 # ENV
 .env
+/lab/outputs/
+/venv/

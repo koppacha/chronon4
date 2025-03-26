@@ -49,7 +49,7 @@ const SideMenu: React.FC<Props> = ({ slug }) => {
             {error ? (
                 <div>{error}</div>
             ) : (
-                <ul>
+                <ul style={{padding:"0"}}>
                     {posts.map((post: { id: Key; title: string; date: string; tags: any }) => {
                         const dateFormat: Intl.DateTimeFormatOptions = {
                             year: "numeric",
