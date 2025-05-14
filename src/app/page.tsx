@@ -8,6 +8,8 @@ import PostBody from "@/components/post-body"
 import SideMenu from "@/components/side-menu"
 import { baseUrl } from "@/lib/const"
 import markdownToHtml from "@/lib/markdownToHtml";
+import {PostFooter} from "@/components/post-footer";
+import LikeButton from "@/components/LikeButton";
 
 export default function Index() {
     const [posts, setPosts] = useState<any[]>([])
@@ -20,9 +22,7 @@ export default function Index() {
 
         async function fetchPosts() {
             try {
-                const res = await fetch(`${baseUrl}/api/recent`, {
-                    cache: "no-store",
-                });
+                const res = await fetch(`${baseUrl}/api/recent`);
 
                 if (!res.ok) {
                     const errorData = await res.json();
@@ -71,6 +71,11 @@ export default function Index() {
                                 category={post.category}
                                 content={post.content}
                                 date={post.date}
+                            />
+                            <LikeButton articleId={post.id} />
+                            <PostFooter
+                                update={post.update}
+                                size={post.size}
                             />
                         </article>
                     ))}

@@ -3,7 +3,7 @@ import { join } from "path";
 import fs from "fs";
 import matter from "gray-matter";
 import {getAllPostFiles} from "@/lib/posts";
-import {id2slug} from "@/lib/chronon4";
+import {id2slug, formatDate} from "@/lib/chronon4";
 
 // APIエンドポイントのメインロジック
 export async function GET(req: Request) {
@@ -38,7 +38,7 @@ export async function GET(req: Request) {
 
     // ファイルの最終更新日時を取得
     const stats = fs.statSync(fullPath);
-    const lastModified = stats.mtime.toISOString();
+    const lastModified = formatDate(stats.mtime);
 
     // JSONデータを構築して返す
     return NextResponse.json({
@@ -48,6 +48,7 @@ export async function GET(req: Request) {
         category: data.categories || null,
         tags: data.tags || [],
         content,
-        lastModified,
+        update: lastModified,
+        size: content.length
     });
 }

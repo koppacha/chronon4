@@ -45,3 +45,4 @@ next-env.d.ts
 .env
 /lab/outputs/
 /venv/
+/lab/tests/

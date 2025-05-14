@@ -1,14 +1,42 @@
-version: '3.8'
-
+# docker-compose.yml
 services:
-  web:
-    container_name: web
-    image: node:18-alpine
+  # ───── dev ────────────────────────────────
+  dev:
+    image: node:20-alpine
     working_dir: /app
+    command: sh -c "corepack enable \
+      && yarn install \
+      && yarn dev -p 3004"
     volumes:
       - ./:/app
+      - /app/node_modules
     ports:
-      - '3004:3004'
-    tty: true
+      - "3004:3004"
     environment:
-      NODE_ENV: development
+      - NODE_ENV=development
+    profiles: ["dev"]
+
+  # ───── build (ワンショット) ───────────────
+  build:
+    image: node:20-alpine
+    working_dir: /app
+    command: yarn build
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./:/app
+    profiles: ["build"]
+
+  # ───── runner (本番) ─────────────────────
+  runner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+    # Let the CMD in the Dockerfile run (node server.js)
+    environment:
+      - NODE_ENV=production
+      - PORT=3004
+    ports:
+      - "3004:3004"
+    profiles: ["prod"]

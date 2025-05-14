@@ -5,7 +5,7 @@ export function Footer() {
   return (
     <footer className="bg-neutral-50 border-t border-neutral-200 dark:bg-slate-800">
       <Container>
-        <div className="flex flex-col lg:flex-row items-center">
+        <div className="copyright">
           ver.4.01 / Author: @koppachappy / Since 2004.09.01
         </div>
       </Container>

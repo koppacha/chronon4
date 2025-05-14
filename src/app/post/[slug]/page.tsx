@@ -7,6 +7,7 @@ import Link from "next/link";
 import ToggleLists from "@/components/toggle-list";
 import {baseUrl} from "@/lib/const";
 import SideMenu from "@/components/side-menu";
+import {PostFooter} from "@/components/post-footer";
 
 export const revalidate = 2592000;
 
@@ -55,6 +56,10 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
                             <div>この記事は非公開に設定されています。</div> :
                             <PostBody category={post.category[0]} content={post.content} date={post.date}/>
                     }
+                    <PostFooter
+                        update={post.update}
+                        size={post.size}
+                    />
                 </article>
                 <div className="grid-container">
                     {prev}

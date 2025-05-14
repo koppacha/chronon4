@@ -2,7 +2,7 @@ import { join, relative } from "path";
 import fs from "fs/promises";
 import { getCache, setCache } from "@/lib/cache";
 
-const postsDirectory = join(process.cwd(), "blog");
+export const postsDirectory = join(process.cwd(), "blog");
 
 // 除外するフォルダ名
 const ignoreFolders = [".obsidian", "keyword"];

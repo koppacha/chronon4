@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
-import { getAllPostFiles, getPostContent } from "@/lib/posts";
+import {getAllPostFiles, getPostContent, postsDirectory} from "@/lib/posts";
 import matter from "gray-matter";
-import {id2slug} from "@/lib/chronon4"; // mdファイルのメタデータを解析するために使用
+import {id2slug, formatDate} from "@/lib/chronon4";
+import fs from "fs/promises";
+import path from "path";
 
 export async function GET(req: Request) {
 
@@ -58,6 +60,12 @@ export async function GET(req: Request) {
                 if (!content) return null;
 
                 const { data, content: fileContent } = matter(content);
+
+                // ファイルの最終更新日時を取得
+                const filePath = path.join(postsDirectory, fileName)
+                const stats = await fs.stat(filePath);
+                const updatedAt = formatDate(stats.mtime);
+
                 const { postId } = id2slug(fileName);
 
                 // id は常に含める
@@ -68,6 +76,8 @@ export async function GET(req: Request) {
                 if (includeField('c')) result.category = data.category || null;
                 if (includeField('g')) result.tags = data.tags || [];
                 if (includeField('n')) result.content = fileContent;
+                if (includeField('u')) result.update = updatedAt;
+                if (includeField('s')) result.size = fileContent.length;
 
                 return result;
             })
