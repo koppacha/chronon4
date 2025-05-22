@@ -1,14 +1,18 @@
 // src/app/api/img/[...slug]/route.ts
-import { NextResponse } from 'next/server'
+import { NextResponse, NextRequest } from 'next/server'
 import { join } from 'path'
 import { promises as fs } from 'fs'
 import { extname } from 'path'
 
+type RouteContext = {
+  params: Promise<{ slug: string[] }>   // catch-all は string[]
+}
+
 export async function GET(
-  req: Request,
-  { params }: { params: { slug: string[] } }
+  req: NextRequest,
+  { params }: RouteContext
 ) {
-  const localPath = join(process.cwd(), 'blog', ...params.slug)
+  const localPath = join(process.cwd(), 'blog', ...(await params).slug)
   const ext = extname(localPath).toLowerCase().slice(1) // 例: 'jpg'
 
   // 拡張子と MIME タイプの対応表
