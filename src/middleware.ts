@@ -1,28 +1,50 @@
-import { NextRequest, NextResponse } from "next/server";
+// src/middleware.ts
+import { NextRequest, NextResponse } from 'next/server'
+import crypto from 'node:crypto'
+
+/* ---------- 共通設定 ---------- */
 
 const allowedOrigins = [
-    "http://localhost:3004", // 開発環境
-    "https://chrononglyph.net", // 本番環境
-];
+    'http://localhost:3004',     // 開発
+    'https://chrononglyph.net'   // 本番
+]
 
+const COOKIE_NAME = 'access_id'
+const ONE_YEAR   = 60 * 60 * 24 * 365   // 秒
+
+/* ---------- ミドルウェア本体 ---------- */
 export function middleware(req: NextRequest) {
-    const origin = req.headers.get("origin") || "";
+    const res = NextResponse.next()
 
-    // 許可されたオリジン以外のアクセスはブロック（same-originリクエストは常に許可）
-    if (origin && !allowedOrigins.includes(origin)) {
-        return new NextResponse("CORS Error", { status: 403 });
+    /* --- ① まだユーザーID が無ければ発行 --- */
+    if (!req.cookies.get(COOKIE_NAME)) {
+        const anonId = crypto.randomUUID()
+        res.cookies.set({
+            name:     COOKIE_NAME,
+            value:    anonId,
+            httpOnly: true,
+            sameSite: 'lax',
+            path:     '/',
+            secure:   process.env.NODE_ENV === 'production',
+            maxAge:   ONE_YEAR
+        })
     }
 
-    // CORS ヘッダーを設定
-    const response = NextResponse.next();
-    response.headers.set("Access-Control-Allow-Origin", origin);
-    response.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    /* --- ② API パスだけ CORS ヘッダー処理 --- */
+    if (req.nextUrl.pathname.startsWith('/api/')) {
+        const origin = req.headers.get('origin') || ''
+        if (origin && !allowedOrigins.includes(origin)) {
+            return new NextResponse('CORS Error', { status: 403 })
+        }
+        res.headers.set('Access-Control-Allow-Origin',  origin)
+        res.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+        res.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+    }
 
-    return response;
+    return res
 }
 
-// `middleware.ts` を適用するパスを指定
+/* ---------- どのパスで実行するか ---------- */
 export const config = {
-    matcher: "/api/:path*",
-};
+    matcher: ['/', '/(.*)']   // = 全リクエストに適用
+}
