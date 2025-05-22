@@ -57,6 +57,7 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
                             <PostBody category={post.category[0]} content={post.content} date={post.date}/>
                     }
                     <PostFooter
+                        id={post.id}
                         update={post.update}
                         size={post.size}
                     />

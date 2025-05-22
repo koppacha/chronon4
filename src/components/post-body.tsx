@@ -35,7 +35,7 @@ function convertContent(content: string, date: string): string {
     content = content.replace(imageRegex, (match, fileName, width) => {
         const imageDir = path.join(year, month, 'images');
         const imagePath = path.join(imageDir, fileName);
-        return `<img src="../blog/${imagePath}" width="${width}" alt="${fileName}" />`;
+        return `<img src="/api/img/${imagePath}" width="${width}" alt="${fileName}" />`;
     });
     // ２連改行をpに変換
     content = content.replace(/\n\n/g, "</p><p>")

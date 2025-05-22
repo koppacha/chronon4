@@ -86,8 +86,8 @@ strong {
 }
 .info-container {
     color: #e7e7e7;
-    margin: 20px;
-    padding: 20px;
+    margin: 8px;
+    padding: 12px;
     border-radius: 10px;
     border: 1px solid #c0c0c0;
     @media (max-width: 1200px) {
@@ -109,6 +109,7 @@ strong {
     }
 }
 .article {
+    width: 100%;
     padding: 20px;
     font-size: 110%;
     color: #e7e7e7;
@@ -190,7 +191,6 @@ blockquote p {
 }
 .footer-container {
     border-top: 1px solid #626262;
-    text-align: right;
     font-size: 0.9em;
     padding-right: 20px;
 }
@@ -199,4 +199,7 @@ blockquote p {
     font-size: 0.9em;
     color: #fff;
     width: 100%;
+}
+.like-button {
+    color: #fff;
 }

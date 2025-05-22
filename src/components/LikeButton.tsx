@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons'
+import {Button} from "@mui/material";
 
 interface Props {
     articleId: string
@@ -36,15 +37,16 @@ export default function LikeButton({ articleId }: Props) {
     }
 
     return (
-        <button
+        <Button
+            size="medium"
             disabled={loading}
             onClick={handleToggle}
-            className={`flex items-center gap-1 ${
+            startIcon={<FontAwesomeIcon icon={faThumbsUp} />}
+            className={`like-button flex items-center gap-1 ${
                 liked ? 'text-blue-600' : 'text-gray-500'
             }`}
         >
-            <FontAwesomeIcon icon={faThumbsUp} />
             <span>{count > 0 ? count : ''}</span>
-        </button>
+        </Button>
     )
 }

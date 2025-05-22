@@ -1,4 +1,5 @@
-import { CMS_NAME } from "@/lib/constants";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faThumbsUp} from "@fortawesome/free-solid-svg-icons";
 
 export function Intro() {
   return (
@@ -7,9 +8,9 @@ export function Intro() {
         Chrononglyph
       </h1>
       <div className="info-container">
-          このブログは、こっぱちゃ（@koppachappy）が個人的に思うことを書き残す日記系ブログです。
-          2004年09月から１日１本相当の連載維持を目指して運営中。掲載には最大７日程度の遅延が生じます。2022年以前の記事は非公開になっています。
-      </div>
+          このブログは、こっぱちゃ（@koppachappy）の日記系ブログです。2004年より連載中。原則毎週日曜更新。<br/>
+          いいねボタンを設置しました。記事を読んだら押して頂けると執筆の励みになります <FontAwesomeIcon icon={faThumbsUp} />
+    </div>
     </section>
   );
 }

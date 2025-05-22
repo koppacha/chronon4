@@ -72,8 +72,8 @@ export default function Index() {
                                 content={post.content}
                                 date={post.date}
                             />
-                            <LikeButton articleId={post.id} />
                             <PostFooter
+                                id={post.id}
                                 update={post.update}
                                 size={post.size}
                             />
