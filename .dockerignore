@@ -1,0 +1,13 @@
+# Python venv
+venv/
+
+# IDE 設定
+.idea/
+
+# Git
+.git/
+
+# ローカル node_modules は不要
+node_modules/
+
+.DS_Store
