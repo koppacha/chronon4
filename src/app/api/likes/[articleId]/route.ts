@@ -12,7 +12,7 @@ export async function GET(
     { params }: RouteContext
 ) {
     try {
-        const sessionId = (await cookies()).get('next-auth.session-token')?.value ?? ''
+        const sessionId = (await cookies()).get('access_id')?.value ?? ''
         const { articleId } = await params
 
         // 有効いいね数
@@ -42,7 +42,7 @@ export async function POST(
     { params }: RouteContext
 ) {
     try {
-        const sessionId = (await cookies()).get('next-auth.session-token')?.value
+        const sessionId = (await cookies()).get('access_id')?.value
         if (!sessionId) return NextResponse.json({ error: 'No session' }, { status: 401 })
 
         const { articleId } = await params

@@ -1,6 +1,5 @@
 // src/middleware.ts
 import { NextRequest, NextResponse } from 'next/server'
-import crypto from 'node:crypto'
 
 /* ---------- 共通設定 ---------- */
 

@@ -1,5 +1,6 @@
 "use client";
 
+import '@fortawesome/fontawesome-svg-core/styles.css'
 import Footer from "@/components/footer";
 import { Inter } from "next/font/google";
 import cn from "classnames";

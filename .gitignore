@@ -46,3 +46,6 @@ next-env.d.ts
 /lab/outputs/
 /venv/
 /lab/tests/
+
+# DB
+prisma/dev.db

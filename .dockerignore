@@ -10,4 +10,8 @@ venv/
 # ローカル node_modules は不要
 node_modules/
 
+# ブログコンテンツ本体およびDBはビルド時に除外
+blog/
+prisma/dev.db
+
 .DS_Store

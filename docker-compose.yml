@@ -33,10 +33,13 @@ services:
       context: .
       dockerfile: Dockerfile
       target: runner
-    # Let the CMD in the Dockerfile run (node server.js)
     environment:
       - NODE_ENV=production
       - PORT=3004
+      - DATABASE_URL=file:/app/prisma/dev.db
     ports:
       - "3004:3004"
+    volumes:
+      - ./blog:/app/blog:ro
+      - ./prisma/dev.db:/app/prisma/dev.db
     profiles: ["prod"]
