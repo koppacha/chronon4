@@ -3,7 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@300;400;500;700;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+Antique:wght@300;400;500;700;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique&display=swap');
 
 a {
     color: #e7e7e7;
@@ -60,25 +60,12 @@ strong {
 .content-body p {
     margin: 0;
 }
-@media (max-width: 1200px) {
-    .content-body {
-        text-indent: 1em;
-        font-size: 0.8em;
-        letter-spacing: 0;
-    }
-    .content-body br {
-        display: none;
-    }
-    .content-body p {
-        margin: 1em 0;
-    }
-}
 .category-today {
     font-family: "Zen Kaku Gothic New", serif;
     font-weight: 400;
 }
 .category-monologue {
-    font-family: "Shippori Mincho", sans-serif;
+    font-family: "Zen Kaku Gothic Antique", sans-serif;
     font-weight: 400;
 }
 .info-title {
@@ -90,9 +77,6 @@ strong {
     padding: 12px;
     border-radius: 10px;
     border: 1px solid #c0c0c0;
-    @media (max-width: 1200px) {
-        font-size: 0.9em;
-    }
 }
 .post-list {
     list-style: none;
@@ -171,8 +155,8 @@ blockquote p {
 .post-block-current {
     background-color: #cccccc;
     color: #333;
-    padding: 24px 14px;
-    width: 95%;
+    padding: 20px 8px;
+    width: 97%;
 
     span {
         color: #333;
@@ -202,4 +186,21 @@ blockquote p {
 }
 .like-button {
     color: #fff;
+}
+@media (max-width: 1200px) {
+    .content-body {
+        text-indent: 1em;
+        font-size: 0.8em;
+        letter-spacing: 0;
+    }
+    .footer-container,
+    .info-container {
+        font-size: 0.8em;
+    }
+    .content-body br {
+        display: none;
+    }
+    .content-body p {
+        margin: 1em 0;
+    }
 }

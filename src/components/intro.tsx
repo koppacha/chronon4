@@ -8,8 +8,8 @@ export function Intro() {
         Chrononglyph
       </h1>
       <div className="info-container">
-          このブログは、こっぱちゃ（@koppachappy）の日記系ブログです。2004年より連載中。原則毎週日曜更新。<br/>
-          いいねボタンを設置しました。記事を読んだら押して頂けると執筆の励みになります <FontAwesomeIcon icon={faThumbsUp} />
+          このブログは、こっぱちゃ（@koppachappy）の日記系ブログです。2004年より連載中。原則日曜更新。
+          記事を読んだら「いいね <FontAwesomeIcon icon={faThumbsUp} />」押して頂けると執筆の励みになります。
     </div>
     </section>
   );

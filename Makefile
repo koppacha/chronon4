@@ -11,11 +11,11 @@ prod:
 	docker compose --profile prod up -d runner
 
 # 本番環境用の Docker イメージをビルド（成果物を元に）
-prod build:
+prod-build:
 	docker compose --profile prod build runner
 
-prod stop:
+prod-stop:
 	docker compose --profile prod stop runner
 
-prod exec:
+prod-exec:
 	docker compose --profile prod exec runner sh
