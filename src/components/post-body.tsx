@@ -51,7 +51,12 @@ function convertContent(content: string, date: string): string {
         // 行頭が「〜」で始まる行の直前の br（行頭側）
         .replace(/<br\/>\s*(「[^」\n]+」)/g, '<br class="br-dialogue"/>$1')
 
-    return `<p>${content}</p>`
+    let html = `<p>${content}</p>`
+
+    // 先頭が「で始まる段落にクラスを付与してインデントを無効化
+    html = html.replace(/<p>\s*「/g, '<p class="no-indent">「')
+
+    return html
 }
 
 export default function PostBody({ category, content, date }: Props) {
