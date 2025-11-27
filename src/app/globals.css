@@ -200,6 +200,9 @@ blockquote p {
     .content-body br {
         display: none;
     }
+    .content-body br.br-dialogue {
+        display: inline;
+    }
     .content-body p {
         margin: 1em 0;
     }

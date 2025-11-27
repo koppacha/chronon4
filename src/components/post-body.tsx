@@ -41,7 +41,17 @@ function convertContent(content: string, date: string): string {
     content = content.replace(/\n\n/g, "</p><p>")
 
     // 改行をbrに変換
-    return `<p>${content.replace(/(?<!<\/?(li|ol)>)\n/g, "<br/>")}</p>`;
+    content = content.replace(/(?<!<\/?(li|ol)>)\n/g, "<br/>")
+
+    // セリフ行（「〜」で始まり「〜」で終わる行）の前後にある br を
+    // モバイルでも表示される br（クラス付き）に変換
+    content = content
+        // 行末が「〜」で終わる行の br（行末側）
+        .replace(/(「[^」\n]+」)\s*<br\/>/g, '$1<br class="br-dialogue"/>')
+        // 行頭が「〜」で始まる行の直前の br（行頭側）
+        .replace(/<br\/>\s*(「[^」\n]+」)/g, '<br class="br-dialogue"/>$1')
+
+    return `<p>${content}</p>`
 }
 
 export default function PostBody({ category, content, date }: Props) {
