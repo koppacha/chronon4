@@ -9,7 +9,7 @@ import {baseUrl} from "@/lib/const";
 import SideMenu from "@/components/side-menu";
 import {PostFooter} from "@/components/post-footer";
 
-export const revalidate = 2592000;
+export const revalidate = 2000;
 
 export default async function Post({ params }: { params: Promise<{ slug: string }> }) {
 
