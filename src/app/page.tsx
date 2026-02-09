@@ -33,13 +33,7 @@ export default function Index() {
                 if (!Array.isArray(data) || data.length === 0) {
                     throw new Error("No posts found");
                 }
-                setPosts((prevPosts) => {
-                    if (JSON.stringify(prevPosts) === JSON.stringify(data)) {
-                        console.log("Data is the same, skipping update.");
-                        return prevPosts;
-                    }
-                    return data;
-                });
+                setPosts(data);
 
             } catch (e) {
                 console.error("Error Fetching Data:", e);

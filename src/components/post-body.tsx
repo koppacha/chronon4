@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import markdownStyles from "./markdown-styles.module.css";
-import path from "path";
 import markdownToHtml from "@/lib/markdownToHtml";
+import { escapeHtmlAttr, sanitizeHtml } from "@/lib/sanitizeHtml";
 
 type Props = {
     category: string;
@@ -28,14 +28,16 @@ function convertContent(content: string, date: string): string {
 
     // 通常のリンクを変換
     content = content.replace(linkRegex, (match, year, month, day, id) => {
-        return `<a href="/post/${id}">#${id} / ${year}年${month}月${day}日</a>`;
+        const safeId = escapeHtmlAttr(id);
+        return `<a href="/post/${safeId}">#${safeId} / ${year}年${month}月${day}日</a>`;
     });
 
     // 画像リンクを変換
     content = content.replace(imageRegex, (match, fileName, width) => {
-        const imageDir = path.join(year, month, 'images');
-        const imagePath = path.join(imageDir, fileName);
-        return `<img src="/api/img/${imagePath}" width="${width}" alt="${fileName}" />`;
+        const safeFileName = escapeHtmlAttr(fileName);
+        const safeWidth = escapeHtmlAttr(width);
+        const imagePath = `${year}/${month}/images/${encodeURIComponent(fileName)}`;
+        return `<img src="/api/img/${imagePath}" width="${safeWidth}" alt="${safeFileName}" />`;
     });
     // ２連改行をpに変換
     content = content.replace(/\n\n/g, "</p><p>")
@@ -56,7 +58,7 @@ function convertContent(content: string, date: string): string {
     // 先頭が「で始まる段落にクラスを付与してインデントを無効化
     html = html.replace(/<p>\s*「/g, '<p class="no-indent">「')
 
-    return html
+    return sanitizeHtml(html)
 }
 
 export default function PostBody({ category, content, date }: Props) {

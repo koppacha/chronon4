@@ -1,4 +1,3 @@
-import markdownToHtml from "@/lib/markdownToHtml";
 import Container from "@/components/container";
 import Header from "@/components/header";
 import PostBody from "@/components/post-body";
@@ -8,6 +7,7 @@ import ToggleLists from "@/components/toggle-list";
 import {baseUrl} from "@/lib/const";
 import SideMenu from "@/components/side-menu";
 import {PostFooter} from "@/components/post-footer";
+import { notFound } from "next/navigation";
 
 export const revalidate = 2000;
 
@@ -73,8 +73,6 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
         )
     } catch (e) {
         console.error("Error Fetching Data:", e)
-        return {
-            notFound: true
-        }
+        notFound()
     }
 }

@@ -14,6 +14,9 @@ export async function GET(
     try {
         const sessionId = (await cookies()).get('access_id')?.value ?? ''
         const { articleId } = await params
+        if (!/^\d{5}$/.test(articleId)) {
+            return NextResponse.json({ error: 'Invalid article id' }, { status: 400 })
+        }
 
         // 有効いいね数
         const count = await prisma.like.count({
@@ -44,8 +47,14 @@ export async function POST(
     try {
         const sessionId = (await cookies()).get('access_id')?.value
         if (!sessionId) return NextResponse.json({ error: 'No session' }, { status: 401 })
+        if (sessionId.length > 128) {
+            return NextResponse.json({ error: 'Invalid session' }, { status: 400 })
+        }
 
         const { articleId } = await params
+        if (!/^\d{5}$/.test(articleId)) {
+            return NextResponse.json({ error: 'Invalid article id' }, { status: 400 })
+        }
 
         // 既に有効いいねがあるか判定
         const existing = await prisma.like.findFirst({

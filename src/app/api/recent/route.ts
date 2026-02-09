@@ -5,6 +5,31 @@ import {id2slug, formatDate} from "@/lib/chronon4";
 import fs from "fs/promises";
 import path from "path";
 
+const MAX_N = 100;
+const MAX_M = 5000;
+const MAX_CONCURRENCY = 8;
+const VALID_FIELDS = new Set(["t", "d", "c", "g", "n", "u", "s"]);
+
+async function mapWithConcurrency<T, R>(
+    items: T[],
+    limit: number,
+    mapper: (item: T, index: number) => Promise<R>
+): Promise<R[]> {
+    const results: R[] = new Array(items.length);
+    let index = 0;
+
+    async function worker() {
+        while (index < items.length) {
+            const current = index;
+            index += 1;
+            results[current] = await mapper(items[current], current);
+        }
+    }
+
+    await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+    return results;
+}
+
 export async function GET(req: Request) {
 
     try {
@@ -15,8 +40,22 @@ export async function GET(req: Request) {
         const fParam = searchParams.get("f");
 
         // デフォルト値を設定
-        const n = nParam && parseInt(nParam, 10) > 0 ? parseInt(nParam, 10) : 10;
-        const m = mParam && parseInt(mParam, 10) >= 0 ? parseInt(mParam, 10) : 0;
+        const n = nParam && /^\d+$/.test(nParam) ? Number.parseInt(nParam, 10) : 10;
+        const m = mParam && /^\d+$/.test(mParam) ? Number.parseInt(mParam, 10) : 0;
+        const a = aParam && /^\d+$/.test(aParam) ? Number.parseInt(aParam, 10) : null;
+
+        if (n < 1 || n > MAX_N) {
+            return NextResponse.json({ error: `n must be between 1 and ${MAX_N}` }, { status: 400 });
+        }
+        if (m < 0 || m > MAX_M) {
+            return NextResponse.json({ error: `m must be between 0 and ${MAX_M}` }, { status: 400 });
+        }
+        if (a !== null && a < 1) {
+            return NextResponse.json({ error: "a must be greater than or equal to 1" }, { status: 400 });
+        }
+        if (fParam && !/^[tdcgnus]+$/.test(fParam)) {
+            return NextResponse.json({ error: "f contains unsupported fields" }, { status: 400 });
+        }
 
         // 全記事を取得
         const allPosts = await getAllPostFiles();
@@ -26,7 +65,6 @@ export async function GET(req: Request) {
         const totalPosts = allPosts.length;
 
         // 開始インデックス
-        const a = aParam && parseInt(aParam, 10);
         const startIndex = (a >= 1 && a <= totalPosts) ?
             Math.max(a - m, 1) - 1 :
             totalPosts - m - n;
@@ -50,21 +88,18 @@ export async function GET(req: Request) {
         }
 
         // `f` パラメータで指定されたデータを抽出
-        const allowedFields = new Set(fParam ? fParam.split('') : []);
+        const allowedFields = new Set((fParam ? fParam.split("") : []).filter((field) => VALID_FIELDS.has(field)));
         const includeField = (field: string) => allowedFields.has(field) || !fParam;
 
         // 記事内容とメタデータの取得
-        const postsData = await Promise.all(
-            selectedPosts.map(async (fileName) => {
+        const postsData = await mapWithConcurrency(
+            selectedPosts,
+            MAX_CONCURRENCY,
+            async (fileName) => {
                 const content = await getPostContent(fileName);
                 if (!content) return null;
 
                 const { data, content: fileContent } = matter(content);
-
-                // ファイルの最終更新日時を取得
-                const filePath = path.join(postsDirectory, fileName)
-                const stats = await fs.stat(filePath);
-                const updatedAt = formatDate(stats.mtime);
 
                 const { postId } = id2slug(fileName);
 
@@ -76,11 +111,15 @@ export async function GET(req: Request) {
                 if (includeField('c')) result.category = data.category || null;
                 if (includeField('g')) result.tags = data.tags || [];
                 if (includeField('n')) result.content = fileContent;
-                if (includeField('u')) result.update = updatedAt;
+                if (includeField('u')) {
+                    const filePath = path.join(postsDirectory, fileName);
+                    const stats = await fs.stat(filePath);
+                    result.update = formatDate(stats.mtime);
+                }
                 if (includeField('s')) result.size = fileContent.length;
 
                 return result;
-            })
+            }
         );
 
         // null のデータを除外

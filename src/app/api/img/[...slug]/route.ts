@@ -1,6 +1,6 @@
 // src/app/api/img/[...slug]/route.ts
 import { NextResponse, NextRequest } from 'next/server'
-import { join } from 'path'
+import { resolve, sep } from 'path'
 import { promises as fs } from 'fs'
 import { extname } from 'path'
 
@@ -12,7 +12,17 @@ export async function GET(
   req: NextRequest,
   { params }: RouteContext
 ) {
-  const localPath = join(process.cwd(), 'blog', ...(await params).slug)
+  const slugParts = (await params).slug
+  if (!Array.isArray(slugParts) || slugParts.length === 0) {
+    return new NextResponse(null, { status: 400 })
+  }
+
+  const localPath = resolve(process.cwd(), 'blog', ...slugParts)
+  const blogRoot = resolve(process.cwd(), 'blog')
+  if (!(localPath === blogRoot || localPath.startsWith(blogRoot + sep))) {
+    return new NextResponse(null, { status: 400 })
+  }
+
   const ext = extname(localPath).toLowerCase().slice(1) // 例: 'jpg'
 
   // 拡張子と MIME タイプの対応表
@@ -35,7 +45,10 @@ export async function GET(
   try {
     const data = await fs.readFile(localPath)
     return new NextResponse(data, {
-      headers: { 'Content-Type': contentType }
+      headers: {
+        'Content-Type': contentType,
+        'Cache-Control': 'public, max-age=86400'
+      }
     })
   } catch {
     return new NextResponse(null, { status: 404 })
