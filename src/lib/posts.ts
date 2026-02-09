@@ -6,6 +6,7 @@ export const postsDirectory = join(process.cwd(), "blog");
 
 // 除外するフォルダ名
 const ignoreFolders = [".obsidian", "keyword"];
+const ALL_POST_FILES_CACHE_TTL_MS = 5 * 60 * 1000;
 
 /**
  * 再帰的に.mdファイルを探索する
@@ -51,8 +52,8 @@ export async function getAllPostFiles(): Promise<string[]> {
     }
     const files = await getAllMarkdownFiles(postsDirectory, true)
 
-    // キャッシュに保存（有効期限1時間: 3600000ms）
-    setCache(cacheKey, files, 3600000);
+    // キャッシュに保存（有効期限5分）
+    setCache(cacheKey, files, ALL_POST_FILES_CACHE_TTL_MS);
 
     return files;
 }

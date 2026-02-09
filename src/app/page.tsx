@@ -1,47 +1,42 @@
-"use client" // クライアントコンポーネントとして実行
-
-import {useEffect, useRef, useState} from "react"
 import Container from "@/components/container"
 import { Intro } from "@/components/intro"
 import { PostHeader } from "@/components/post-header"
 import PostBody from "@/components/post-body"
 import SideMenu from "@/components/side-menu"
 import { baseUrl } from "@/lib/const"
-import markdownToHtml from "@/lib/markdownToHtml";
 import {PostFooter} from "@/components/post-footer";
-import LikeButton from "@/components/LikeButton";
+type RecentPost = {
+    id: string;
+    title?: string;
+    coverImage?: string;
+    date?: string;
+    author?: { name: string; picture: string } | string;
+    tags?: string[];
+    category?: string;
+    content?: string;
+    update?: string;
+    size?: number;
+};
 
-export default function Index() {
-    const [posts, setPosts] = useState<any[]>([])
-    const [error, setError] = useState<string | null>(null)
-    const hasFetched = useRef(false)
-
-    useEffect(() => {
-        if (hasFetched.current) return
-        hasFetched.current = true
-
-        async function fetchPosts() {
-            try {
-                const res = await fetch(`${baseUrl}/api/recent`);
-
-                if (!res.ok) {
-                    const errorData = await res.json();
-                    throw new Error(`Failed to fetch: ${res.status} ${res.statusText} - ${errorData.error}`);
-                }
-                const data = await res.json();
-
-                if (!Array.isArray(data) || data.length === 0) {
-                    throw new Error("No posts found");
-                }
-                setPosts(data);
-
-            } catch (e) {
-                console.error("Error Fetching Data:", e);
-                setError("記事の取得に失敗しました。しばらくしてから再試行してください。");
-            }
+async function getRecentPosts(): Promise<{ posts: RecentPost[]; error: string | null }> {
+    try {
+        const res = await fetch(`${baseUrl}/api/recent`, { cache: "no-store" });
+        if (!res.ok) {
+            return { posts: [], error: "記事の取得に失敗しました。しばらくしてから再試行してください。" };
         }
-        fetchPosts()
-    }, [])
+        const data = await res.json();
+        if (!Array.isArray(data) || data.length === 0) {
+            return { posts: [], error: "記事が見つかりませんでした。" };
+        }
+        return { posts: data, error: null };
+    } catch (e) {
+        console.error("Error Fetching Data:", e);
+        return { posts: [], error: "記事の取得に失敗しました。しばらくしてから再試行してください。" };
+    }
+}
+
+export default async function Index() {
+    const { posts, error } = await getRecentPosts();
 
     return (
         <Container maxWidth="xl">
@@ -54,22 +49,26 @@ export default function Index() {
                         <article key={post.id} className="article">
                             <PostHeader
                                 id={post.id}
-                                title={post.title}
-                                coverImage={post.coverImage}
-                                date={post.date}
-                                author={post.author}
-                                tags={post.tags}
+                                title={post.title ?? "Untitled"}
+                                coverImage={post.coverImage ?? ""}
+                                date={post.date ?? ""}
+                                author={
+                                    typeof post.author === "object" && post.author !== null
+                                        ? post.author
+                                        : { name: "", picture: "" }
+                                }
+                                tags={post.tags ?? []}
                                 categories={post.category}
                             />
                             <PostBody
                                 category={post.category}
-                                content={post.content}
-                                date={post.date}
+                                content={post.content ?? ""}
+                                date={post.date ?? ""}
                             />
                             <PostFooter
                                 id={post.id}
-                                update={post.update}
-                                size={post.size}
+                                update={post.update ?? ""}
+                                size={post.size ?? 0}
                             />
                         </article>
                     ))}

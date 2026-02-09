@@ -129,7 +129,12 @@ export async function GET(req: Request) {
             return NextResponse.json({ error: "No valid posts found" }, { status: 404 });
         }
 
-        return NextResponse.json(filteredPosts, { status: 200 });
+        return NextResponse.json(filteredPosts, {
+            status: 200,
+            headers: {
+                "Cache-Control": "no-store",
+            },
+        });
     } catch (error) {
         console.error("API Error:", error);
         return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
