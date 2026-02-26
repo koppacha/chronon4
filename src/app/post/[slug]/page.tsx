@@ -1,6 +1,6 @@
 import Container from "@/components/container";
 import Header from "@/components/header";
-import PostBody from "@/components/post-body";
+import PostBodyGuard from "@/components/post-body-guard";
 import { PostHeader } from "@/components/post-header";
 import Link from "next/link";
 import ToggleLists from "@/components/toggle-list";
@@ -23,8 +23,6 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
         }
         const post = await res.json()
 
-        // 記事が存在しない or 非公開タグがある場合は非公開フラグを設定
-        const hiddenFlg = post.tags?.includes("準非公開の記事") || Number(slug) < 6955;
 
         // 前後記事のURLを生成
         const zeroPad = (num: number) => String(num).padStart(5, "0");
@@ -51,11 +49,13 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
                         tags={post.tags}
                         categories={post.category}
                     />
-                    {
-                        hiddenFlg ?
-                            <div>この記事は非公開に設定されています。</div> :
-                            <PostBody category={post.category[0]} content={post.content} date={post.date}/>
-                    }
+                    <PostBodyGuard
+                        idOrSlug={slug}
+                        tags={post.tags}
+                        category={post.category}
+                        content={post.content}
+                        date={post.date}
+                    />
                     <PostFooter
                         id={post.id}
                         update={post.update}

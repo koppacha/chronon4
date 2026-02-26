@@ -210,3 +210,72 @@ blockquote p {
         margin: 1em 0;
     }
 }
+.archive-header {
+    margin-bottom: 1.5em;
+}
+.archive-title {
+    color: #e7e7e7;
+    font-size: 2rem;
+    margin: 0 0 10px 0;
+}
+.archive-nav-row {
+    display: flex;
+    width: 100%;
+    flex-wrap: nowrap;
+    gap: 0;
+    margin-bottom: 8px;
+}
+.archive-nav-row-years {
+    flex-wrap: wrap;
+}
+.archive-nav-row-months {
+    flex-wrap: nowrap;
+}
+.archive-nav-button {
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+    text-align: center;
+    color: #ddd;
+    border: 1px solid #777;
+    border-radius: 5px;
+    padding: 3px 8px;
+    font-size: 0.85rem;
+    background: #3b3b3b;
+}
+.archive-nav-button.is-active {
+    background: #f6cb20;
+    color: #2c2c2c;
+    border-color: #f6cb20;
+    font-weight: 700;
+}
+.pagination-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 16px 0 28px;
+    width: 100%;
+}
+.pagination-button {
+    border: 1px solid #888;
+    border-radius: 6px;
+    padding: 4px 10px;
+    background: #3b3b3b;
+    color: #e7e7e7;
+}
+.pagination-button-disabled {
+    opacity: 0.45;
+    pointer-events: none;
+}
+.pagination-status {
+    color: #ddd;
+    font-size: 0.9rem;
+}
+.archive-nav-button.is-disabled {
+    opacity: 0.4;
+    background: #2f2f2f;
+    border-color: #555;
+    color: #9a9a9a;
+    cursor: not-allowed;
+}

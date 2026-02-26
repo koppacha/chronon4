@@ -4,7 +4,7 @@ import DateFormatter from "./date-formatter";
 import {PostTitle} from "@/components/post-title";
 import {type Author} from "@/interfaces/author";
 import Link from "next/link";
-import {id2slug} from "@/lib/chronon4";
+import { tagToUrlKey } from "@/lib/tag-url";
 
 type Props = {
     id: string,
@@ -30,7 +30,9 @@ export function PostHeader({id, title, coverImage, date, author, tags, categorie
                 <DateFormatter dateString={date}/>
                 {category && <span className="tag-block">{category}</span>}
                 {tags?.map((tag:string, index:number) => (
-                    <span key={index} className="tag-block">{tag}</span>
+                    <Link key={index} href={`/tag/${encodeURIComponent(tagToUrlKey(tag))}`}>
+                        <span className="tag-block">{tag}</span>
+                    </Link>
                 ))}
             </div>
             {/*<div className="hidden md:block md:mb-12">*/}
