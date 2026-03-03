@@ -6,6 +6,7 @@ import SideMenu from "@/components/side-menu"
 import { baseUrl } from "@/lib/const"
 import {PostFooter} from "@/components/post-footer";
 import DateArchiveHeader from "@/components/date-archive-header";
+import TagStatsList from "@/components/tag-stats-list";
 type RecentPost = {
     id: string;
     title?: string;
@@ -90,6 +91,7 @@ export default async function Index() {
                     ))}
                 </div>
             )}
+            <TagStatsList n={20} title="タグ一覧" />
             <SideMenu slug={null} />
         </Container>
     )

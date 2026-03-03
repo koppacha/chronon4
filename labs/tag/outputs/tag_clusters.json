@@ -1,0 +1,359 @@
+{
+  "generated_at": "2026-03-01T19:57:06",
+  "threshold": 0.45,
+  "clusters": [
+    {
+      "cluster_id": "cluster_021",
+      "size": 7,
+      "tags": [
+        "ものメモ",
+        "カービィのブロックボール",
+        "ゲームボーイ",
+        "スーパードンキーコングgb",
+        "デジタルゲーム見聞録",
+        "ドラゴンクエストモンスターズ-テリーのワンダー",
+        "星のカービィ-鏡の大迷宮"
+      ]
+    },
+    {
+      "cluster_id": "cluster_016",
+      "size": 6,
+      "tags": [
+        "getting-over-it",
+        "stardew-valley",
+        "tumbleseed",
+        "オーディンクラウン",
+        "ゲームレビュー横断",
+        "摘み書き"
+      ]
+    },
+    {
+      "cluster_id": "cluster_032",
+      "size": 6,
+      "tags": [
+        "一人旅",
+        "任意改行非表示対象の記事",
+        "家族旅行",
+        "旅行",
+        "東京都",
+        "沖縄県"
+      ]
+    },
+    {
+      "cluster_id": "cluster_008",
+      "size": 5,
+      "tags": [
+        "SoundCloud",
+        "beatmania-iidx-25-cannon-ballers-original-soundtrack",
+        "future-cαke",
+        "ゆのもきゅ",
+        "ベストミュージックランキング"
+      ]
+    },
+    {
+      "cluster_id": "cluster_001",
+      "size": 3,
+      "tags": [
+        "9-songs",
+        "piana",
+        "ジャケット"
+      ]
+    },
+    {
+      "cluster_id": "cluster_006",
+      "size": 3,
+      "tags": [
+        "Faint",
+        "exai",
+        "taylor-deupree"
+      ]
+    },
+    {
+      "cluster_id": "cluster_012",
+      "size": 3,
+      "tags": [
+        "beatmania-iidx-20-tricoro-original-soundtrack-vol-1",
+        "bon-voyage",
+        "the-midsummer-station"
+      ]
+    },
+    {
+      "cluster_id": "cluster_013",
+      "size": 3,
+      "tags": [
+        "bit-generationsシリーズ",
+        "オススメソフト",
+        "ミニ特集"
+      ]
+    },
+    {
+      "cluster_id": "cluster_019",
+      "size": 3,
+      "tags": [
+        "おすすめアルバム",
+        "らき☆すた-キャラクターソング-vol-003-柊つかさ",
+        "音楽1000再生突破"
+      ]
+    },
+    {
+      "cluster_id": "cluster_020",
+      "size": 3,
+      "tags": [
+        "くろのん短編集",
+        "大キリ番記事",
+        "自作小説"
+      ]
+    },
+    {
+      "cluster_id": "cluster_025",
+      "size": 3,
+      "tags": [
+        "ゲームプレイ動画",
+        "チャレンジモード公式記録超えを目指す",
+        "プラチナ攻略詰め合わせ"
+      ]
+    },
+    {
+      "cluster_id": "cluster_033",
+      "size": 3,
+      "tags": [
+        "一人暮らし",
+        "旧今日の出来事",
+        "生活リズム"
+      ]
+    },
+    {
+      "cluster_id": "cluster_034",
+      "size": 3,
+      "tags": [
+        "一般ニュース雑感",
+        "動物園",
+        "吉祥寺"
+      ]
+    },
+    {
+      "cluster_id": "cluster_002",
+      "size": 2,
+      "tags": [
+        "Apache",
+        "miitomo"
+      ]
+    },
+    {
+      "cluster_id": "cluster_003",
+      "size": 2,
+      "tags": [
+        "Apple-Arcade",
+        "東久留米"
+      ]
+    },
+    {
+      "cluster_id": "cluster_004",
+      "size": 2,
+      "tags": [
+        "Art-style：somnium",
+        "art-style：picopict"
+      ]
+    },
+    {
+      "cluster_id": "cluster_005",
+      "size": 2,
+      "tags": [
+        "Desktop-Tower-Defense",
+        "pcゲーム"
+      ]
+    },
+    {
+      "cluster_id": "cluster_007",
+      "size": 2,
+      "tags": [
+        "Nuxt",
+        "laravel"
+      ]
+    },
+    {
+      "cluster_id": "cluster_009",
+      "size": 2,
+      "tags": [
+        "ambiance",
+        "boost-3d"
+      ]
+    },
+    {
+      "cluster_id": "cluster_010",
+      "size": 2,
+      "tags": [
+        "art-style：aquario",
+        "art-style：decode"
+      ]
+    },
+    {
+      "cluster_id": "cluster_011",
+      "size": 2,
+      "tags": [
+        "autechre",
+        "エレクトロニカ"
+      ]
+    },
+    {
+      "cluster_id": "cluster_014",
+      "size": 2,
+      "tags": [
+        "e3",
+        "プチまとめ"
+      ]
+    },
+    {
+      "cluster_id": "cluster_015",
+      "size": 2,
+      "tags": [
+        "empire-for-kingdoms",
+        "royal-revolt-2"
+      ]
+    },
+    {
+      "cluster_id": "cluster_017",
+      "size": 2,
+      "tags": [
+        "pocket",
+        "read-it-later"
+      ]
+    },
+    {
+      "cluster_id": "cluster_018",
+      "size": 2,
+      "tags": [
+        "unity",
+        "ピクミン本編チャレンジ"
+      ]
+    },
+    {
+      "cluster_id": "cluster_022",
+      "size": 2,
+      "tags": [
+        "カテゴリ変更済みの記事",
+        "長編"
+      ]
+    },
+    {
+      "cluster_id": "cluster_023",
+      "size": 2,
+      "tags": [
+        "キャラクター名",
+        "ポケットモンスター-ファイアレッド・リーフグリーン"
+      ]
+    },
+    {
+      "cluster_id": "cluster_024",
+      "size": 2,
+      "tags": [
+        "ギャンブル",
+        "公共事業"
+      ]
+    },
+    {
+      "cluster_id": "cluster_026",
+      "size": 2,
+      "tags": [
+        "デジタル規制法",
+        "携帯動画環境"
+      ]
+    },
+    {
+      "cluster_id": "cluster_027",
+      "size": 2,
+      "tags": [
+        "ドラゴンダイス",
+        "パネローグ"
+      ]
+    },
+    {
+      "cluster_id": "cluster_028",
+      "size": 2,
+      "tags": [
+        "バーチャルコンソール",
+        "ワリオの森"
+      ]
+    },
+    {
+      "cluster_id": "cluster_029",
+      "size": 2,
+      "tags": [
+        "ピクミン3本編チャレンジ",
+        "外部動画を含む記事"
+      ]
+    },
+    {
+      "cluster_id": "cluster_030",
+      "size": 2,
+      "tags": [
+        "フューチャーベース",
+        "音楽系イベント"
+      ]
+    },
+    {
+      "cluster_id": "cluster_031",
+      "size": 2,
+      "tags": [
+        "マリオパーティ5",
+        "マリオパーティ6"
+      ]
+    },
+    {
+      "cluster_id": "cluster_035",
+      "size": 2,
+      "tags": [
+        "仕事の反省",
+        "自立計画"
+      ]
+    },
+    {
+      "cluster_id": "cluster_036",
+      "size": 2,
+      "tags": [
+        "倫理的問題点のある記事",
+        "準非公開の記事"
+      ]
+    },
+    {
+      "cluster_id": "cluster_037",
+      "size": 2,
+      "tags": [
+        "写真で振り返る一年",
+        "写真特集"
+      ]
+    },
+    {
+      "cluster_id": "cluster_038",
+      "size": 2,
+      "tags": [
+        "国分寺",
+        "心療内科"
+      ]
+    },
+    {
+      "cluster_id": "cluster_039",
+      "size": 2,
+      "tags": [
+        "新潟県",
+        "石川県"
+      ]
+    },
+    {
+      "cluster_id": "cluster_040",
+      "size": 2,
+      "tags": [
+        "着想メモ箇条書き",
+        "高校時代の反省"
+      ]
+    },
+    {
+      "cluster_id": "cluster_041",
+      "size": 2,
+      "tags": [
+        "絵文字を含む記事",
+        "運動"
+      ]
+    }
+  ]
+}

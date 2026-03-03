@@ -43,10 +43,28 @@ next-env.d.ts
 
 # ENV
 .env
-/lab/inputs/
-/lab/outputs/
+/labs/inputs/
+/labs/outputs/
 /venv/
 /lab/tests/
 
 # DB
 prisma/dev.db
+
+# tag analysis scripts outputs (labs/tag)
+/labs/tag/outputs/**
+!/labs/tag/outputs/
+!/labs/tag/outputs/README.md
+!/labs/tag/outputs/tag_related_cloud.json
+!/labs/tag/outputs/tag_clusters.json
+!/labs/tag/outputs/assigned_tags.jsonl
+!/labs/tag/outputs/metadata/
+!/labs/tag/outputs/metadata/tag_attributes.json
+!/labs/tag/outputs/metadata/needs_review.json
+!/labs/tag/outputs/feedback/
+!/labs/tag/outputs/feedback/corrections.jsonl
+
+# Python cache
+__pycache__/
+*.pyc
+/labs/mecab-ipadic-neologd/

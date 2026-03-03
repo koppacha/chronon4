@@ -1,0 +1,2005 @@
+{
+  "generated_at": "2026-03-01T19:57:06",
+  "items": [
+    {
+      "tag": "旧ゲームのプレイ日記",
+      "article_count": 598,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "webサイト更新作業",
+      "article_count": 220,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "生活リズム",
+      "article_count": 188,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "生活リズムの問題",
+      "article_count": 145,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "外部リンクを含む記事",
+      "article_count": 137,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ピクミン2",
+      "article_count": 122,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ピクミン3",
+      "article_count": 110,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "iosアプリ",
+      "article_count": 103,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ブログのアクセス数",
+      "article_count": 83,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "キリ番記事",
+      "article_count": 80,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "会社（第２社）",
+      "article_count": 79,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ポケモンgo",
+      "article_count": 76,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "カテゴリ変更済みの記事",
+      "article_count": 74,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ブログ内リンクを含む記事",
+      "article_count": 71,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ブログの後日投稿問題",
+      "article_count": 70,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "高校クラスメイト",
+      "article_count": 70,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "タイトル修正済みの記事",
+      "article_count": 68,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ブログの執筆方針",
+      "article_count": 67,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ポケットモンスター-ダイヤモンド・パール・プラ",
+      "article_count": 67,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "デジタルメモ環境",
+      "article_count": 61,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "音楽ライブラリ",
+      "article_count": 60,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "高校テスト期間",
+      "article_count": 59,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "メテオス",
+      "article_count": 52,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "エレクトロニカ",
+      "article_count": 46,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ブログ執筆環境",
+      "article_count": 45,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "アパート引っ越し",
+      "article_count": 41,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ゲームプレイ環境",
+      "article_count": 41,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "一人暮らしのトラブル",
+      "article_count": 41,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "2019年新型コロナウイルス",
+      "article_count": 40,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ブログ執筆",
+      "article_count": 39,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ゲームプレイ雑記",
+      "article_count": 38,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "動画サイト",
+      "article_count": 37,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "webサイト更新計画",
+      "article_count": 36,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ゲームプレイ遍歴",
+      "article_count": 35,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ハードウェア系トラブル",
+      "article_count": 35,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "動画エンコード",
+      "article_count": 35,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "バイト",
+      "article_count": 34,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "本家ブログ移転計画",
+      "article_count": 34,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "特設サイト",
+      "article_count": 33,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "bluetoothヘッドセット",
+      "article_count": 32,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "バイト応募",
+      "article_count": 32,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "購入予定ゲームタイトル",
+      "article_count": 31,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "大乱闘スマッシュブラザーズx",
+      "article_count": 30,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "webブラウザ",
+      "article_count": 29,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ゲームプレイ動画",
+      "article_count": 29,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ゲーム一般",
+      "article_count": 29,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "コミュニケーション能力",
+      "article_count": 29,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ピクミン界隈",
+      "article_count": 29,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ブログ存続危機問題",
+      "article_count": 28,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "webサイト運営",
+      "article_count": 27,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ぷよぷよテトリス",
+      "article_count": 27,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ドラガリアロスト",
+      "article_count": 27,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ブログの運営方針",
+      "article_count": 27,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ポケットモンスター-ブラック・ホワイト",
+      "article_count": 27,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "Nintendo-Direct",
+      "article_count": 26,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ネット文化",
+      "article_count": 26,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ピクミン",
+      "article_count": 25,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "プチまとめ",
+      "article_count": 25,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "スマートフォンゲーム",
+      "article_count": 24,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ニンテンドーds",
+      "article_count": 24,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ブログ運営",
+      "article_count": 24,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "スプラトゥーン",
+      "article_count": 23,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "メルクストーリア",
+      "article_count": 23,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ゲーム業界",
+      "article_count": 22,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "デジタル計画管理",
+      "article_count": 22,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "トラブル",
+      "article_count": 22,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ネガティブ思考の問題",
+      "article_count": 22,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ブログの文字数",
+      "article_count": 22,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "楽天ブログ",
+      "article_count": 22,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "だれでもアソビ大全",
+      "article_count": 21,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "アニバーサリー記念記事",
+      "article_count": 21,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "トップイラスト",
+      "article_count": 21,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ピクミンシリーズチャレンジモード大会",
+      "article_count": 21,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "プチ特集",
+      "article_count": 21,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ポケモンカードポケット",
+      "article_count": 21,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "dsiウェア",
+      "article_count": 20,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "e3",
+      "article_count": 20,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "イヤホン",
+      "article_count": 20,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "カフェ",
+      "article_count": 20,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "テトリスds",
+      "article_count": 20,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "デジタル情報収集",
+      "article_count": 20,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ネットワーク環境",
+      "article_count": 20,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "大乱闘スマッシュブラザーズspecial",
+      "article_count": 20,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "webサイト制作環境",
+      "article_count": 19,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "キーボード",
+      "article_count": 19,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "プログラミング",
+      "article_count": 19,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ゲーム音楽",
+      "article_count": 18,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "スマートフォン",
+      "article_count": 18,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "大学院ゼミ",
+      "article_count": 18,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "運営サイトのアクセス数",
+      "article_count": 18,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ゲームプレイ計画",
+      "article_count": 17,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "タブレット",
+      "article_count": 17,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "デスクトップカスタム",
+      "article_count": 17,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ニンテンドー3ds",
+      "article_count": 17,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ピクミン4",
+      "article_count": 17,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ペーパーマリオrpg",
+      "article_count": 17,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "風来のシレン4-神の眼と悪魔のヘソ",
+      "article_count": 17,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "LLM",
+      "article_count": 16,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ffccエコーズ・オブ・タイム",
+      "article_count": 16,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "スーパーマリオ-オデッセイ",
+      "article_count": 16,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ネットショップ",
+      "article_count": 16,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ヘッドホン",
+      "article_count": 16,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "RTA",
+      "article_count": 15,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "webサイト運営方針",
+      "article_count": 15,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "webサイト運営裏話",
+      "article_count": 15,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "スポーツ観戦",
+      "article_count": 15,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "テトリスエフェクト",
+      "article_count": 15,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ポケットモンスター-ソード・シールド",
+      "article_count": 15,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ミニ特集",
+      "article_count": 15,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "モバイルマルチ系",
+      "article_count": 15,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "匿名メッセージングアプリ",
+      "article_count": 15,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ゲーム発売前",
+      "article_count": 14,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ソーシャルゲーム",
+      "article_count": 14,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ハードウェア換装",
+      "article_count": 14,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "他人のプライバシーを含む記事",
+      "article_count": 14,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "情報セキュリティ",
+      "article_count": 14,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "VTuber",
+      "article_count": 13,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "pcゲーム",
+      "article_count": 13,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "アニメ",
+      "article_count": 13,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "クレジットカード",
+      "article_count": 13,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ニュース",
+      "article_count": 13,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ファンタシースターzero",
+      "article_count": 13,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ブログの継続日数",
+      "article_count": 13,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ポケットモンスター-x・y",
+      "article_count": 13,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "モンスターハンタークロス",
+      "article_count": 13,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "コーヒー",
+      "article_count": 12,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "テクノポップ",
+      "article_count": 12,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "デジタルイラスト",
+      "article_count": 12,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ニンテンドーds-lite",
+      "article_count": 12,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ポケットモンスターシリーズ",
+      "article_count": 12,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "風来のシレン5plus-フォーチュンタワーと運命のダイ",
+      "article_count": 12,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "bit-generationsシリーズ",
+      "article_count": 11,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "imeソフト",
+      "article_count": 11,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "twitter相互ブロック問題",
+      "article_count": 11,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "オススメソフト",
+      "article_count": 11,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ゲームイベント",
+      "article_count": 11,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "スーパーマリオブラザーズ2",
+      "article_count": 11,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ブログの価値",
+      "article_count": 11,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "プライバシー問題を含む記事",
+      "article_count": 11,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "プラチナ攻略詰め合わせ",
+      "article_count": 11,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "メール",
+      "article_count": 11,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "郵便・宅配サービス",
+      "article_count": 11,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "PSP",
+      "article_count": 10,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "VR",
+      "article_count": 10,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "fmラジオ",
+      "article_count": 10,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "iosゲーム",
+      "article_count": 10,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "やりたいことリスト",
+      "article_count": 10,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "アナログメモ環境",
+      "article_count": 10,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "イラスト練習",
+      "article_count": 10,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ゲーム＆ウオッチ",
+      "article_count": 10,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "スーパーマリオサンシャイン",
+      "article_count": 10,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "チャレンジモード公式記録超えを目指す",
+      "article_count": 10,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ピクミン3デラックス",
+      "article_count": 10,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ベストゲームランキング",
+      "article_count": 10,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "マリオカート8",
+      "article_count": 10,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "レトロゲーム",
+      "article_count": 10,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "外付けHDD",
+      "article_count": 10,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "情報リテラシー",
+      "article_count": 10,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "直感ヒトフデ",
+      "article_count": 10,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "No-Mans-Sky",
+      "article_count": 9,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ものメモ",
+      "article_count": 9,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "アナログノート",
+      "article_count": 9,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ゲームセンター",
+      "article_count": 9,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ゲームプレイ方針",
+      "article_count": 9,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ゲーム制作",
+      "article_count": 9,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ゴールデンウィーク",
+      "article_count": 9,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ディスプレイ",
+      "article_count": 9,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ネットブック",
+      "article_count": 9,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "フォートナイト-バトルロイヤル",
+      "article_count": 9,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "会社（第３社）",
+      "article_count": 9,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "会社（第４社）",
+      "article_count": 9,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "動画配信サービス",
+      "article_count": 9,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "大学ゼミ",
+      "article_count": 9,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "通勤ヒトフデ",
+      "article_count": 9,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "BEMANI-Soundtracks",
+      "article_count": 8,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "SO-04D",
+      "article_count": 8,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "WS020SH",
+      "article_count": 8,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "webサイト制作業務",
+      "article_count": 8,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "クラッシュフィーバー",
+      "article_count": 8,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "スマートフォンos比較",
+      "article_count": 8,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "スマートフォンアプリ",
+      "article_count": 8,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "テレビ番組感想",
+      "article_count": 8,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ブログのメンテナンス",
+      "article_count": 8,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ブログ衰退期",
+      "article_count": 8,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ポケットモンスター-サン・ムーン",
+      "article_count": 8,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "メトロイドプライム：ハンターズ",
+      "article_count": 8,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "リンク切れを含む記事",
+      "article_count": 8,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "公的サービス",
+      "article_count": 8,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "初代ブログ",
+      "article_count": 8,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "大キリ番記事",
+      "article_count": 8,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "大乱闘スマッシュブラザーズ-for-3DS-Wii-U",
+      "article_count": 8,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "005SH",
+      "article_count": 7,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "931SH",
+      "article_count": 7,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "LINE",
+      "article_count": 7,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "Nintendo-Switch-2",
+      "article_count": 7,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "webサイト制作作業",
+      "article_count": 7,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "カービィのエアライド",
+      "article_count": 7,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "キャリアプラン",
+      "article_count": 7,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "クラブニンテンドー",
+      "article_count": 7,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    },
+    {
+      "tag": "ゲームプレイ時間",
+      "article_count": 7,
+      "suggested_fields": [
+        "group",
+        "series",
+        "platforms"
+      ],
+      "reason": "高頻度タグだが metadata/tag_attributes.json に属性が未定義"
+    }
+  ]
+}
