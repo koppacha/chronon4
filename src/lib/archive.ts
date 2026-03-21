@@ -4,10 +4,11 @@ import matter from "gray-matter";
 import { getAllPostFiles, postsDirectory } from "@/lib/posts";
 import { getCache, setCache } from "@/lib/cache";
 import { formatDate, id2slug } from "@/lib/chronon4";
-import { tagToUrlKey } from "@/lib/tag-url";
+import { tagMatchesUrlKey } from "@/lib/tag-url";
 
 const ARCHIVE_META_CACHE_KEY = "archivePostMeta";
 const ARCHIVE_META_CACHE_TTL_MS = 5 * 60 * 1000;
+const KEYWORD_DIRECTORY = path.join(postsDirectory, "keyword");
 
 export type ArchivePostMeta = {
     id: number;
@@ -31,6 +32,11 @@ export type ArchivePostFull = {
     content: string;
     update: string;
     size: number;
+};
+
+export type KeywordDoc = {
+    name: string;
+    content: string;
 };
 
 function normalizeCategories(data: any): string[] {
@@ -57,6 +63,49 @@ function parseDateParts(dateValue: any) {
         month: date.getMonth() + 1,
         day: date.getDate(),
     };
+}
+
+function buildKeywordFilePath(fileName: string): string | null {
+    if (!fileName) return null;
+
+    const keywordRoot = path.resolve(KEYWORD_DIRECTORY);
+    const fullPath = path.resolve(keywordRoot, `${fileName}.md`);
+
+    if (fullPath === keywordRoot || fullPath.startsWith(keywordRoot + path.sep)) {
+        return fullPath;
+    }
+
+    return null;
+}
+
+function uniqueCandidateNames(names: string[]): string[] {
+    return Array.from(
+        new Set(
+            names
+                .map((name) => String(name || "").trim())
+                .filter(Boolean)
+        )
+    );
+}
+
+export async function getKeywordDocByNames(names: string[]): Promise<KeywordDoc | null> {
+    const candidates = uniqueCandidateNames(names);
+
+    for (const name of candidates) {
+        const filePath = buildKeywordFilePath(name);
+        if (!filePath) continue;
+
+        try {
+            const fileContents = await fs.readFile(filePath, "utf8");
+            const { content } = matter(fileContents);
+            return { name, content };
+        } catch (error: any) {
+            if (error?.code === "ENOENT") continue;
+            throw error;
+        }
+    }
+
+    return null;
 }
 
 export async function getAllArchivePostMeta(): Promise<ArchivePostMeta[]> {
@@ -118,7 +167,7 @@ export async function resolveTagByUrlKey(urlKey: string): Promise<{ tag: string 
 
     for (const post of all) {
         for (const tag of post.tags) {
-            if (tagToUrlKey(tag) === urlKey) {
+            if (tagMatchesUrlKey(tag, urlKey)) {
                 matched.add(tag);
             }
         }

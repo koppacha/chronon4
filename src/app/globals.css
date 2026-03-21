@@ -279,3 +279,35 @@ blockquote p {
     color: #9a9a9a;
     cursor: not-allowed;
 }
+/* 各年ごとのイメージカラー
+ * 2020年代：彩度65, 明るさ90
+ * 2010年代：彩度55, 明るさ95
+ * 2000年代：彩度45, 明るさ98
+ */
+.y2026 {color: #E4E650;}
+.y2025 {color: #A550E6;}
+.y2024 {color: #50E687;}
+.y2023 {color: #E6B750;}
+.y2022 {color: #E67150;}
+.y2021 {color: #50E6AA;}
+.y2020 {color: #AAAAAA;}
+.y2019 {color: #F26DA0;}
+.y2018 {color: #6DF27B;}
+.y2017 {color: #F26DEE;}
+.y2016 {color: #F2EF6D;}
+.y2015 {color: #A76DF2;}
+.y2014 {color: #F2AE6D;}
+.y2013 {color: #7EF26D;}
+.y2012 {color: #F26F6D;}
+.y2011 {color: #6DB4F2;}
+.y2010 {color: #CCCCCC;}
+.y2009 {color: #FA8B89;}
+.y2008 {color: #DB89FA;}
+.y2007 {color: #FAF889;}
+.y2006 {color: #B789FA;}
+.y2005 {color: #89A4FA;}
+.y2004 {color: #CEFA89;}
+.y2003 {color: #FAC989;}
+.y2002 {color: #8DFA89;}
+.y2001 {color: #89F6FA;}
+.y2000 {color: #FFFFFF;}
