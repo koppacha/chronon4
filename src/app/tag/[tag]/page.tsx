@@ -55,10 +55,10 @@ export default async function TagPage({
         <Container maxWidth="xl">
             <Header />
             <div style={{ width: "100%" }}>
-                <h1 className="archive-title">タグ: {displayTag}</h1>
+                <h1 className="archive-title">{displayTag}</h1>
                 {keywordDoc ? (
                     <article className="article" style={{ marginBottom: "2rem" }}>
-                        <PostBody category="" content={keywordDoc.content} date="2004-09-01" />
+                        <PostBody category="" content={keywordDoc.content} date="" />
                     </article>
                 ) : null}
                 {pagination ? (

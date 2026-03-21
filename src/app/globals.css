@@ -31,9 +31,6 @@ body {
 code {
     white-space: pre-wrap;
 }
-strong {
-    color: #f6cb20;
-}
 .container {
     margin: 0 auto;
     padding: 10px;
@@ -55,7 +52,15 @@ strong {
 .content-body a {
     text-decoration: underline 1px #626262;
     text-underline-offset: 4px;
-    color: #f6cb20;
+}
+.content-body .svg-inline--fa {
+    width: 0.85em;
+    height: 0.85em;
+    vertical-align: -0.125em;
+}
+.content-body strong.year-color-default,
+.content-body a.year-color-default {
+    color: #20cff6;
 }
 .content-body p {
     margin: 0;
@@ -178,6 +183,26 @@ blockquote p {
     font-size: 0.9em;
     padding-right: 20px;
 }
+.intro-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+    width: 100%;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #626262;
+    font-size: 0.9em;
+}
+.intro-link-item {
+    text-align: center;
+}
+.intro-link-item a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35em;
+    width: 100%;
+}
 .copyright {
     text-align: right;
     font-size: 0.9em;
@@ -285,7 +310,7 @@ blockquote p {
  * 2000年代：彩度45, 明るさ98
  */
 .y2026 {color: #E4E650;}
-.y2025 {color: #A550E6;}
+.y2025 {color: #bc50e6;}
 .y2024 {color: #50E687;}
 .y2023 {color: #E6B750;}
 .y2022 {color: #E67150;}
@@ -311,3 +336,4 @@ blockquote p {
 .y2002 {color: #8DFA89;}
 .y2001 {color: #89F6FA;}
 .y2000 {color: #FFFFFF;}
+.year-color-default {color: #ffffff;}

@@ -5,6 +5,7 @@ import {PostTitle} from "@/components/post-title";
 import {type Author} from "@/interfaces/author";
 import Link from "next/link";
 import { tagToUrlKey } from "@/lib/tag-url";
+import { getYearColorHex } from "@/lib/year-color";
 
 type Props = {
     id: string,
@@ -19,10 +20,11 @@ type Props = {
 export function PostHeader({id, title, coverImage, date, author, tags, categories}: Props) {
 
     const category = Array.isArray(categories) ? categories[0] : categories
+    const postNumberColor = getYearColorHex(date);
 
     return (
         <>
-            <div className="post-header">
+            <div className="post-header" style={{ color: postNumberColor ?? undefined }}>
                 {`#${Number(id)}`}
             </div>
             <Link href={`/post/${id}`}><PostTitle>{title}</PostTitle></Link>

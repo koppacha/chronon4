@@ -2,7 +2,6 @@
 
 import React, { Key, useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import { baseUrl } from "@/lib/const";
 
 type Props = {
     slug: string;
@@ -15,9 +14,9 @@ const SideMenu: React.FC<Props> = ({ slug }) => {
     useEffect(() => {
         let fetchUrl: string;
         if (!slug) {
-            fetchUrl = `${baseUrl}/api/recent?n=90&m=10&f=tdg`;
+            fetchUrl = `/api/recent?n=90&m=10&f=tdg`;
         } else {
-            fetchUrl = `${baseUrl}/api/recent?n=51&m=25&f=tdg&a=${slug}`;
+            fetchUrl = `/api/recent?n=51&m=25&f=tdg&a=${slug}`;
         }
 
         async function fetchPosts() {

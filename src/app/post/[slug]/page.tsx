@@ -4,24 +4,21 @@ import PostBodyGuard from "@/components/post-body-guard";
 import { PostHeader } from "@/components/post-header";
 import Link from "next/link";
 import ToggleLists from "@/components/toggle-list";
-import {baseUrl} from "@/lib/const";
 import SideMenu from "@/components/side-menu";
 import {PostFooter} from "@/components/post-footer";
 import { notFound } from "next/navigation";
+import { getPostDetailById } from "@/lib/post-detail";
 
 export const revalidate = 2000;
 
 export default async function Post({ params }: { params: Promise<{ slug: string }> }) {
 
     try {
-        // 記事を取得
         const {slug} = await params;
-        const res = await fetch(`${baseUrl}/api/single?n=${slug}`, {next: {revalidate}})
-
-        if (!res.ok) {
-            throw new Error(`Failed to fetch data: ${res.status} ${res.statusText}`)
+        const post = await getPostDetailById(slug);
+        if (!post) {
+            notFound();
         }
-        const post = await res.json()
 
 
         // 前後記事のURLを生成
@@ -42,24 +39,24 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
                 <article className="article">
                     <PostHeader
                         id={post.id}
-                        title={post.title}
-                        coverImage={post.coverImage}
+                        title={post.title ?? "Untitled"}
+                        coverImage=""
                         date={post.date}
-                        author={post.author}
-                        tags={post.tags}
+                        author={{ name: "", picture: "" }}
+                        tags={post.tags ?? []}
                         categories={post.category}
                     />
                     <PostBodyGuard
                         idOrSlug={slug}
-                        tags={post.tags}
+                        tags={post.tags ?? []}
                         category={post.category}
-                        content={post.content}
+                        content={post.content ?? ""}
                         date={post.date}
                     />
                     <PostFooter
                         id={post.id}
-                        update={post.update}
-                        size={post.size}
+                        update={post.update ?? ""}
+                        size={post.size ?? 0}
                     />
                 </article>
                 <div className="grid-container">

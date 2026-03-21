@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Box } from "@mui/material";
-import { baseUrl } from "@/lib/const";
 import { tagToUrlKey } from "@/lib/tag-url";
 
 type TagStat = {
@@ -25,7 +24,7 @@ const TagStatsList: React.FC<Props> = ({ n = 20, title = "タグ一覧" }) => {
     useEffect(() => {
         async function fetchTags() {
             try {
-                const res = await fetch(`${baseUrl}/api/tags?n=${n}`, { cache: "no-store" });
+                const res = await fetch(`/api/tags?n=${n}`, { cache: "no-store" });
                 if (!res.ok) {
                     throw new Error(`Failed to fetch tags: ${res.status}`);
                 }
