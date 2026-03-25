@@ -7,6 +7,9 @@ import {PostFooter} from "@/components/post-footer";
 import DateArchiveHeader from "@/components/date-archive-header";
 import TagStatsList from "@/components/tag-stats-list";
 import { getRecentPostsData } from "@/lib/recent-posts";
+
+export const revalidate = 2000;
+
 type RecentPost = {
     id: string;
     title?: string;
