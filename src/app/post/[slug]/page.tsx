@@ -4,10 +4,10 @@ import PostBodyGuard from "@/components/post-body-guard";
 import { PostHeader } from "@/components/post-header";
 import Link from "next/link";
 import ToggleLists from "@/components/toggle-list";
-import {baseUrl} from "@/lib/const";
 import SideMenu from "@/components/side-menu";
 import {PostFooter} from "@/components/post-footer";
 import { notFound } from "next/navigation";
+import { getPostDetailById } from "@/lib/post-detail";
 
 export const revalidate = 2000;
 
@@ -15,12 +15,10 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
 
     try {
         const {slug} = await params;
-        const res = await fetch(`${baseUrl}/api/single?n=${slug}`, {next: {revalidate}})
-
-        if (!res.ok) {
-            throw new Error(`Failed to fetch data: ${res.status} ${res.statusText}`)
+        const post = await getPostDetailById(slug);
+        if (!post) {
+            notFound();
         }
-        const post = await res.json()
 
 
         // 前後記事のURLを生成
