@@ -36,6 +36,7 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3004
+      - HOSTNAME=0.0.0.0
       - DATABASE_URL=file:/app/prisma/dev.db
     ports:
       - "3004:3004"

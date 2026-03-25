@@ -58,6 +58,10 @@ code {
     height: 0.85em;
     vertical-align: -0.125em;
 }
+.content-body .external-link-icon {
+    font-size: 0.85em;
+    vertical-align: 0.05em;
+}
 .content-body strong.year-color-default,
 .content-body a.year-color-default {
     color: #20cff6;

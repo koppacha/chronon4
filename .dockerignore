@@ -9,6 +9,7 @@ venv/
 
 # ローカル node_modules は不要
 node_modules/
+.next/
 
 # ブログコンテンツ本体およびDBはビルド時に除外
 blog/
