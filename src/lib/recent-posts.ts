@@ -99,29 +99,35 @@ export async function getRecentPostsData(options?: {
         selectedPosts,
         MAX_CONCURRENCY,
         async (fileName) => {
-            const content = await getPostContent(fileName);
-            if (!content) return null;
+            try {
+                const content = await getPostContent(fileName);
+                if (!content) return null;
 
-            const { data, content: fileContent } = matter(content);
-            const { postId } = id2slug(fileName);
+                const { data, content: fileContent } = matter(content);
+                const { postId } = id2slug(fileName);
+                if (!postId) return null;
 
-            const result: RecentPostData = { id: postId };
+                const result: RecentPostData = { id: postId };
 
-            if (includeField("t")) result.title = data.title || "Untitled";
-            if (includeField("d")) result.date = data.date || null;
-            if (includeField("c")) result.category = data.category || null;
-            if (includeField("g")) result.tags = data.tags || [];
-            if (includeField("n")) result.content = fileContent;
-            if (includeField("u")) {
-                const filePath = path.join(postsDirectory, fileName);
-                const stats = await fs.stat(filePath);
-                result.update = formatDate(stats.mtime);
+                if (includeField("t")) result.title = data.title || "Untitled";
+                if (includeField("d")) result.date = data.date || null;
+                if (includeField("c")) result.category = data.category || null;
+                if (includeField("g")) result.tags = data.tags || [];
+                if (includeField("n")) result.content = fileContent;
+                if (includeField("u")) {
+                    const filePath = path.join(postsDirectory, fileName);
+                    const stats = await fs.stat(filePath);
+                    result.update = formatDate(stats.mtime);
+                }
+                if (includeField("s")) result.size = fileContent.length;
+
+                return result;
+            } catch (error) {
+                console.error(`[getRecentPostsData] skip failed file: ${fileName}`, error);
+                return null;
             }
-            if (includeField("s")) result.size = fileContent.length;
-
-            return result;
         }
     );
 
-    return postsData.filter(Boolean);
+    return postsData.filter((post): post is RecentPostData => Boolean(post));
 }
