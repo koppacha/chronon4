@@ -3,12 +3,10 @@ import { Intro } from "@/components/intro"
 import { PostHeader } from "@/components/post-header"
 import PostBodyGuard from "@/components/post-body-guard"
 import SideMenu from "@/components/side-menu"
+import { baseUrl } from "@/lib/const"
 import {PostFooter} from "@/components/post-footer";
 import DateArchiveHeader from "@/components/date-archive-header";
 import TagStatsList from "@/components/tag-stats-list";
-import { getRecentPostsData } from "@/lib/recent-posts";
-
-export const revalidate = 2000;
 
 type RecentPost = {
     id: string;
@@ -25,7 +23,11 @@ type RecentPost = {
 
 async function getRecentPosts(): Promise<{ posts: RecentPost[]; error: string | null }> {
     try {
-        const data = await getRecentPostsData();
+        const res = await fetch(`${baseUrl}/api/recent`, { cache: "no-store" });
+        if (!res.ok) {
+            return { posts: [], error: "記事の取得に失敗しました。しばらくしてから再試行してください。" };
+        }
+        const data = await res.json();
         if (!Array.isArray(data) || data.length === 0) {
             return { posts: [], error: "記事が見つかりませんでした。" };
         }
