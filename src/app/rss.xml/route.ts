@@ -1,9 +1,16 @@
 import { renderRssXml } from "@/lib/rss";
+import { unstable_cache } from "next/cache";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
+
+const getCachedRssXml = unstable_cache(
+    async () => renderRssXml(),
+    ["rss-xml"],
+    { revalidate: 3600 }
+);
 
 export async function GET(): Promise<Response> {
-    const xml = await renderRssXml();
+    const xml = await getCachedRssXml();
 
     return new Response(xml, {
         status: 200,
