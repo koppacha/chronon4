@@ -1,7 +1,8 @@
 import { getCache, setCache } from "@/lib/cache";
-import { getAllArchivePostMeta } from "@/lib/archive";
+import { getVisibleArchivePostMeta } from "@/lib/archive";
+import { getTodayDateOnly } from "@/lib/publication-delay";
 
-const TAG_STATS_CACHE_KEY = "tagStatsV1";
+const TAG_STATS_CACHE_KEY_PREFIX = "tagStatsV1";
 const TAG_STATS_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
 export type TagStat = {
@@ -12,10 +13,11 @@ export type TagStat = {
 };
 
 export async function getTagStats(): Promise<TagStat[]> {
-    const cached = getCache<TagStat[]>(TAG_STATS_CACHE_KEY);
+    const cacheKey = `${TAG_STATS_CACHE_KEY_PREFIX}:${getTodayDateOnly()}`;
+    const cached = getCache<TagStat[]>(cacheKey);
     if (cached) return cached;
 
-    const posts = await getAllArchivePostMeta();
+    const posts = await getVisibleArchivePostMeta();
     const sorted = [...posts].sort((a, b) => a.id - b.id);
     const map = new Map<string, TagStat>();
 
@@ -47,7 +49,7 @@ export async function getTagStats(): Promise<TagStat[]> {
         return a.tag.localeCompare(b.tag, "ja");
     });
 
-    setCache(TAG_STATS_CACHE_KEY, result, TAG_STATS_CACHE_TTL_MS);
+    setCache(cacheKey, result, TAG_STATS_CACHE_TTL_MS);
     return result;
 }
 

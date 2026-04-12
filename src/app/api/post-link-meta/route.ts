@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAllArchivePostMeta } from "@/lib/archive";
+import { getVisibleArchivePostMeta } from "@/lib/archive";
 
 export async function GET(request: NextRequest) {
     try {
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
         }
 
         const uniqueIds = Array.from(new Set(ids));
-        const allMeta = await getAllArchivePostMeta();
+        const allMeta = await getVisibleArchivePostMeta();
         const metaMap = Object.fromEntries(
             allMeta
                 .filter((post) => uniqueIds.includes(post.idString))

@@ -2,6 +2,7 @@ import {Post} from "@/interfaces/post";
 import fs from "fs";
 import matter from "gray-matter";
 import {join} from "path";
+import { isPostPubliclyVisible } from "@/lib/publication-delay";
 
 const postsDirectory = join(process.cwd(), "blog");
 
@@ -36,6 +37,7 @@ export function getAllPosts(): Post[] {
   const slugs = getPostSlugs();
   return slugs
       .map((slug) => getPostBySlug(slug))
+      .filter((post) => isPostPubliclyVisible(post.date))
       // sort posts by date in descending order
       .sort((post1, post2) => (post1.date > post2.date ? -1 : 1));
 }
@@ -44,13 +46,7 @@ export function getRecentPostsById(): Post[] {
   return slugs
       .map((slug) => getPostBySlug(slug))
       .filter(post => {
-        const currentDate = new Date();
-        const postDate = new Date(post.date);
-
-        // 未来日付を除外
-        if (postDate > currentDate) {
-          return false;
-        }
+        if (!isPostPubliclyVisible(post.date)) return false;
         // タイトルがfalsyなら除外
         return post.title;
       })
@@ -72,6 +68,7 @@ export function getPostsByDateRange(startDate: string, endDate: string): Post[] 
         return postDate >= start && postDate <= end;
       })
       .map(slug => getPostBySlug(slug))
+      .filter(post => isPostPubliclyVisible(post.date))
       // 日付順にソート (降順)
       .sort((post1, post2) => (new Date(post1.date) > new Date(post2.date) ? -1 : 1));
 }
@@ -81,7 +78,7 @@ export function getRecentPostsByTag(tag: string, n: number): Post[] {
     // タグに基づいてフィルタリングし、メタ情報を取得する
     const filteredPosts = slugs
         .map(slug => getPostBySlug(slug))
-        .filter(post => post.tags && post.tags.includes(tag)) // tagsに該当するものをフィルタ
+        .filter(post => post.tags && post.tags.includes(tag) && isPostPubliclyVisible(post.date)) // tagsに該当するものをフィルタ
         // 日付順にソート (降順)
         .sort((post1, post2) => (new Date(post1.date) > new Date(post2.date) ? -1 : 1));
 

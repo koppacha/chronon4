@@ -5,6 +5,7 @@ import { getAllPostFiles, postsDirectory } from "@/lib/posts";
 import { getCache, setCache } from "@/lib/cache";
 import { formatDate, id2slug } from "@/lib/chronon4";
 import { tagMatchesUrlKey } from "@/lib/tag-url";
+import { isPostPubliclyVisible } from "@/lib/publication-delay";
 
 const ARCHIVE_META_CACHE_KEY = "archivePostMeta";
 const ARCHIVE_META_CACHE_TTL_MS = 5 * 60 * 1000;
@@ -25,6 +26,7 @@ export type ArchivePostMeta = {
 
 export type ArchivePostFull = {
     id: string;
+    fileName: string;
     title: string;
     date: string;
     tags: string[];
@@ -32,6 +34,7 @@ export type ArchivePostFull = {
     content: string;
     update: string;
     size: number;
+    sourceMtimeMs: number;
 };
 
 export type KeywordDoc = {
@@ -144,25 +147,30 @@ export async function getAllArchivePostMeta(): Promise<ArchivePostMeta[]> {
     return filtered;
 }
 
-export async function getPostsByTag(tag: string): Promise<ArchivePostMeta[]> {
+export async function getVisibleArchivePostMeta(now = new Date()): Promise<ArchivePostMeta[]> {
     const all = await getAllArchivePostMeta();
+    return all.filter((post) => isPostPubliclyVisible(post.date, now));
+}
+
+export async function getPostsByTag(tag: string): Promise<ArchivePostMeta[]> {
+    const all = await getVisibleArchivePostMeta();
     return all.filter((post) => post.tags.includes(tag)).sort((a, b) => b.id - a.id);
 }
 
 export async function getPostsByYear(year: number): Promise<ArchivePostMeta[]> {
-    const all = await getAllArchivePostMeta();
+    const all = await getVisibleArchivePostMeta();
     return all.filter((post) => post.year === year).sort((a, b) => a.id - b.id);
 }
 
 export async function getPostsByYearMonth(year: number, month: number): Promise<ArchivePostMeta[]> {
-    const all = await getAllArchivePostMeta();
+    const all = await getVisibleArchivePostMeta();
     return all
         .filter((post) => post.year === year && post.month === month)
         .sort((a, b) => a.id - b.id);
 }
 
 export async function resolveTagByUrlKey(urlKey: string): Promise<{ tag: string | null; collision: boolean }> {
-    const all = await getAllArchivePostMeta();
+    const all = await getVisibleArchivePostMeta();
     const matched = new Set<string>();
 
     for (const post of all) {
@@ -189,6 +197,7 @@ export async function getArchivePostFullList(posts: ArchivePostMeta[]): Promise<
 
             return {
                 id: post.idString,
+                fileName: post.fileName,
                 title: data.title || post.title || "Untitled",
                 date: String(data.date || post.date || ""),
                 tags: normalizeTags(data),
@@ -196,6 +205,7 @@ export async function getArchivePostFullList(posts: ArchivePostMeta[]): Promise<
                 content,
                 update: formatDate(stats.mtime),
                 size: content.length,
+                sourceMtimeMs: stats.mtimeMs,
             };
         })
     );

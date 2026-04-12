@@ -13,6 +13,7 @@ export const dynamic = "force-dynamic";
 
 type RecentPost = {
     id: string;
+    fileName?: string;
     title?: string;
     coverImage?: string;
     date?: string;
@@ -22,6 +23,7 @@ type RecentPost = {
     content?: string;
     update?: string;
     size?: number;
+    sourceMtimeMs?: number;
 };
 
 async function getRecentPosts(): Promise<{ posts: RecentPost[]; error: string | null }> {
@@ -81,6 +83,8 @@ export default async function Index() {
                                 category={post.category ?? ""}
                                 content={post.content ?? ""}
                                 date={post.date ?? ""}
+                                fileName={post.fileName}
+                                sourceMtimeMs={post.sourceMtimeMs}
                             />
                             <PostFooter
                                 id={post.id}

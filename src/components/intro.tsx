@@ -12,7 +12,7 @@ export function Intro() {
               Chrononglyph
           </h1>
           <div className="info-container">
-              このブログは、こっぱちゃの日記系個人ブログです。2004年より連載中、原則日曜更新、執筆に際しAI不使用。
+              このブログは、"こっぱちゃ"の日記系個人ブログです。2004年より連載中。毎日00時更新、掲載は７日遅延します。執筆に際しAI不使用。
               記事を読んだら「いいね <FontAwesomeIcon icon={faThumbsUp}/>」押して頂けると執筆の励みになります。
               <div className="intro-links">
                   <div className="intro-link-item"><Link href="https://x.com/koppacha">Twitter@koppacha<FontAwesomeIcon icon={faTwitter} /></Link></div>

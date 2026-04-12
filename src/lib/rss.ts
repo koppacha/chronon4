@@ -1,8 +1,9 @@
-import { getArchivePostFullList, getAllArchivePostMeta } from "@/lib/archive";
+import { getArchivePostFullList, getVisibleArchivePostMeta } from "@/lib/archive";
 import { baseUrl, siteDescription, siteLanguage, siteTitle } from "@/lib/const";
 import markdownToHtml from "@/lib/markdownToHtml";
 import { convertRenderedContent } from "@/lib/post-content";
 import { shouldHidePostBody } from "@/lib/post-visibility";
+import { getPublicationDateOnly } from "@/lib/publication-delay";
 
 const RSS_POST_LIMIT = 50;
 const RSS_BODY_TEXT_LIMIT = 200;
@@ -79,7 +80,7 @@ function buildExcerptHtml(contentHtml: string): { description: string; contentHt
 }
 
 export async function getRssPosts(limit = RSS_POST_LIMIT): Promise<RssPost[]> {
-    const metas = await getAllArchivePostMeta();
+    const metas = await getVisibleArchivePostMeta();
     const visibleMetas = metas
         .filter((post) => !shouldHidePostBody(post.id, post.tags))
         .sort((a, b) => b.id - a.id)
@@ -117,7 +118,8 @@ export async function renderRssXml(): Promise<string> {
                 toAbsoluteUrl,
             });
             const { description, contentHtml } = buildExcerptHtml(feedHtml);
-            const pubDate = toRfc822(post.date) ?? toRfc822(post.update) ?? new Date().toUTCString();
+            const publicationDate = getPublicationDateOnly(post.date);
+            const pubDate = toRfc822(publicationDate ?? post.date) ?? toRfc822(post.update) ?? new Date().toUTCString();
             const categories = [...post.categories, ...post.tags]
                 .filter(Boolean)
                 .map((category) => `<category>${escapeXml(category)}</category>`)

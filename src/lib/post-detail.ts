@@ -3,9 +3,11 @@ import fs from "fs/promises";
 import matter from "gray-matter";
 import { getAllPostFiles } from "@/lib/posts";
 import { formatDate, id2slug } from "@/lib/chronon4";
+import { isPostPubliclyVisible } from "@/lib/publication-delay";
 
 export type PostDetail = {
     id: string;
+    fileName: string;
     title: string | null;
     date: string | null;
     category: string[] | string | null;
@@ -13,6 +15,7 @@ export type PostDetail = {
     content: string;
     update: string;
     size: number;
+    sourceMtimeMs: number;
 };
 
 export async function getPostDetailById(id: string): Promise<PostDetail | null> {
@@ -34,8 +37,13 @@ export async function getPostDetailById(id: string): Promise<PostDetail | null> 
     const { postId } = id2slug(targetFile);
     const stats = await fs.stat(fullPath);
 
+    if (!isPostPubliclyVisible(data.date)) {
+        return null;
+    }
+
     return {
         id: postId || "0",
+        fileName: targetFile,
         title: data.title || null,
         date: data.date || null,
         category: data.category || data.categories || null,
@@ -43,5 +51,6 @@ export async function getPostDetailById(id: string): Promise<PostDetail | null> 
         content,
         update: formatDate(stats.mtime),
         size: content.length,
+        sourceMtimeMs: stats.mtimeMs,
     };
 }

@@ -1,18 +1,14 @@
-import matter from "gray-matter";
-import fs from "fs/promises";
-import path from "path";
-import { getAllPostFiles, getPostContent, postsDirectory } from "@/lib/posts";
-import { formatDate, id2slug } from "@/lib/chronon4";
+import { getArchivePostFullList, getVisibleArchivePostMeta } from "@/lib/archive";
 
 const MAX_N = 100;
 const MAX_M = 5000;
-const MAX_CONCURRENCY = 8;
 const VALID_FIELDS = new Set(["t", "d", "c", "g", "n", "u", "s"]);
 
 type RecentPostField = "t" | "d" | "c" | "g" | "n" | "u" | "s";
 
 export type RecentPostData = {
     id: string;
+    fileName?: string;
     title?: string;
     date?: string | null;
     category?: string | null;
@@ -20,27 +16,8 @@ export type RecentPostData = {
     content?: string;
     update?: string;
     size?: number;
+    sourceMtimeMs?: number;
 };
-
-async function mapWithConcurrency<T, R>(
-    items: T[],
-    limit: number,
-    mapper: (item: T, index: number) => Promise<R>
-): Promise<R[]> {
-    const results: R[] = new Array(items.length);
-    let index = 0;
-
-    async function worker() {
-        while (index < items.length) {
-            const current = index;
-            index += 1;
-            results[current] = await mapper(items[current], current);
-        }
-    }
-
-    await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
-    return results;
-}
 
 export async function getRecentPostsData(options?: {
     n?: number;
@@ -66,27 +43,8 @@ export async function getRecentPostsData(options?: {
         throw new Error("f contains unsupported fields");
     }
 
-    const allPosts = await getAllPostFiles();
-    if (!allPosts || allPosts.length === 0) {
-        return [];
-    }
-    const totalPosts = allPosts.length;
-
-    const startIndex = (a !== null && a >= 1 && a <= totalPosts)
-        ? Math.max(a - m, 1) - 1
-        : totalPosts - m - n;
-    const endIndex = (a !== null && a >= 1 && a <= totalPosts)
-        ? Math.min(a + n - m, totalPosts)
-        : totalPosts - m;
-
-    const validStartIndex = Math.max(startIndex, 0);
-    const validEndIndex = Math.max(endIndex, 0);
-
-    const selectedPosts = allPosts
-        .slice(validStartIndex, validEndIndex)
-        .reverse();
-
-    if (selectedPosts.length === 0) {
+    const allPosts = (await getVisibleArchivePostMeta()).sort((a, b) => a.id - b.id);
+    if (allPosts.length === 0) {
         return [];
     }
 
@@ -94,40 +52,48 @@ export async function getRecentPostsData(options?: {
         (fParam ? fParam.split("") : []).filter((field) => VALID_FIELDS.has(field))
     );
     const includeField = (field: RecentPostField) => allowedFields.has(field) || !fParam;
+    const totalPosts = allPosts.length;
 
-    const postsData = await mapWithConcurrency(
-        selectedPosts,
-        MAX_CONCURRENCY,
-        async (fileName) => {
-            try {
-                const content = await getPostContent(fileName);
-                if (!content) return null;
-
-                const { data, content: fileContent } = matter(content);
-                const { postId } = id2slug(fileName);
-                if (!postId) return null;
-
-                const result: RecentPostData = { id: postId };
-
-                if (includeField("t")) result.title = data.title || "Untitled";
-                if (includeField("d")) result.date = data.date || null;
-                if (includeField("c")) result.category = data.category || null;
-                if (includeField("g")) result.tags = data.tags || [];
-                if (includeField("n")) result.content = fileContent;
-                if (includeField("u")) {
-                    const filePath = path.join(postsDirectory, fileName);
-                    const stats = await fs.stat(filePath);
-                    result.update = formatDate(stats.mtime);
-                }
-                if (includeField("s")) result.size = fileContent.length;
-
-                return result;
-            } catch (error) {
-                console.error(`[getRecentPostsData] skip failed file: ${fileName}`, error);
-                return null;
-            }
+    let selectedPosts = allPosts;
+    if (a !== null) {
+        const anchorIndex = allPosts.findIndex((post) => post.id === a);
+        if (anchorIndex === -1) {
+            return [];
         }
-    );
 
-    return postsData.filter((post): post is RecentPostData => Boolean(post));
+        const startIndex = Math.max(anchorIndex - m, 0);
+        const endIndex = Math.min(anchorIndex + (n - m), totalPosts);
+        selectedPosts = allPosts.slice(startIndex, endIndex).reverse();
+    } else {
+        selectedPosts = [...allPosts].reverse().slice(m, m + n);
+    }
+
+    if (selectedPosts.length === 0) {
+        return [];
+    }
+
+    const fullPostsById = (includeField("n") || includeField("u") || includeField("s"))
+        ? new Map(
+            (await getArchivePostFullList(selectedPosts)).map((post) => [post.id, post])
+        )
+        : null;
+
+    return selectedPosts.map((post) => {
+        const full = fullPostsById?.get(post.idString);
+        const result: RecentPostData = {
+            id: post.idString,
+            fileName: post.fileName,
+        };
+
+        if (includeField("t")) result.title = post.title || "Untitled";
+        if (includeField("d")) result.date = post.date || null;
+        if (includeField("c")) result.category = post.categories[0] || null;
+        if (includeField("g")) result.tags = post.tags || [];
+        if (includeField("n")) result.content = full?.content ?? "";
+        if (includeField("u")) result.update = full?.update ?? "";
+        if (includeField("s")) result.size = full?.size ?? 0;
+        if (full) result.sourceMtimeMs = full.sourceMtimeMs;
+
+        return result;
+    });
 }

@@ -7,14 +7,24 @@ type Props = {
     category: string | string[];
     content: string;
     date: string;
+    fileName?: string;
+    sourceMtimeMs?: number;
 };
 
-export default function PostBodyGuard({ idOrSlug, tags, category, content, date }: Props) {
+export default async function PostBodyGuard({ idOrSlug, tags, category, content, date, fileName, sourceMtimeMs }: Props) {
     if (shouldHidePostBody(idOrSlug, tags)) {
         return <div>この記事は非公開に設定されています</div>;
     }
 
     const normalizedCategory = Array.isArray(category) ? (category[0] || "") : (category || "");
 
-    return <PostBody category={normalizedCategory} content={content} date={date} />;
+    return (
+        <PostBody
+            category={normalizedCategory}
+            content={content}
+            date={date}
+            fileName={fileName}
+            sourceMtimeMs={sourceMtimeMs}
+        />
+    );
 }

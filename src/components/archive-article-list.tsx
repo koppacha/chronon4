@@ -27,6 +27,8 @@ export default function ArchiveArticleList({ posts }: Props) {
                         category={post.category}
                         content={post.content}
                         date={post.date}
+                        fileName={post.fileName}
+                        sourceMtimeMs={post.sourceMtimeMs}
                     />
                     <PostFooter id={post.id} update={post.update} size={post.size} />
                 </article>
