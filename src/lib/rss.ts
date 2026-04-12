@@ -1,7 +1,7 @@
 import { getArchivePostFullList, getAllArchivePostMeta } from "@/lib/archive";
 import { baseUrl, siteDescription, siteLanguage, siteTitle } from "@/lib/const";
 import markdownToHtml from "@/lib/markdownToHtml";
-import { escapeHtmlAttr, sanitizeHtml } from "@/lib/sanitizeHtml";
+import { convertRenderedContent } from "@/lib/post-content";
 import { shouldHidePostBody } from "@/lib/post-visibility";
 
 const RSS_POST_LIMIT = 50;
@@ -19,39 +19,6 @@ export type RssPost = {
 
 function toAbsoluteUrl(path: string): string {
     return new URL(path, baseUrl).toString();
-}
-
-function convertFeedContent(content: string, date: string): string {
-    const linkRegex = /\[\[(\d{4})-(\d{2})-(\d{2})-(\d{5})]]/g;
-    const imageRegex = /!\[\[(.+?)\|(\d+?)]]/g;
-    const [year, month] = date.split("-");
-
-    if (typeof content !== "string") {
-        return "";
-    }
-
-    let converted = content.replace(linkRegex, (_match, linkYear, linkMonth, day, id) => {
-        const safeId = escapeHtmlAttr(id);
-        const href = escapeHtmlAttr(toAbsoluteUrl(`/post/${safeId}`));
-        return `<a href="${href}">#${safeId} / ${linkYear}年${linkMonth}月${day}日</a>`;
-    });
-
-    converted = converted.replace(imageRegex, (_match, fileName, width) => {
-        const safeFileName = escapeHtmlAttr(fileName);
-        const safeWidth = escapeHtmlAttr(width);
-        const imagePath = `${year}/${month}/images/${encodeURIComponent(fileName)}`;
-        const src = escapeHtmlAttr(toAbsoluteUrl(`/api/img/${imagePath}`));
-        return `<img src="${src}" width="${safeWidth}" alt="${safeFileName}" />`;
-    });
-
-    converted = converted.replace(/\n\n/g, "</p><p>");
-    converted = converted.replace(/(?<!<\/?(li|ol|ul|h1|h2|h3)>)\n/g, "<br/>");
-    converted = converted.replace(/((?:^|<br\/>)\s*「.*」)\s*<br\/>/g, '$1<br class="br-dialogue"/>');
-
-    let html = `<p>${converted}</p>`;
-    html = html.replace(/<p>\s*「/g, '<p class="no-indent">「');
-
-    return sanitizeHtml(html);
 }
 
 function stripHtml(html: string): string {
@@ -146,7 +113,9 @@ export async function renderRssXml(): Promise<string> {
             const safeDate = Number.isNaN(new Date(post.date).getTime())
                 ? "2004-09-01"
                 : new Date(post.date).toISOString().split("T")[0];
-            const feedHtml = convertFeedContent(markdownHtml, safeDate);
+            const feedHtml = convertRenderedContent(markdownHtml, safeDate, {
+                toAbsoluteUrl,
+            });
             const { description, contentHtml } = buildExcerptHtml(feedHtml);
             const pubDate = toRfc822(post.date) ?? toRfc822(post.update) ?? new Date().toUTCString();
             const categories = [...post.categories, ...post.tags]
