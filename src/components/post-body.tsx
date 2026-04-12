@@ -1,5 +1,7 @@
 "use client"; // クライアントコンポーネント化
 
+import { icon } from "@fortawesome/fontawesome-svg-core";
+import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import markdownStyles from "./markdown-styles.module.css";
 import markdownToHtml from "@/lib/markdownToHtml";
@@ -17,6 +19,10 @@ type Props = {
     content: string;
     date: string;
 };
+
+const EXTERNAL_LINK_ICON_HTML = icon(faArrowUpRightFromSquare, {
+    classes: ["external-link-icon"],
+}).html.join("");
 
 function convertContent(content: string, date: string): string {
     // リンク形式にマッチする正規表現
@@ -118,11 +124,7 @@ async function decorateArticleLinks(html: string): Promise<string> {
             link.setAttribute("rel", "noopener noreferrer");
 
             if (!link.querySelector(".external-link-icon")) {
-                const icon = doc.createElement("span");
-                icon.className = "external-link-icon";
-                icon.setAttribute("aria-hidden", "true");
-                icon.textContent = "↗";
-                link.append(" ", icon);
+                link.insertAdjacentHTML("beforeend", ` ${EXTERNAL_LINK_ICON_HTML}`);
             }
         }
     });
@@ -135,8 +137,11 @@ export default function PostBody({ category, content, date }: Props) {
     useEffect(() => {
         async function convertMarkdown() {
             const htmlContent = await markdownToHtml(content);
-            const dateObj = new Date(date ?? "2004-09-01T00:00:00.000Z");
-            const finalContent = convertContent(htmlContent, dateObj.toISOString().split('T')[0]);
+            const dateObj = new Date(date || "2004-09-01T00:00:00.000Z");
+            const safeDate = Number.isNaN(dateObj.getTime())
+                ? "2004-09-01"
+                : dateObj.toISOString().split('T')[0];
+            const finalContent = convertContent(htmlContent, safeDate);
             const decoratedContent = await decorateArticleLinks(finalContent);
             setConvertedContent(decoratedContent);
         }

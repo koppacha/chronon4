@@ -1,7 +1,9 @@
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faBook, faCircleInfo, faCloud, faCommentDots, faPencil, faThumbsUp} from "@fortawesome/free-solid-svg-icons";
+"use client";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBook, faCircleInfo, faCloud, faCommentDots, faPencil, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 import Link from "next/link";
-import {faTwitter} from "@fortawesome/free-brands-svg-icons";
 
 export function Intro() {
     return (

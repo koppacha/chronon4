@@ -66,5 +66,5 @@ export function middleware(req: NextRequest) {
 
 /* ---------- どのパスで実行するか ---------- */
 export const config = {
-    matcher: ['/((?!_next/static|_next/image|favicon.ico|favicon|robots.txt|sitemap.xml).*)']
+    matcher: ['/((?!_next/static|_next/image|favicon.ico|favicon|robots.txt|sitemap.xml|rss.xml).*)']
 }

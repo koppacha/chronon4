@@ -1,26 +1,19 @@
-"use client";
-
-import '@fortawesome/fontawesome-svg-core/styles.css'
+import "@fortawesome/fontawesome-svg-core/styles.css";
+import { config } from "@fortawesome/fontawesome-svg-core";
 import Footer from "@/components/footer";
 import { Inter } from "next/font/google";
-import cn from "classnames";
 import Script from "next/script";
-import * as gtag from "../lib/gtag";
+import AnalyticsTracker from "@/components/analytics-tracker";
+import * as gtag from "@/lib/gtag";
+import { baseUrl, siteTitle } from "@/lib/const";
 import "./globals.css";
-import {usePathname, useRouter} from "next/navigation";
-import {useEffect} from "react";
+
+config.autoAddCss = false;
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
   children,}: Readonly<{ children: React.ReactNode; }>) {
-
-  const pathname = usePathname();
-
-  useEffect(() => {
-      if(!pathname) return;
-      gtag.pageView(pathname);
-  }, [pathname]);
 
   return (
     <html lang="ja">
@@ -71,9 +64,16 @@ export default function RootLayout({
         />
         <meta name="theme-color" content="#000"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>Chrononglyph</title>
+        <link
+            rel="alternate"
+            type="application/rss+xml"
+            title={siteTitle}
+            href={`${baseUrl}/rss.xml`}
+        />
+        <title>{siteTitle}</title>
     </head>
-    <body>
+    <body className={inter.className}>
+        <AnalyticsTracker />
         {children}
         <Footer />
       </body>
