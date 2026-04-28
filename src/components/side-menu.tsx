@@ -21,7 +21,7 @@ const SideMenu: React.FC<Props> = ({ slug }) => {
 
         async function fetchPosts() {
             try {
-                const res = await fetch(fetchUrl, { cache: "no-store" });
+                const res = await fetch(fetchUrl);
 
                 if (!res.ok) {
                     throw new Error(`Failed to fetch data: ${res.status}`);

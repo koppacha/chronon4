@@ -24,7 +24,7 @@ const TagStatsList: React.FC<Props> = ({ n = 20, title = "タグ一覧" }) => {
     useEffect(() => {
         async function fetchTags() {
             try {
-                const res = await fetch(`/api/tags?n=${n}`, { cache: "no-store" });
+                const res = await fetch(`/api/tags?n=${n}`);
                 if (!res.ok) {
                     throw new Error(`Failed to fetch tags: ${res.status}`);
                 }

@@ -13,6 +13,13 @@ import {
 import { LIST_PAGE_SIZE, paginateItems, parsePageParam } from "@/lib/pagination";
 import { tagToUrlKey } from "@/lib/tag-url";
 
+export const revalidate = 604800;
+export const dynamicParams = true;
+
+export function generateStaticParams() {
+    return [];
+}
+
 function normalizeTagUrlKey(value: string) {
     try {
         return decodeURIComponent(value);

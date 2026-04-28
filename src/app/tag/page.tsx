@@ -3,6 +3,8 @@ import Header from "@/components/header";
 import SideMenu from "@/components/side-menu";
 import TagStatsList from "@/components/tag-stats-list";
 
+export const revalidate = 604800;
+
 export default function TagIndexPage() {
     return (
         <Container maxWidth="xl">

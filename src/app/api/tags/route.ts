@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
 import { getTopTagStats } from "@/lib/tag-stats";
+import { FIVE_MINUTES_SECONDS } from "@/lib/isr";
+
+export const dynamic = "force-dynamic";
+
+const CACHE_CONTROL = `public, max-age=60, s-maxage=${FIVE_MINUTES_SECONDS}, stale-while-revalidate=${FIVE_MINUTES_SECONDS}`;
 
 export async function GET(req: Request) {
     try {
@@ -15,7 +20,7 @@ export async function GET(req: Request) {
         return NextResponse.json(tags, {
             status: 200,
             headers: {
-                "Cache-Control": "no-store",
+                "Cache-Control": CACHE_CONTROL,
             },
         });
     } catch (error) {

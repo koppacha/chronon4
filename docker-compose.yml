@@ -38,6 +38,8 @@ services:
       - PORT=3004
       - HOSTNAME=0.0.0.0
       - DATABASE_URL=file:/app/prisma/dev.db
+      - REVALIDATE_SECRET=${REVALIDATE_SECRET:-}
+      - REVALIDATE_SCHEDULER_ENABLED=${REVALIDATE_SCHEDULER_ENABLED:-1}
     ports:
       - "3004:3004"
     volumes:

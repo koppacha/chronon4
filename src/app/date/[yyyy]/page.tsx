@@ -4,7 +4,19 @@ import Header from "@/components/header";
 import SideMenu from "@/components/side-menu";
 import ArchiveList from "@/components/archive-list";
 import DateArchiveHeader from "@/components/date-archive-header";
-import { getPostsByYear } from "@/lib/archive";
+import { getPostsByYear, getVisibleArchivePostMeta } from "@/lib/archive";
+
+export const revalidate = 604800;
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+    const posts = await getVisibleArchivePostMeta();
+    const years = Array.from(new Set(posts.map((post) => post.year)));
+
+    return years.map((year) => ({
+        yyyy: String(year),
+    }));
+}
 
 function parseYear(value: string) {
     if (!/^\d{4}$/.test(value)) return null;

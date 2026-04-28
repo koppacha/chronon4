@@ -26,3 +26,19 @@ export function getCache<T>(key: string): T | null {
 export function setCache<T>(key: string, value: T, ttl: number): void {
     cache.set(key, { value, expiry: Date.now() + ttl });
 }
+
+export function deleteCache(key: string): void {
+    cache.delete(key);
+}
+
+export function clearCache(): void {
+    cache.clear();
+}
+
+export function clearCacheByPrefix(prefix: string): void {
+    for (const key of cache.keys()) {
+        if (key.startsWith(prefix)) {
+            cache.delete(key);
+        }
+    }
+}

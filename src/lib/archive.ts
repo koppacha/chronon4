@@ -5,11 +5,14 @@ import { getAllPostFiles, postsDirectory } from "@/lib/posts";
 import { getCache, setCache } from "@/lib/cache";
 import { formatDate, id2slug } from "@/lib/chronon4";
 import { tagMatchesUrlKey } from "@/lib/tag-url";
-import { isPostPubliclyVisible } from "@/lib/publication-delay";
+import { getTodayDateOnly, isPostPubliclyVisible } from "@/lib/publication-delay";
 
 const ARCHIVE_META_CACHE_KEY = "archivePostMeta";
+const VISIBLE_ARCHIVE_META_CACHE_KEY_PREFIX = "visibleArchivePostMeta";
 const ARCHIVE_META_CACHE_TTL_MS = 5 * 60 * 1000;
+const VISIBLE_ARCHIVE_META_CACHE_TTL_MS = 26 * 60 * 60 * 1000;
 const KEYWORD_DIRECTORY = path.join(postsDirectory, "keyword");
+const FILE_READ_CONCURRENCY = 32;
 
 export type ArchivePostMeta = {
     id: number;
@@ -68,6 +71,28 @@ function parseDateParts(dateValue: any) {
     };
 }
 
+async function mapWithConcurrency<T, R>(
+    items: T[],
+    concurrency: number,
+    mapper: (item: T) => Promise<R>
+): Promise<R[]> {
+    const results: R[] = new Array(items.length);
+    let nextIndex = 0;
+    const workerCount = Math.min(concurrency, items.length);
+
+    await Promise.all(
+        Array.from({ length: workerCount }, async () => {
+            while (nextIndex < items.length) {
+                const currentIndex = nextIndex;
+                nextIndex += 1;
+                results[currentIndex] = await mapper(items[currentIndex]);
+            }
+        })
+    );
+
+    return results;
+}
+
 function buildKeywordFilePath(fileName: string): string | null {
     if (!fileName) return null;
 
@@ -116,8 +141,10 @@ export async function getAllArchivePostMeta(): Promise<ArchivePostMeta[]> {
     if (cached) return cached;
 
     const files = await getAllPostFiles();
-    const metas = await Promise.all(
-        files.map(async (fileName) => {
+    const metas = await mapWithConcurrency(
+        files,
+        FILE_READ_CONCURRENCY,
+        async (fileName) => {
             const filePath = path.join(postsDirectory, fileName);
             const fileContents = await fs.readFile(filePath, "utf8");
             const { data } = matter(fileContents);
@@ -139,7 +166,7 @@ export async function getAllArchivePostMeta(): Promise<ArchivePostMeta[]> {
                 month: dateParts.month,
                 day: dateParts.day,
             } as ArchivePostMeta;
-        })
+        }
     );
 
     const filtered = metas.filter(Boolean) as ArchivePostMeta[];
@@ -148,8 +175,14 @@ export async function getAllArchivePostMeta(): Promise<ArchivePostMeta[]> {
 }
 
 export async function getVisibleArchivePostMeta(now = new Date()): Promise<ArchivePostMeta[]> {
+    const cacheKey = `${VISIBLE_ARCHIVE_META_CACHE_KEY_PREFIX}:${getTodayDateOnly(now)}`;
+    const cached = getCache<ArchivePostMeta[]>(cacheKey);
+    if (cached) return cached;
+
     const all = await getAllArchivePostMeta();
-    return all.filter((post) => isPostPubliclyVisible(post.date, now));
+    const visible = all.filter((post) => isPostPubliclyVisible(post.date, now));
+    setCache(cacheKey, visible, VISIBLE_ARCHIVE_META_CACHE_TTL_MS);
+    return visible;
 }
 
 export async function getPostsByTag(tag: string): Promise<ArchivePostMeta[]> {

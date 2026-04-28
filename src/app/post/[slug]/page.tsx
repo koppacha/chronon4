@@ -10,7 +10,12 @@ import { notFound } from "next/navigation";
 import { getPostDetailById } from "@/lib/post-detail";
 import { getVisibleArchivePostMeta } from "@/lib/archive";
 
-export const revalidate = 2000;
+export const revalidate = 604800;
+export const dynamicParams = true;
+
+export function generateStaticParams() {
+    return [];
+}
 
 export default async function Post({ params }: { params: Promise<{ slug: string }> }) {
     const {slug} = await params;

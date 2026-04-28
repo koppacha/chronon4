@@ -11,22 +11,29 @@ const ALL_POST_FILES_CACHE_TTL_MS = 5 * 60 * 1000;
 /**
  * 再帰的に.mdファイルを探索する
  */
-async function getAllMarkdownFiles(directory: string, isRoot = false): Promise<string[]> {
+async function getAllMarkdownFiles(directory: string, depth = 0): Promise<string[]> {
     const entries = await fs.readdir(directory, { withFileTypes: true });
     const files = await Promise.all(
         entries.map(async (entry) => {
             const fullPath = join(directory, entry.name);
 
             if (entry.isDirectory()) {
-                // 除外フォルダに該当する場合はスキップ
                 if (ignoreFolders.includes(entry.name)) {
                     return null;
                 }
-                // サブディレクトリ内を再帰的に探索
-                return await getAllMarkdownFiles(fullPath);
+                if (depth === 0 && !/^\d{4}$/.test(entry.name)) {
+                    return null;
+                }
+                if (depth === 1 && !/^\d{2}$/.test(entry.name)) {
+                    return null;
+                }
+                if (depth >= 2) {
+                    return null;
+                }
+                return await getAllMarkdownFiles(fullPath, depth + 1);
             } else if (entry.isFile() && entry.name.endsWith(".md")) {
                 // ルート直下の .md ファイルを無視
-                if (isRoot) {
+                if (depth === 0) {
                     return null;
                 }
                 // Markdown ファイルの場合、相対パスを取得
@@ -50,7 +57,7 @@ export async function getAllPostFiles(): Promise<string[]> {
     if (cachedData) {
         return cachedData;
     }
-    const files = await getAllMarkdownFiles(postsDirectory, true)
+    const files = await getAllMarkdownFiles(postsDirectory)
 
     // キャッシュに保存（有効期限5分）
     setCache(cacheKey, files, ALL_POST_FILES_CACHE_TTL_MS);

@@ -8,6 +8,13 @@ import ArchiveArticleList from "@/components/archive-article-list";
 import { getArchivePostFullList, getPostsByYearMonth } from "@/lib/archive";
 import { LIST_PAGE_SIZE, paginateItems, parsePageParam } from "@/lib/pagination";
 
+export const revalidate = 604800;
+export const dynamicParams = true;
+
+export function generateStaticParams() {
+    return [];
+}
+
 function parseYear(value: string) {
     if (!/^\d{4}$/.test(value)) return null;
     const year = Number(value);

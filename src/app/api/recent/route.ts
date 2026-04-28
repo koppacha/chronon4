@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
 import { getRecentPostsData } from "@/lib/recent-posts";
+import { FIVE_MINUTES_SECONDS } from "@/lib/isr";
+
+export const dynamic = "force-dynamic";
+
+const CACHE_CONTROL = `public, max-age=60, s-maxage=${FIVE_MINUTES_SECONDS}, stale-while-revalidate=${FIVE_MINUTES_SECONDS}`;
 
 export async function GET(req: Request) {
 
@@ -18,7 +23,7 @@ export async function GET(req: Request) {
         return NextResponse.json(filteredPosts, {
             status: 200,
             headers: {
-                "Cache-Control": "no-store",
+                "Cache-Control": CACHE_CONTROL,
             },
         });
     } catch (error) {

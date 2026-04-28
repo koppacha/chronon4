@@ -8,8 +8,7 @@ import DateArchiveHeader from "@/components/date-archive-header";
 import TagStatsList from "@/components/tag-stats-list";
 import { getRecentPostsData } from "@/lib/recent-posts";
 
-export const revalidate = 2000;
-export const dynamic = "force-dynamic";
+export const revalidate = false;
 
 type RecentPost = {
     id: string;
