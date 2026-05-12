@@ -26,8 +26,9 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env*.local
-.env*.production
+.env.local
+.env.production
+.env
 
 # vercel
 .vercel
@@ -43,7 +44,6 @@ next-env.d.ts
 .obsidian
 
 # ENV
-.env
 /labs/inputs/
 /labs/outputs/
 /venv/
