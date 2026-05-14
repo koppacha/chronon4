@@ -20,6 +20,8 @@ RUN rm -rf .next && yarn build
 FROM node:20-alpine AS runner
 WORKDIR /app
 
+RUN apk add --no-cache tini
+
 # 実行に必要なファイルだけコピー
 COPY --from=builder /app/node_modules     ./node_modules
 COPY --from=builder /app/prisma           ./prisma
@@ -31,4 +33,5 @@ COPY --from=builder /app/public           ./public
 COPY --from=builder /app/scripts/start-runner.mjs ./scripts/start-runner.mjs
 ENV NODE_ENV=production
 EXPOSE 3004
+ENTRYPOINT ["tini", "--"]
 CMD ["node", "scripts/start-runner.mjs"]

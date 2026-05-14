@@ -136,6 +136,18 @@ export async function getKeywordDocByNames(names: string[]): Promise<KeywordDoc 
     return null;
 }
 
+export async function getKeywordDocNames(): Promise<string[]> {
+    try {
+        const entries = await fs.readdir(KEYWORD_DIRECTORY, { withFileTypes: true });
+        return entries
+            .filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
+            .map((entry) => entry.name.replace(/\.md$/, ""));
+    } catch (error: any) {
+        if (error?.code === "ENOENT") return [];
+        throw error;
+    }
+}
+
 export async function getAllArchivePostMeta(): Promise<ArchivePostMeta[]> {
     const cached = getCache<ArchivePostMeta[]>(ARCHIVE_META_CACHE_KEY);
     if (cached) return cached;

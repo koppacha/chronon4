@@ -1,22 +1,24 @@
 import Link from "next/link";
 
 type Props = {
-    basePath: string;
+    basePath?: string;
     currentPage: number;
     totalPages: number;
+    getPageHref?: (page: number) => string;
 };
 
 function pageHref(basePath: string, page: number) {
     return `${basePath}?page=${page}`;
 }
 
-export default function PaginationNav({ basePath, currentPage, totalPages }: Props) {
+export default function PaginationNav({ basePath, currentPage, totalPages, getPageHref }: Props) {
     if (totalPages <= 1) return null;
+    const hrefForPage = getPageHref ?? ((page: number) => pageHref(basePath || "", page));
 
     return (
         <div className="pagination-nav">
             {currentPage > 1 ? (
-                <Link className="pagination-button" href={pageHref(basePath, currentPage - 1)}>
+                <Link className="pagination-button" href={hrefForPage(currentPage - 1)}>
                     前へ
                 </Link>
             ) : (
@@ -24,7 +26,7 @@ export default function PaginationNav({ basePath, currentPage, totalPages }: Pro
             )}
             <span className="pagination-status">{currentPage} / {totalPages}</span>
             {currentPage < totalPages ? (
-                <Link className="pagination-button" href={pageHref(basePath, currentPage + 1)}>
+                <Link className="pagination-button" href={hrefForPage(currentPage + 1)}>
                     次へ
                 </Link>
             ) : (

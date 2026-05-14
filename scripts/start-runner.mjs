@@ -10,9 +10,65 @@ const JST_OFFSET_MS = 9 * 60 * 60 * 1000;
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 const DEFAULT_PORT = "3004";
 const MARKER_DIRECTORY = path.join(os.tmpdir(), "chronon4-revalidate");
+const BLOG_DIRECTORY = process.env.BLOG_DIRECTORY || path.join(process.cwd(), "blog");
 
 function getServerPort() {
     return process.env.PORT || DEFAULT_PORT;
+}
+
+async function assertReadableDirectory(directory, label) {
+    let stat;
+
+    try {
+        stat = await fs.stat(directory);
+    } catch (error) {
+        throw new Error(`${label} is not mounted or cannot be accessed: ${directory}`, { cause: error });
+    }
+
+    if (!stat.isDirectory()) {
+        throw new Error(`${label} is not a directory: ${directory}`);
+    }
+
+    try {
+        await fs.access(directory);
+    } catch (error) {
+        throw new Error(`${label} is not readable: ${directory}`, { cause: error });
+    }
+}
+
+async function hasBlogDirectoryShape(directory) {
+    const yearEntries = await fs.readdir(directory, { withFileTypes: true });
+    const yearDirectories = yearEntries
+        .filter((entry) => entry.isDirectory() && /^\d{4}$/.test(entry.name))
+        .map((entry) => entry.name);
+
+    for (const year of yearDirectories) {
+        const yearPath = path.join(directory, year);
+        const monthEntries = await fs.readdir(yearPath, { withFileTypes: true });
+        if (monthEntries.some((entry) => entry.isDirectory() && /^\d{2}$/.test(entry.name))) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+async function runStartupChecks() {
+    if (process.env.BLOG_MOUNT_CHECK_ENABLED === "0") {
+        console.warn("[startup-check] BLOG_MOUNT_CHECK_ENABLED=0; blog mount check is skipped.");
+        return;
+    }
+
+    await assertReadableDirectory(BLOG_DIRECTORY, "Blog directory");
+
+    if (!(await hasBlogDirectoryShape(BLOG_DIRECTORY))) {
+        throw new Error(
+            `Blog directory does not look like a mounted blog tree: ${BLOG_DIRECTORY}. ` +
+            "Expected at least one yyyy/mm directory."
+        );
+    }
+
+    console.log(`[startup-check] blog directory is mounted: ${BLOG_DIRECTORY}`);
 }
 
 /** @type {import("node:child_process").SpawnOptions} */
@@ -23,6 +79,11 @@ const serverOptions = {
         PORT: getServerPort(),
     },
 };
+
+await runStartupChecks().catch((error) => {
+    console.error("[startup-check] failed:", error);
+    process.exit(1);
+});
 
 const server = spawn(process.execPath, ["server.js"], serverOptions);
 
