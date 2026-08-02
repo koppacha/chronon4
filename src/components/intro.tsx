@@ -12,8 +12,9 @@ export function Intro() {
               Chrononglyph
           </h1>
           <div className="info-container">
-              このブログは、"こっぱちゃ"の日記系個人ブログです。2004年より連載中。毎日00時更新、掲載は７日遅延します。執筆に際しAI不使用。
-              記事を読んだら「いいね <FontAwesomeIcon icon={faThumbsUp}/>」押して頂けると執筆の励みになります。
+              お知らせ（2026/08/03）：現在、長期低迷により記事の更新が停止しています。8月下旬までに復帰予定です。
+              {/*このブログは、"こっぱちゃ"の日記系個人ブログです。2004年より連載中。毎日00時更新、掲載は７日遅延します。執筆に際しAI不使用。*/}
+              {/*記事を読んだら「いいね <FontAwesomeIcon icon={faThumbsUp}/>」押して頂けると執筆の励みになります。*/}
               <div className="intro-links">
                   <div className="intro-link-item"><Link href="https://x.com/koppacha">Twitter@koppacha<FontAwesomeIcon icon={faTwitter} /></Link></div>
                   <div className="intro-link-item"><Link href="https://bookmeter.com/users/121721">BookMater<FontAwesomeIcon icon={faBook} /></Link></div>
