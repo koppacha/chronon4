@@ -15,6 +15,7 @@ const DEFAULT_PORT = "3004";
 const MARKER_DIRECTORY = path.join(os.tmpdir(), "chronon4-revalidate");
 const BLOG_DIRECTORY = process.env.BLOG_DIRECTORY || path.join(process.cwd(), "blog");
 const AUTH_CLEANUP_INTERVAL_MS = 24 * 60 * 60 * 1000;
+const SQLITE_SIDECAR_SUFFIXES = ["-journal", "-wal", "-shm"];
 
 function databaseFilePath() {
     const url = process.env.DATABASE_URL || "";
@@ -24,13 +25,32 @@ function databaseFilePath() {
     return path.isAbsolute(rawPath) ? rawPath : path.resolve(process.cwd(), "prisma", rawPath);
 }
 
+async function existingDatabaseFiles(databasePath) {
+    const candidates = [
+        databasePath,
+        ...SQLITE_SIDECAR_SUFFIXES.map((suffix) => `${databasePath}${suffix}`),
+    ];
+    const existing = [];
+    for (const candidate of candidates) {
+        try {
+            const stats = await fs.stat(candidate);
+            if (stats.isFile()) existing.push(candidate);
+        } catch (error) {
+            if (error?.code !== "ENOENT") throw error;
+        }
+    }
+    return existing;
+}
+
 async function ensureDatabasePermissions() {
     const databasePath = databaseFilePath();
     if (!databasePath) return;
     const backupDirectory = process.env.DATABASE_BACKUP_DIRECTORY || path.join(path.dirname(databasePath), "backups");
     await fs.mkdir(backupDirectory, { recursive: true, mode: 0o700 });
     await fs.chmod(backupDirectory, 0o700);
-    await fs.chmod(databasePath, 0o600);
+    for (const filePath of await existingDatabaseFiles(databasePath)) {
+        await fs.chmod(filePath, 0o600);
+    }
 }
 
 function getRuntimeIdentity() {
@@ -48,12 +68,40 @@ async function prepareRuntimeOwnership(identity) {
     if (!databasePath) return;
     const backupDirectory = process.env.DATABASE_BACKUP_DIRECTORY || path.join(path.dirname(databasePath), "backups");
     await fs.chown(path.dirname(databasePath), identity.uid, identity.gid);
-    await fs.chown(databasePath, identity.uid, identity.gid);
+    for (const filePath of await existingDatabaseFiles(databasePath)) {
+        await fs.chown(filePath, identity.uid, identity.gid);
+        await fs.chmod(filePath, 0o600);
+    }
     await fs.chown(backupDirectory, identity.uid, identity.gid);
     const entries = await fs.readdir(backupDirectory, { withFileTypes: true });
     await Promise.all(entries
         .filter((entry) => entry.isFile() && entry.name.endsWith(".db"))
         .map((entry) => fs.chown(path.join(backupDirectory, entry.name), identity.uid, identity.gid)));
+}
+
+async function verifyRuntimeDatabaseAccess(identity) {
+    if (!databaseFilePath()) return;
+    const probe = [
+        "const { PrismaClient } = require('@prisma/client');",
+        "const prisma = new PrismaClient();",
+        "prisma.$queryRawUnsafe('SELECT 1 AS ok')",
+        "  .then(() => prisma.$disconnect())",
+        "  .catch(async (error) => {",
+        "    console.error('[runtime-database-check] failed:', error);",
+        "    await prisma.$disconnect().catch(() => undefined);",
+        "    process.exit(1);",
+        "  });",
+    ].join("\n");
+    await new Promise((resolve, reject) => {
+        const options = { stdio: "inherit", env: process.env };
+        if (identity) Object.assign(options, identity);
+        const check = spawnProcess(process.execPath, ["-e", probe], options);
+        check.on("error", reject);
+        check.on("exit", (code) => code === 0
+            ? resolve(undefined)
+            : reject(new Error(`runtime database check exited with ${code}`)));
+    });
+    console.log("[runtime-database-check] database is accessible by the application user");
 }
 
 async function backupDatabase() {
@@ -246,6 +294,11 @@ if (runtimeIdentity) {
     });
     Object.assign(serverOptions, runtimeIdentity);
 }
+
+await verifyRuntimeDatabaseAccess(runtimeIdentity).catch((error) => {
+    console.error("[runtime-database-check] startup aborted:", error);
+    process.exit(1);
+});
 
 const server = spawn(process.execPath, ["server.js"], serverOptions);
 
