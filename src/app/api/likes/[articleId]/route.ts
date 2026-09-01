@@ -1,129 +1,134 @@
-import { NextResponse, NextRequest } from 'next/server'
-import prisma from '@/lib/prisma'           // prisma client を薄いラッパーで export
-import { cookies } from 'next/headers'
+import { NextRequest, NextResponse } from "next/server";
+import prisma from "@/lib/prisma";
+import { getCurrentSession, validateAuthenticatedMutation } from "@/lib/auth-session";
+import { getPostDetailById } from "@/lib/post-detail";
+import { safeStringEqual } from "@/lib/auth-crypto";
+import { validateMutationRequest } from "@/lib/request-security";
+import { consumeRateLimit } from "@/lib/rate-limit";
+import { toggleAnonymousLike, toggleUserLike } from "@/lib/like-service";
+import { isValidAnonymousSessionId } from "@/lib/anonymous-session";
 
-export const runtime = 'nodejs'
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+type RouteContext = { params: Promise<{ articleId: string }> };
+const ANON_CSRF_COOKIE = process.env.NODE_ENV === "production" ? "__Host-anon_csrf" : "anon_csrf";
 
-type RouteContext = {
-    params: Promise<{ articleId: string }>
+async function contextForArticle(articleId: string) {
+    const session = await getCurrentSession();
+    const post = await getPostDetailById(articleId, session?.user.role ?? 0);
+    return { session, post };
 }
 
-function isPrismaStorageUnavailable(error: unknown): boolean {
-    if (!error || typeof error !== 'object') return false
-
-    const code = 'code' in error ? (error as { code?: unknown }).code : undefined
-    if (code === 'P2021' || code === 'P2022' || code === 'P1003') return true
-
-    const message = error instanceof Error ? error.message : ''
-    return (
-        message.includes('does not exist in the current database') ||
-        message.includes('no such table') ||
-        message.includes('Unable to open the database file')
-    )
+async function likeResponseState(articleId: string, userId?: number, anonymousSessionId?: string) {
+    const [anonymousCount, userCount, userLike, anonymousLike] = await Promise.all([
+        prisma.like.count({ where: { articleId, flag: false } }),
+        prisma.userLike.count({ where: { articleId, active: true } }),
+        userId ? prisma.userLike.findUnique({ where: { userId_articleId: { userId, articleId } } }) : null,
+        anonymousSessionId ? prisma.like.findUnique({ where: { articleId_sessionId: { articleId, sessionId: anonymousSessionId } } }) : null,
+    ]);
+    return {
+        count: anonymousCount + userCount,
+        liked: userId ? Boolean(userLike?.active) : Boolean(anonymousLike && !anonymousLike.flag),
+    };
 }
 
-function unavailableGetResponse() {
-    return NextResponse.json({
-        count: 0,
-        liked: false,
-        unavailable: true,
-    })
-}
-
-function unavailablePostResponse() {
-    return NextResponse.json(
-        {
-            ok: false,
-            unavailable: true,
-            error: 'Like storage is unavailable.',
-        },
-        { status: 503 }
-    )
-}
-
-export async function GET(
-    req: NextRequest,
-    { params }: RouteContext
-) {
+export async function GET(_req: NextRequest, { params }: RouteContext) {
     try {
-        const sessionId = (await cookies()).get('access_id')?.value ?? ''
-        const { articleId } = await params
-        if (!/^\d{5}$/.test(articleId)) {
-            return NextResponse.json({ error: 'Invalid article id' }, { status: 400 })
-        }
+        const { articleId } = await params;
+        if (!/^\d{5}$/.test(articleId)) return NextResponse.json({ error: "Invalid article id" }, { status: 400 });
+        const { session, post } = await contextForArticle(articleId);
+        if (!post) return NextResponse.json({ error: "Article not found" }, { status: 404 });
+        if (!post.canViewBody) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-        // 有効いいね数
-        const count = await prisma.like.count({
-            where: { articleId, flag: false }
-        })
-
-        // 現ユーザーがいいね済みか？
-        const liked = sessionId
-            ? await prisma.like.findFirst({
-                where: { articleId, sessionId, flag: false }
-            })
-            : null
-
-        return NextResponse.json({ count, liked: !!liked })
-    } catch (e) {
-        if (isPrismaStorageUnavailable(e)) {
-            console.error('Like storage unavailable:', e)
-            return unavailableGetResponse()
-        }
-
-        console.error(e)
-        return NextResponse.json(
-            { error: e instanceof Error ? e.message : 'Unknown error' },
-            { status: 500 }
-        )
+        const [anonymousCount, userCount, anonymousLike, userLike] = await Promise.all([
+            prisma.like.count({ where: { articleId, flag: false } }),
+            prisma.userLike.count({ where: { articleId, active: true } }),
+            session ? null : (() => {
+                const sessionId = _req.cookies.get("access_id")?.value;
+                return isValidAnonymousSessionId(sessionId) ? prisma.like.findFirst({
+                    where: { articleId, sessionId, flag: false },
+                }) : null;
+            })(),
+            session ? prisma.userLike.findUnique({
+                where: { userId_articleId: { userId: session.user.id, articleId } },
+            }) : null,
+        ]);
+        return NextResponse.json({
+            count: anonymousCount + userCount,
+            liked: session ? Boolean(userLike?.active) : Boolean(anonymousLike),
+            authenticated: Boolean(session),
+        }, { headers: { "Cache-Control": "private, no-store" } });
+    } catch (error) {
+        console.error("Like lookup failed.", error instanceof Error ? error.name : "UnknownError");
+        return NextResponse.json({ error: "Like storage is unavailable." }, { status: 503 });
     }
 }
 
-export async function POST(
-    req: NextRequest,
-    { params }: RouteContext
-) {
+export async function POST(req: NextRequest, { params }: RouteContext) {
     try {
-        const sessionId = (await cookies()).get('access_id')?.value
-        if (!sessionId) return NextResponse.json({ error: 'No session' }, { status: 401 })
-        if (sessionId.length > 128) {
-            return NextResponse.json({ error: 'Invalid session' }, { status: 400 })
-        }
-
-        const { articleId } = await params
-        if (!/^\d{5}$/.test(articleId)) {
-            return NextResponse.json({ error: 'Invalid article id' }, { status: 400 })
-        }
-
-        // 既に有効いいねがあるか判定
-        const existing = await prisma.like.findFirst({
-            where: { articleId, sessionId, flag: false }
-        })
-
-        if (existing) {
-            // いいね取り消し → flag を true に
-            await prisma.like.update({
-                where: { id: existing.id },
-                data: { flag: true }
-            })
+        const { articleId } = await params;
+        if (!/^\d{5}$/.test(articleId)) return NextResponse.json({ error: "Invalid article id" }, { status: 400 });
+        const session = await getCurrentSession();
+        if (session) {
+            const auth = await validateAuthenticatedMutation(req);
+            if ("error" in auth) return NextResponse.json({ error: auth.error }, { status: auth.status });
         } else {
-            // いいね登録
-            await prisma.like.create({
-                data: { articleId, sessionId, flag: false }
-            })
+            const requestCheck = validateMutationRequest(req);
+            if ("error" in requestCheck) return NextResponse.json({ error: requestCheck.error }, { status: requestCheck.status });
+            const csrfCookie = req.cookies.get(ANON_CSRF_COOKIE)?.value ?? "";
+            const csrfHeader = req.headers.get("x-csrf-token") ?? "";
+            if (!csrfCookie || !csrfHeader || !safeStringEqual(csrfCookie, csrfHeader)) {
+                return NextResponse.json({ error: "Invalid CSRF token." }, { status: 403 });
+            }
         }
 
-        return NextResponse.json({ ok: true })
-    } catch (e) {
-        if (isPrismaStorageUnavailable(e)) {
-            console.error('Like storage unavailable:', e)
-            return unavailablePostResponse()
-        }
+        const post = await getPostDetailById(articleId, session?.user.role ?? 0);
+        if (!post) return NextResponse.json({ error: "Article not found" }, { status: 404 });
+        if (!post.canViewBody) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-        console.error(e)
-        return NextResponse.json(
-            { error: e instanceof Error ? e.message : 'Unknown error' },
-            { status: 500 }
-        )
+        if (session) {
+            const limit = await consumeRateLimit({
+                operation: "user_like",
+                identifierHashes: [`user:${session.user.id}`],
+                limit: 120,
+                windowMs: 10 * 60 * 1000,
+                blockMs: 10 * 60 * 1000,
+            });
+            if (!limit.allowed) return NextResponse.json({ error: "Too many requests" }, {
+                status: 429,
+                headers: { "Retry-After": String(limit.retryAfterSeconds) },
+            });
+            await toggleUserLike(session.user.id, articleId);
+            const state = await likeResponseState(articleId, session.user.id);
+            return NextResponse.json({ ok: true, ...state });
+        } else {
+            const sessionId = req.cookies.get("access_id")?.value;
+            if (!isValidAnonymousSessionId(sessionId)) return NextResponse.json({ error: "No anonymous session" }, { status: 401 });
+            const globalLimit = await consumeRateLimit({
+                operation: "anonymous_like_global",
+                identifierHashes: ["global"],
+                limit: 1_000,
+                windowMs: 10 * 60 * 1000,
+                blockMs: 10 * 60 * 1000,
+            });
+            const sessionLimit = await consumeRateLimit({
+                operation: "anonymous_like_session",
+                identifierHashes: [`anonymous:${sessionId}`],
+                limit: 30,
+                windowMs: 10 * 60 * 1000,
+                blockMs: 10 * 60 * 1000,
+            });
+            const limit = globalLimit.allowed ? sessionLimit : globalLimit;
+            if (!limit.allowed) return NextResponse.json({ error: "Too many requests" }, {
+                status: 429,
+                headers: { "Retry-After": String(limit.retryAfterSeconds) },
+            });
+            await toggleAnonymousLike(sessionId, articleId);
+            const state = await likeResponseState(articleId, undefined, sessionId);
+            return NextResponse.json({ ok: true, ...state });
+        }
+    } catch (error) {
+        console.error("Like update failed.", error instanceof Error ? error.name : "UnknownError");
+        return NextResponse.json({ error: "Like storage is unavailable." }, { status: 503 });
     }
 }

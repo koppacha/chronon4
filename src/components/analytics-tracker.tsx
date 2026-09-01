@@ -9,6 +9,12 @@ export default function AnalyticsTracker() {
 
     useEffect(() => {
         if (!pathname) return;
+        if (
+            pathname === "/login" ||
+            pathname === "/welcome" ||
+            pathname === "/password-reset" ||
+            pathname.startsWith("/api/auth/")
+        ) return;
         gtag.pageView(pathname);
     }, [pathname]);
 

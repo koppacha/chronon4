@@ -2,7 +2,6 @@ import { getArchivePostFullList, getVisibleArchivePostMeta } from "@/lib/archive
 import { baseUrl, siteDescription, siteLanguage, siteTitle } from "@/lib/const";
 import markdownToHtml from "@/lib/markdownToHtml";
 import { convertRenderedContent } from "@/lib/post-content";
-import { shouldHidePostBody } from "@/lib/post-visibility";
 import { getPublicationDateOnly } from "@/lib/publication-delay";
 
 const RSS_POST_LIMIT = 50;
@@ -81,12 +80,11 @@ function buildExcerptHtml(contentHtml: string): { description: string; contentHt
 
 export async function getRssPosts(limit = RSS_POST_LIMIT): Promise<RssPost[]> {
     const metas = await getVisibleArchivePostMeta();
-    const visibleMetas = metas
-        .filter((post) => !shouldHidePostBody(post.id, post.tags))
-        .sort((a, b) => b.id - a.id)
-        .slice(0, limit);
+    const visibleMetas = metas.sort((a, b) => b.id - a.id);
 
-    const fullPosts = await getArchivePostFullList(visibleMetas);
+    const fullPosts = (await getArchivePostFullList(visibleMetas, 0))
+        .filter((post) => post.canViewBody && post.content !== null)
+        .slice(0, limit);
 
     return fullPosts.map((post) => ({
         id: post.id,
@@ -95,7 +93,7 @@ export async function getRssPosts(limit = RSS_POST_LIMIT): Promise<RssPost[]> {
         update: post.update,
         tags: post.tags,
         categories: post.category,
-        content: post.content,
+        content: post.content ?? "",
     }));
 }
 

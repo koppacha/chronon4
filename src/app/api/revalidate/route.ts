@@ -1,7 +1,6 @@
-import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
-import { clearCache } from "@/lib/cache";
 import { getHomeRevalidateTimingStatus } from "@/lib/isr";
+import { revalidateSiteContent } from "@/lib/site-revalidation";
 
 export const dynamic = "force-dynamic";
 
@@ -41,15 +40,12 @@ export async function POST(req: NextRequest) {
         );
     }
 
-    clearCache();
-    revalidatePath("/", "page");
-    revalidatePath("/api/recent");
-    revalidatePath("/api/tags");
+    const paths = revalidateSiteContent();
 
     return NextResponse.json({
         revalidated: true,
         target,
-        paths: ["/", "/api/recent", "/api/tags"],
+        paths,
         timing,
     });
 }

@@ -29,7 +29,7 @@ export default function RootLayout({
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
   
-            gtag('config', '${gtag.GA_MEASUREMENT_ID}');
+            gtag('config', '${gtag.GA_MEASUREMENT_ID}', { send_page_view: false });
             `
             }}
         />

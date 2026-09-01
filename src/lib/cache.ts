@@ -3,7 +3,11 @@ type CacheItem<T> = {
     expiry: number; // タイムスタンプ（ミリ秒単位）
 };
 
-const cache = new Map<string, CacheItem<any>>();
+const runtimeGlobal = globalThis as typeof globalThis & {
+    __chrononRuntimeCache?: Map<string, CacheItem<any>>;
+};
+const cache = runtimeGlobal.__chrononRuntimeCache ?? new Map<string, CacheItem<any>>();
+runtimeGlobal.__chrononRuntimeCache = cache;
 
 /**
  * キャッシュからデータを取得する

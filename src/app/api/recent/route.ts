@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { getRecentPostsData } from "@/lib/recent-posts";
-import { FIVE_MINUTES_SECONDS } from "@/lib/isr";
+import { getCurrentSession } from "@/lib/auth-session";
+import { isValidAnonymousSessionId } from "@/lib/anonymous-session";
 
 export const dynamic = "force-dynamic";
-
-const CACHE_CONTROL = `public, max-age=60, s-maxage=${FIVE_MINUTES_SECONDS}, stale-while-revalidate=${FIVE_MINUTES_SECONDS}`;
 
 export async function GET(req: Request) {
 
@@ -18,12 +18,26 @@ export async function GET(req: Request) {
         const n = nParam && /^\d+$/.test(nParam) ? Number.parseInt(nParam, 10) : 10;
         const m = mParam && /^\d+$/.test(mParam) ? Number.parseInt(mParam, 10) : 0;
         const a = aParam && /^\d+$/.test(aParam) ? Number.parseInt(aParam, 10) : null;
-        const filteredPosts = await getRecentPostsData({ n, m, a, f: fParam });
+        const session = await getCurrentSession();
+        const anonymousId = (await cookies()).get("access_id")?.value;
+        const viewerReadActor = session
+            ? { type: "user" as const, id: String(session.user.id) }
+            : isValidAnonymousSessionId(anonymousId)
+                ? { type: "anonymous" as const, id: anonymousId }
+                : undefined;
+        const filteredPosts = await getRecentPostsData({
+            n,
+            m,
+            a,
+            f: fParam,
+            viewerRole: session?.user.role ?? 0,
+            viewerReadActor,
+        });
 
         return NextResponse.json(filteredPosts, {
             status: 200,
             headers: {
-                "Cache-Control": CACHE_CONTROL,
+                "Cache-Control": session ? "private, no-store" : "public, max-age=0, must-revalidate",
             },
         });
     } catch (error) {

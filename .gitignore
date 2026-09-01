@@ -29,6 +29,7 @@ yarn-error.log*
 .env.local
 .env.production
 .env
+.env.sample
 
 # vercel
 .vercel
@@ -42,6 +43,7 @@ next-env.d.ts
 /blog
 .idea
 .obsidian
+.playwright-cli/
 
 # ENV
 /labs/inputs/
@@ -51,6 +53,9 @@ next-env.d.ts
 
 # DB
 prisma/dev.db
+prisma/*.db-journal
+prisma/backups/**
+!prisma/backups/.gitkeep
 
 # tag analysis scripts outputs (labs/tag)
 /labs/tag/outputs/**

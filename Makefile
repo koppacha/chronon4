@@ -2,6 +2,9 @@
 dev:
 	docker compose --profile dev up dev
 
+dev-exec:
+	docker compose --profile dev exec dev sh
+
 # 本番と同等のビルドをローカルで検証（next build 相当）
 build:
 	docker compose --profile build run --rm build

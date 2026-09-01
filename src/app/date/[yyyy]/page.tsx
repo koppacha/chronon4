@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Container from "@/components/container";
 import Header from "@/components/header";
 import SideMenu from "@/components/side-menu";
-import ArchiveList from "@/components/archive-list";
+import ArticleList from "@/components/article-list";
 import DateArchiveHeader from "@/components/date-archive-header";
 import { getPostsByYear, getVisibleArchivePostMeta } from "@/lib/archive";
 
@@ -38,7 +38,7 @@ export default async function DateYearPage({ params }: { params: Promise<{ yyyy:
         <Container maxWidth="xl">
             <Header />
             <DateArchiveHeader title={`${year}年`} activeYear={year} />
-            <ArchiveList posts={posts} />
+            <ArticleList posts={posts} provideReadStatus />
             <DateArchiveHeader title={`${year}年`} activeYear={year} showTitle={false} />
         </Container>
     );

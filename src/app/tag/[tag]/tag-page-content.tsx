@@ -14,6 +14,7 @@ import {
 } from "@/lib/archive";
 import { LIST_PAGE_SIZE, paginateItems } from "@/lib/pagination";
 import { tagToUrlKey } from "@/lib/tag-url";
+import { getViewerRole } from "@/lib/auth-session";
 
 export function normalizeTagUrlKey(value: string) {
     try {
@@ -89,7 +90,7 @@ export async function renderTagPage(rawTagParam: string, page: number) {
     const pagination = posts.length > 0 ? paginateItems(posts, page, LIST_PAGE_SIZE) : null;
     if (posts.length > 0 && !pagination) notFound();
 
-    const fullPosts = pagination ? await getArchivePostFullList(pagination.items) : [];
+    const fullPosts = pagination ? await getArchivePostFullList(pagination.items, await getViewerRole()) : [];
     const displayTag = resolved.tag || keywordDoc?.name || urlTagKey;
     const canonicalUrlTagKey = resolved.tag ? tagToUrlKey(resolved.tag) : urlTagKey;
 

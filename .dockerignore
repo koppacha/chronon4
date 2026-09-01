@@ -11,6 +11,19 @@ venv/
 node_modules/
 .next/
 
+# 実行時Secretはビルドコンテキストへ送らない
+.env*
+!.env.example
+
+# Webアプリのビルドに不要なローカル作業物
+labs/
+docs/
+tests/
+_sandbox/
+.playwright-cli/
+*.log
+*.tsbuildinfo
+
 # ブログコンテンツはビルド時の静的生成に必要なMarkdownだけ含める
 blog/**
 !blog/
@@ -22,5 +35,10 @@ blog/**
 
 # DBはビルド時に除外
 prisma/dev.db
+prisma/backups/**
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
 
 .DS_Store

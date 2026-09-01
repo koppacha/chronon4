@@ -7,6 +7,7 @@ export const postsDirectory = join(process.cwd(), "blog");
 // 除外するフォルダ名
 const ignoreFolders = [".obsidian", "keyword"];
 const ALL_POST_FILES_CACHE_TTL_MS = 5 * 60 * 1000;
+let allPostFilesInFlight: Promise<string[]> | null = null;
 
 /**
  * 再帰的に.mdファイルを探索する
@@ -57,12 +58,25 @@ export async function getAllPostFiles(): Promise<string[]> {
     if (cachedData) {
         return cachedData;
     }
-    const files = await getAllMarkdownFiles(postsDirectory)
+    if (!allPostFilesInFlight) {
+        allPostFilesInFlight = getAllMarkdownFiles(postsDirectory)
+            .then((files) => {
+                setCache(cacheKey, files, ALL_POST_FILES_CACHE_TTL_MS);
+                return files;
+            })
+            .finally(() => {
+                allPostFilesInFlight = null;
+            });
+    }
+    return allPostFilesInFlight;
+}
 
-    // キャッシュに保存（有効期限5分）
-    setCache(cacheKey, files, ALL_POST_FILES_CACHE_TTL_MS);
-
-    return files;
+/**
+ * 認可判定用に、現在のファイル一覧をキャッシュを介さず取得する。
+ * 新規記事の追加直後に「最新記事」の境界が古いまま残ることを防ぐ。
+ */
+export async function getAllPostFilesFresh(): Promise<string[]> {
+    return getAllMarkdownFiles(postsDirectory);
 }
 /**
  * ファイルの内容を取得する

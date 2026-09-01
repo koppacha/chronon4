@@ -7,8 +7,15 @@ import {PostFooter} from "@/components/post-footer";
 import DateArchiveHeader from "@/components/date-archive-header";
 import TagStatsList from "@/components/tag-stats-list";
 import { getRecentPostsData } from "@/lib/recent-posts";
+import { getViewerRole } from "@/lib/auth-session";
+import { ReadStatusProvider } from "@/components/read-status";
+import { getYearColorHex } from "@/lib/year-color";
+import { LikeStatusProvider } from "@/components/like-status";
+import SiteStatisticsHeader from "@/components/site-statistics-header";
 
-export const revalidate = false;
+// 最新10本の境界変更後に古い本文を静的HTMLから配信しない。
+// MarkdownからHTMLへの変換結果はrender-post-body側のキャッシュを再利用する。
+export const dynamic = "force-dynamic";
 
 type RecentPost = {
     id: string;
@@ -23,11 +30,12 @@ type RecentPost = {
     update?: string;
     size?: number;
     sourceMtimeMs?: number;
+    canViewBody?: boolean;
 };
 
-async function getRecentPosts(): Promise<{ posts: RecentPost[]; error: string | null }> {
+async function getRecentPosts(viewerRole = 0): Promise<{ posts: RecentPost[]; error: string | null }> {
     try {
-        const data = await getRecentPostsData();
+        const data = await getRecentPostsData({ viewerRole });
         if (!Array.isArray(data) || data.length === 0) {
             return { posts: [], error: "記事が見つかりませんでした。" };
         }
@@ -39,7 +47,8 @@ async function getRecentPosts(): Promise<{ posts: RecentPost[]; error: string | 
 }
 
 export default async function Index() {
-    const { posts, error } = await getRecentPosts();
+    const viewerRole = await getViewerRole();
+    const { posts, error } = await getRecentPosts(viewerRole);
 
     const latestArchiveDate = posts.find((post) => post.date)?.date;
     const latestDateObj = latestArchiveDate ? new Date(latestArchiveDate) : null;
@@ -48,10 +57,14 @@ export default async function Index() {
 
     return (
         <Container maxWidth="xl">
-            <Intro />
+            <Intro>
+                <SiteStatisticsHeader />
+            </Intro>
             {error ? (
                 <div className="error-message">{error}</div>
             ) : (
+                <ReadStatusProvider articleIds={posts.map((post) => post.id)}>
+                <LikeStatusProvider articleIds={posts.filter((post) => post.canViewBody).map((post) => post.id)}>
                 <div style={{width:"100%"}}>
                     {latestYear && latestMonth && (
                         <DateArchiveHeader
@@ -77,8 +90,7 @@ export default async function Index() {
                                 categories={post.category}
                             />
                             <PostBodyGuard
-                                idOrSlug={post.id}
-                                tags={post.tags ?? []}
+                                canViewBody={Boolean(post.canViewBody)}
                                 category={post.category ?? ""}
                                 content={post.content ?? ""}
                                 date={post.date ?? ""}
@@ -89,10 +101,14 @@ export default async function Index() {
                                 id={post.id}
                                 update={post.update ?? ""}
                                 size={post.size ?? 0}
+                                canInteract={Boolean(post.canViewBody)}
+                                yearColor={getYearColorHex(post.date ?? "") ?? undefined}
                             />
                         </article>
                     ))}
                 </div>
+                </LikeStatusProvider>
+                </ReadStatusProvider>
             )}
             <SideMenu slug={null} />
         </Container>

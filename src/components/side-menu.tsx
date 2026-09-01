@@ -1,27 +1,37 @@
 "use client" // 🔹 クライアントコンポーネントにする
 
-import React, { Key, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
+import ArticleList, { type ArticleListItem } from "@/components/article-list";
 
 type Props = {
-    slug: string;
+    slug: string | null;
 };
 
 const SideMenu: React.FC<Props> = ({ slug }) => {
-    const [posts, setPosts] = useState<any[]>([]);
+    const [posts, setPosts] = useState<ArticleListItem[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         let fetchUrl: string;
         if (!slug) {
-            fetchUrl = `/api/recent?n=90&m=10&f=tdg`;
+            // トップ本文の最新10本より後の記事を表示する。ゲストは閲覧可能範囲を使い切るため0件になる。
+            fetchUrl = `/api/recent?n=100&m=10&f=tdg`;
         } else {
             fetchUrl = `/api/recent?n=51&m=25&f=tdg&a=${slug}`;
         }
 
+        const controller = new AbortController();
+        setLoading(true);
+        setError(null);
         async function fetchPosts() {
             try {
-                const res = await fetch(fetchUrl);
+                const res = await fetch(fetchUrl, {
+                    cache: "no-store",
+                    credentials: "same-origin",
+                    signal: controller.signal,
+                });
 
                 if (!res.ok) {
                     throw new Error(`Failed to fetch data: ${res.status}`);
@@ -30,12 +40,16 @@ const SideMenu: React.FC<Props> = ({ slug }) => {
                 const data = await res.json();
                 setPosts(data);
             } catch (e) {
+                if (controller.signal.aborted) return;
                 console.error("Error Fetching Data:", e);
                 setError("記事リストの取得に失敗しました。");
+            } finally {
+                if (!controller.signal.aborted) setLoading(false);
             }
         }
 
-        fetchPosts();
+        void fetchPosts();
+        return () => controller.abort();
     }, [slug]); // 🔹 `slug` が変わった場合のみ `fetch` する
 
     return (
@@ -45,32 +59,12 @@ const SideMenu: React.FC<Props> = ({ slug }) => {
                 padding: "4px",
             }}
         >
-            {error ? (
+            {loading ? (
+                <div className="side-menu-loading">記事一覧を読み込み中…</div>
+            ) : error ? (
                 <div>{error}</div>
             ) : (
-                <ul style={{padding:"0"}}>
-                    {posts.map((post: { id: Key; title: string; date: string; tags: any }) => {
-                        const dateFormat: Intl.DateTimeFormatOptions = {
-                            year: "numeric",
-                            month: "2-digit",
-                            day: "2-digit",
-                        };
-
-                        return (
-                            <a href={`/post/${post.id}`} key={post.id}>
-                                <li className={slug === post.id ? "post-list post-block-current" : "post-list"}>
-                                    <span>#{Number(post.id)}</span>
-                                    『{post.title}』
-                                    <span>({new Date(post.date).toLocaleDateString("ja-JP", dateFormat)})</span>
-                                    <br />
-                                    <span style={{ textAlign: "right" }} className="tag-block">
-                                        {post.tags[0]}
-                                    </span>
-                                </li>
-                            </a>
-                        );
-                    })}
-                </ul>
+                <ArticleList posts={posts} currentId={slug} variant="compact" tagDisplay="first" />
             )}
         </Box>
     );

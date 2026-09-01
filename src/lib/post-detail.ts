@@ -4,6 +4,7 @@ import matter from "gray-matter";
 import { getAllPostFiles } from "@/lib/posts";
 import { formatDate, id2slug } from "@/lib/chronon4";
 import { isPostPubliclyVisible } from "@/lib/publication-delay";
+import { decidePostAccess, getLatestPublishedPostIdsFromSource } from "@/lib/post-visibility";
 
 export type PostDetail = {
     id: string;
@@ -12,13 +13,18 @@ export type PostDetail = {
     date: string | null;
     category: string[] | string | null;
     tags: string[];
-    content: string;
+    content: string | null;
+    canViewBody: boolean;
     update: string;
     size: number;
     sourceMtimeMs: number;
 };
 
-export async function getPostDetailById(id: string): Promise<PostDetail | null> {
+export async function getPostDetailById(
+    id: string,
+    viewerRole = 0,
+    latestPublishedPostIds?: ReadonlySet<number>,
+): Promise<PostDetail | null> {
     if (!/^\d{1,5}$/.test(id)) {
         return null;
     }
@@ -41,6 +47,9 @@ export async function getPostDetailById(id: string): Promise<PostDetail | null> 
         return null;
     }
 
+    const currentLatestIds = latestPublishedPostIds ?? await getLatestPublishedPostIdsFromSource();
+    const access = decidePostAccess({ id: postId || id, tags: data.tags || [], date: data.date }, viewerRole, currentLatestIds);
+
     return {
         id: postId || "0",
         fileName: targetFile,
@@ -48,7 +57,8 @@ export async function getPostDetailById(id: string): Promise<PostDetail | null> 
         date: data.date || null,
         category: data.category || data.categories || null,
         tags: data.tags || [],
-        content,
+        content: access.canViewBody ? content : null,
+        canViewBody: access.canViewBody,
         update: formatDate(stats.mtime),
         size: content.length,
         sourceMtimeMs: stats.mtimeMs,

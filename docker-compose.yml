@@ -6,14 +6,34 @@ services:
     working_dir: /app
     command: sh -c "corepack enable \
       && yarn install \
+      && yarn prisma generate \
+      && yarn prisma migrate deploy \
       && yarn dev -p 3004"
     volumes:
       - ./:/app
       - /app/node_modules
+      # ホスト側の build と開発サーバーが .next を共有しないようにする。
+      - /app/.next
     ports:
       - "3004:3004"
     environment:
       - NODE_ENV=development
+      - DATABASE_URL=file:/app/prisma/dev.db
+      - NEXT_PUBLIC_BASE_URL=http://localhost:3004
+      # 開発コンテナ専用。実運用では絶対に使用しない。
+      - EMAIL_ENCRYPTION_KEY=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+      - EMAIL_HMAC_KEY=development-email-hmac-key-only-32-bytes
+      - IP_HMAC_KEY=development-ip-hmac-key-only-32-bytes!!!
+      - TOKEN_HMAC_KEY=development-token-hmac-key-only-32-bytes
+      - SESSION_HMAC_KEY=development-session-hmac-key-only-32bytes
+      - TRUST_PROXY=0
+      - ENABLE_DEV_AUTH_MOCK=${ENABLE_DEV_AUTH_MOCK:-1}
+      # SESを試す場合のみ、Git管理外の .env から渡す。
+      - AWS_SES_REGION=${AWS_SES_REGION:-}
+      - AWS_SES_FROM=${AWS_SES_FROM:-}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-}
+      - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN:-}
     profiles: ["dev"]
 
   # ───── build (ワンショット) ───────────────
@@ -33,16 +53,36 @@ services:
       context: .
       dockerfile: Dockerfile
       target: runner
+      args:
+        NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL:?NEXT_PUBLIC_BASE_URL must be set to the production HTTPS origin}
     environment:
       - NODE_ENV=production
       - PORT=3004
       - HOSTNAME=0.0.0.0
       - DATABASE_URL=file:/app/prisma/dev.db
+      - NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL:-}
+      - EMAIL_ENCRYPTION_KEY=${EMAIL_ENCRYPTION_KEY:-}
+      - EMAIL_HMAC_KEY=${EMAIL_HMAC_KEY:-}
+      - IP_HMAC_KEY=${IP_HMAC_KEY:-}
+      - TOKEN_HMAC_KEY=${TOKEN_HMAC_KEY:-}
+      - SESSION_HMAC_KEY=${SESSION_HMAC_KEY:-}
+      - TRUST_PROXY=${TRUST_PROXY:-0}
+      - ADMIN_EMAIL=${ADMIN_EMAIL:-}
+      - AWS_SES_REGION=${AWS_SES_REGION:-}
+      - AWS_SES_FROM=${AWS_SES_FROM:-}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-}
+      - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN:-}
       - REVALIDATE_SECRET=${REVALIDATE_SECRET:-}
       - REVALIDATE_SCHEDULER_ENABLED=${REVALIDATE_SCHEDULER_ENABLED:-1}
+      - POST_STATS_SCHEDULER_ENABLED=${POST_STATS_SCHEDULER_ENABLED:-1}
+      - PRISMA_MIGRATE_ON_START=${PRISMA_MIGRATE_ON_START:-1}
+      - APP_UID=${APP_UID:-1000}
+      - APP_GID=${APP_GID:-1000}
     ports:
       - "3004:3004"
     volumes:
       - ./blog:/app/blog:ro
       - ./prisma/dev.db:/app/prisma/dev.db
+      - ./prisma/backups:/app/prisma/backups
     profiles: ["prod"]

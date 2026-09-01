@@ -4,22 +4,20 @@ import PostBodyGuard from "@/components/post-body-guard";
 import { PostHeader } from "@/components/post-header";
 import Link from "next/link";
 import ToggleLists from "@/components/toggle-list";
-import SideMenu from "@/components/side-menu";
 import {PostFooter} from "@/components/post-footer";
 import { notFound } from "next/navigation";
 import { getPostDetailById } from "@/lib/post-detail";
 import { getVisibleArchivePostMeta } from "@/lib/archive";
+import { getViewerRole } from "@/lib/auth-session";
+import { getYearColorHex } from "@/lib/year-color";
 
-export const revalidate = 604800;
+export const dynamic = "force-dynamic";
 export const dynamicParams = true;
-
-export function generateStaticParams() {
-    return [];
-}
 
 export default async function Post({ params }: { params: Promise<{ slug: string }> }) {
     const {slug} = await params;
-    const post = await getPostDetailById(slug);
+    const viewerRole = await getViewerRole();
+    const post = await getPostDetailById(slug, viewerRole);
     if (!post) {
         notFound();
     }
@@ -56,8 +54,7 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
                     categories={post.category}
                 />
                 <PostBodyGuard
-                    idOrSlug={slug}
-                    tags={post.tags ?? []}
+                    canViewBody={post.canViewBody}
                     category={post.category}
                     content={post.content ?? ""}
                     date={post.date}
@@ -68,6 +65,8 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
                     id={post.id}
                     update={post.update ?? ""}
                     size={post.size ?? 0}
+                    canInteract={post.canViewBody}
+                    yearColor={getYearColorHex(post.date) ?? undefined}
                 />
             </article>
             <div className="grid-container">
@@ -76,7 +75,6 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
             </div>
             <br style={{clear: "both"}}/>
             <ToggleLists slug={slug} post={post}/>
-            <SideMenu slug={slug}/>
         </Container>
     );
 }

@@ -14,7 +14,7 @@ type Props = {
     date: string,
     author: Author,
     tags: any,
-    categories: any
+    categories: any,
 };
 
 export function PostHeader({id, title, coverImage, date, author, tags, categories}: Props) {

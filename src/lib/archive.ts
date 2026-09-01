@@ -6,13 +6,16 @@ import { getCache, setCache } from "@/lib/cache";
 import { formatDate, id2slug } from "@/lib/chronon4";
 import { tagMatchesUrlKey } from "@/lib/tag-url";
 import { getTodayDateOnly, isPostPubliclyVisible } from "@/lib/publication-delay";
+import { decidePostAccess, getLatestPublishedPostIdsFromSource } from "@/lib/post-visibility";
 
 const ARCHIVE_META_CACHE_KEY = "archivePostMeta";
 const VISIBLE_ARCHIVE_META_CACHE_KEY_PREFIX = "visibleArchivePostMeta";
 const ARCHIVE_META_CACHE_TTL_MS = 5 * 60 * 1000;
-const VISIBLE_ARCHIVE_META_CACHE_TTL_MS = 26 * 60 * 60 * 1000;
+const VISIBLE_ARCHIVE_META_CACHE_TTL_MS = 5 * 60 * 1000;
 const KEYWORD_DIRECTORY = path.join(postsDirectory, "keyword");
 const FILE_READ_CONCURRENCY = 32;
+let archiveMetaInFlight: Promise<ArchivePostMeta[]> | null = null;
+const visibleArchiveMetaInFlight = new Map<string, Promise<ArchivePostMeta[]>>();
 
 export type ArchivePostMeta = {
     id: number;
@@ -34,7 +37,8 @@ export type ArchivePostFull = {
     date: string;
     tags: string[];
     category: string[];
-    content: string;
+    content: string | null;
+    canViewBody: boolean;
     update: string;
     size: number;
     sourceMtimeMs: number;
@@ -152,38 +156,45 @@ export async function getAllArchivePostMeta(): Promise<ArchivePostMeta[]> {
     const cached = getCache<ArchivePostMeta[]>(ARCHIVE_META_CACHE_KEY);
     if (cached) return cached;
 
-    const files = await getAllPostFiles();
-    const metas = await mapWithConcurrency(
-        files,
-        FILE_READ_CONCURRENCY,
-        async (fileName) => {
-            const filePath = path.join(postsDirectory, fileName);
-            const fileContents = await fs.readFile(filePath, "utf8");
-            const { data } = matter(fileContents);
-            const { postId } = id2slug(fileName);
-            const id = Number(postId);
-            const dateParts = parseDateParts(data.date);
+    if (!archiveMetaInFlight) {
+        archiveMetaInFlight = (async () => {
+            const files = await getAllPostFiles();
+            const metas = await mapWithConcurrency(
+                files,
+                FILE_READ_CONCURRENCY,
+                async (fileName) => {
+                    const filePath = path.join(postsDirectory, fileName);
+                    const fileContents = await fs.readFile(filePath, "utf8");
+                    const { data } = matter(fileContents);
+                    const { postId } = id2slug(fileName);
+                    const id = Number(postId);
+                    const dateParts = parseDateParts(data.date);
 
-            if (!Number.isFinite(id) || !dateParts) return null;
+                    if (!Number.isFinite(id) || !dateParts) return null;
 
-            return {
-                id,
-                idString: String(postId).padStart(5, "0"),
-                fileName,
-                title: data.title || "Untitled",
-                date: dateParts.dateString,
-                tags: normalizeTags(data),
-                categories: normalizeCategories(data),
-                year: dateParts.year,
-                month: dateParts.month,
-                day: dateParts.day,
-            } as ArchivePostMeta;
-        }
-    );
+                    return {
+                        id,
+                        idString: String(postId).padStart(5, "0"),
+                        fileName,
+                        title: data.title || "Untitled",
+                        date: dateParts.dateString,
+                        tags: normalizeTags(data),
+                        categories: normalizeCategories(data),
+                        year: dateParts.year,
+                        month: dateParts.month,
+                        day: dateParts.day,
+                    } as ArchivePostMeta;
+                }
+            );
 
-    const filtered = metas.filter(Boolean) as ArchivePostMeta[];
-    setCache(ARCHIVE_META_CACHE_KEY, filtered, ARCHIVE_META_CACHE_TTL_MS);
-    return filtered;
+            const filtered = metas.filter(Boolean) as ArchivePostMeta[];
+            setCache(ARCHIVE_META_CACHE_KEY, filtered, ARCHIVE_META_CACHE_TTL_MS);
+            return filtered;
+        })().finally(() => {
+            archiveMetaInFlight = null;
+        });
+    }
+    return archiveMetaInFlight;
 }
 
 export async function getVisibleArchivePostMeta(now = new Date()): Promise<ArchivePostMeta[]> {
@@ -191,10 +202,20 @@ export async function getVisibleArchivePostMeta(now = new Date()): Promise<Archi
     const cached = getCache<ArchivePostMeta[]>(cacheKey);
     if (cached) return cached;
 
-    const all = await getAllArchivePostMeta();
-    const visible = all.filter((post) => isPostPubliclyVisible(post.date, now));
-    setCache(cacheKey, visible, VISIBLE_ARCHIVE_META_CACHE_TTL_MS);
-    return visible;
+    const existing = visibleArchiveMetaInFlight.get(cacheKey);
+    if (existing) return existing;
+
+    const request = getAllArchivePostMeta()
+        .then((all) => {
+            const visible = all.filter((post) => isPostPubliclyVisible(post.date, now));
+            setCache(cacheKey, visible, VISIBLE_ARCHIVE_META_CACHE_TTL_MS);
+            return visible;
+        })
+        .finally(() => {
+            visibleArchiveMetaInFlight.delete(cacheKey);
+        });
+    visibleArchiveMetaInFlight.set(cacheKey, request);
+    return request;
 }
 
 export async function getPostsByTag(tag: string): Promise<ArchivePostMeta[]> {
@@ -232,7 +253,8 @@ export async function resolveTagByUrlKey(urlKey: string): Promise<{ tag: string 
     return { tag: Array.from(matched)[0], collision: false };
 }
 
-export async function getArchivePostFullList(posts: ArchivePostMeta[]): Promise<ArchivePostFull[]> {
+export async function getArchivePostFullList(posts: ArchivePostMeta[], viewerRole = 0): Promise<ArchivePostFull[]> {
+    const latestPublishedPostIds = await getLatestPublishedPostIdsFromSource();
     return Promise.all(
         posts.map(async (post) => {
             const filePath = path.join(postsDirectory, post.fileName);
@@ -240,6 +262,13 @@ export async function getArchivePostFullList(posts: ArchivePostMeta[]): Promise<
             const { data, content } = matter(fileContents);
             const stats = await fs.stat(filePath);
 
+            // 本文の認可根拠には一覧用キャッシュを使わない。ファイル更新直後でも、
+            // 最新の公開日・タグ（準非公開等）を必ず優先する。
+            const access = decidePostAccess({
+                id: post.id,
+                date: data.date,
+                tags: normalizeTags(data),
+            }, viewerRole, latestPublishedPostIds);
             return {
                 id: post.idString,
                 fileName: post.fileName,
@@ -247,7 +276,8 @@ export async function getArchivePostFullList(posts: ArchivePostMeta[]): Promise<
                 date: String(data.date || post.date || ""),
                 tags: normalizeTags(data),
                 category: normalizeCategories(data),
-                content,
+                content: access.canViewBody ? content : null,
+                canViewBody: access.canViewBody,
                 update: formatDate(stats.mtime),
                 size: content.length,
                 sourceMtimeMs: stats.mtimeMs,

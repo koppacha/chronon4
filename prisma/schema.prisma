@@ -11,7 +11,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
+  url      = env("DATABASE_URL")
 }
 
 model Like {
@@ -21,5 +21,198 @@ model Like {
   flag      Boolean  @default(false) // false: 有効, true: 無効化済
   createdAt DateTime @default(now())
 
-  @@index([articleId, sessionId])
+  @@unique([articleId, sessionId])
+}
+
+model User {
+  id                 Int                     @id @default(autoincrement())
+  readerNumber       Int?                    @unique
+  emailEncrypted     String
+  emailKeyVersion    Int                     @default(1)
+  emailHmac          String                  @unique
+  passwordHash       String
+  verifiedAt         DateTime?
+  signedUpAt         DateTime                @default(now())
+  lastLoginAt        DateTime?
+  handleName         String?
+  role               Int                     @default(1)
+  createdAt          DateTime                @default(now())
+  updatedAt          DateTime                @updatedAt
+  deletedAt          DateTime?
+  sessions           Session[]
+  verificationToken  EmailVerificationToken?
+  passwordResetToken PasswordResetToken?
+  likes              UserLike[]
+  readStates         UserPostRead[]
+  readEvents         ReadEvent[]
+  updatedSettings    SiteSetting[]           @relation("SiteSettingUpdatedBy")
+  adminAuditLogs     AdminAuditLog[]
+
+  @@index([verifiedAt, deletedAt])
+}
+
+model Session {
+  id            Int       @id @default(autoincrement())
+  userId        Int
+  tokenHash     String    @unique
+  csrfTokenHash String
+  userAgentHash String?
+  ipHmac        String?
+  createdAt     DateTime  @default(now())
+  lastUsedAt    DateTime  @default(now())
+  expiresAt     DateTime
+  revokedAt     DateTime?
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, revokedAt])
+  @@index([expiresAt])
+}
+
+model EmailVerificationToken {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
+}
+
+model PasswordResetToken {
+  id            Int       @id @default(autoincrement())
+  userId        Int       @unique
+  tokenHash     String    @unique
+  csrfTokenHash String?
+  exchangedAt   DateTime?
+  expiresAt     DateTime
+  createdAt     DateTime  @default(now())
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
+}
+
+model AuthAttempt {
+  id              Int      @id @default(autoincrement())
+  operation       String
+  success         Boolean
+  failureReason   String?
+  emailHmac       String?
+  ipHmac          String?
+  userAgent       String?
+  correlationHash String
+  createdAt       DateTime @default(now())
+
+  @@index([operation, emailHmac, createdAt])
+  @@index([operation, ipHmac, createdAt])
+  @@index([createdAt])
+}
+
+model RateLimitBucket {
+  id              Int       @id @default(autoincrement())
+  operation       String
+  identifierHash  String
+  windowStartedAt DateTime
+  count           Int       @default(0)
+  blockedUntil    DateTime?
+  updatedAt       DateTime  @updatedAt
+
+  @@unique([operation, identifierHash])
+  @@index([blockedUntil])
+}
+
+model UserLike {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  articleId String
+  active    Boolean  @default(true)
+  likedAt   DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, articleId])
+  @@index([articleId, active])
+  @@index([userId, active, updatedAt])
+}
+
+model UserPostRead {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  articleId   String
+  firstReadAt DateTime @default(now())
+  lastReadAt  DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, articleId])
+  @@index([userId, lastReadAt])
+}
+
+model ReadEvent {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  articleId String
+  eventId   String
+  referer   String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, eventId])
+  @@index([userId, articleId, createdAt])
+  @@index([createdAt])
+}
+
+// ユーザー・匿名セッション共通の追記専用既読履歴。
+// 同一記事の有効状態は、actorType/actorId/articleId ごとに id が最大の行で決まる。
+model PostReadAction {
+  id        Int      @id @default(autoincrement())
+  actorType String
+  actorId   String
+  articleId String
+  eventId   String
+  isRead    Boolean
+  source    String
+  referer   String?
+  createdAt DateTime @default(now())
+
+  @@unique([actorType, actorId, eventId])
+  @@index([actorType, actorId, articleId, id])
+  @@index([createdAt])
+}
+
+model SiteSetting {
+  key         String   @id
+  value       String
+  updatedById Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  updatedBy   User?    @relation("SiteSettingUpdatedBy", fields: [updatedById], references: [id], onDelete: SetNull)
+}
+
+model AdminAuditLog {
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  action          String
+  target          String
+  beforeValue     String?
+  afterValue      String?
+  correlationHash String
+  createdAt       DateTime @default(now())
+  user            User     @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  @@index([userId, createdAt])
+}
+
+model NotificationThrottle {
+  key        String   @id
+  lastSentAt DateTime
+  updatedAt  DateTime @updatedAt
+}
+
+model ArticleCharacterCount {
+  articleId        Int      @id
+  characterCount   Int
+  sourceModifiedAt DateTime
+  checkedAt        DateTime @default(now())
+
+  @@index([sourceModifiedAt])
 }

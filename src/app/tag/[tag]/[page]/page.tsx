@@ -6,12 +6,8 @@ import {
     renderTagPage,
 } from "@/app/tag/[tag]/tag-page-content";
 
-export const revalidate = 604800;
-export const dynamicParams = false;
-
-export async function generateStaticParams() {
-    return generateTagPageStaticParams();
-}
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
 
 export default async function TagPagedPage({
     params,

@@ -1,22 +1,16 @@
 import { renderRssXml } from "@/lib/rss";
-import { unstable_cache } from "next/cache";
 
 export const dynamic = "force-dynamic";
 
-const getCachedRssXml = unstable_cache(
-    async () => renderRssXml(),
-    ["rss-xml"],
-    { revalidate: 3600 }
-);
-
 export async function GET(): Promise<Response> {
-    const xml = await getCachedRssXml();
+    // RSSには失効可能な本文抜粋が含まれるため、公開可否を要求ごとに再評価する。
+    const xml = await renderRssXml();
 
     return new Response(xml, {
         status: 200,
         headers: {
             "Content-Type": "application/rss+xml; charset=utf-8",
-            "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+            "Cache-Control": "public, max-age=0, must-revalidate",
             "X-Robots-Tag": "noindex",
         },
     });

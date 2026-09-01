@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getPostDetailById } from "@/lib/post-detail";
+import { getCurrentSession } from "@/lib/auth-session";
 
 // APIエンドポイントのメインロジック
 export async function GET(req: Request) {
@@ -14,11 +15,12 @@ export async function GET(req: Request) {
                 { status: 400 }
             );
         }
-        const post = await getPostDetailById(n);
+        const session = await getCurrentSession();
+        const post = await getPostDetailById(n, session?.user.role ?? 0);
         if (!post) {
             return NextResponse.json({ error: "Article not found." }, { status: 404 });
         }
-        return NextResponse.json(post);
+        return NextResponse.json(post, { headers: { "Cache-Control": session ? "private, no-store" : "public, max-age=0, must-revalidate" } });
     } catch (error) {
         console.error("API Error:", error);
         return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
