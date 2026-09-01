@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { countArticleCharacters, removeExcludedArticleContent } from "../scripts/update-post-stats.mjs";
+import {
+    countArticleCharacters,
+    needsFullArticleStatsRefresh,
+    removeExcludedArticleContent,
+} from "../scripts/update-post-stats.mjs";
 import { getOperationDays } from "../src/lib/site-statistics";
 
 describe("post character statistics", () => {
@@ -24,5 +28,11 @@ describe("post character statistics", () => {
     it("2004年9月1日を運営1日目とする", () => {
         assert.equal(getOperationDays(new Date("2004-09-01T12:00:00+09:00")), 1);
         assert.equal(getOperationDays(new Date("2004-09-02T00:00:00+09:00")), 2);
+    });
+
+    it("保存済み記事IDに不足や削除済みIDがあれば全件再集計する", () => {
+        assert.equal(needsFullArticleStatsRefresh([1, 2, 3], [1, 2, 3]), false);
+        assert.equal(needsFullArticleStatsRefresh([1, 2, 3], [2, 3]), true);
+        assert.equal(needsFullArticleStatsRefresh([1, 2, 3], [1, 2, 3, 4]), true);
     });
 });

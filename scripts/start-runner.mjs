@@ -492,8 +492,8 @@ async function runRecentPostStats(reason) {
 async function runPostStatsCatchUpIfNeeded() {
     const parts = getJstParts();
     const target = getJstScheduleUtcMs(parts, POST_STATS_HOUR_JST, POST_STATS_MINUTE_JST);
-    if (Date.now() < target || await hasTodayPostStatsMarker()) return;
-    await runRecentPostStats("startup-catch-up");
+    const catchUpNeeded = Date.now() >= target && !(await hasTodayPostStatsMarker());
+    await runRecentPostStats(catchUpNeeded ? "startup-catch-up" : "startup-integrity-check");
 }
 
 function scheduleNextPostStats() {

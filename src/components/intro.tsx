@@ -15,13 +15,17 @@ import DevAuthSwitcher from "@/components/dev-auth-switcher";
 import { isDevAuthMockEnabled } from "@/lib/dev-auth";
 import { GuestAccountMessage, IntroAuthAction } from "@/components/intro-auth";
 import type { ReactNode } from "react";
+import { getSessionSummary } from "@/lib/session-summary";
 
 const DEFAULT_NOTICE = "お知らせ（2026/08/03）：現在、長期低迷により記事の更新が停止しています。8月下旬までに復帰予定です。";
 
 export async function Intro({ children }: { children?: ReactNode }) {
-    const notice = await prisma.siteSetting.findUnique({ where: { key: "intro_notice" } })
-        .then((setting) => setting?.value || DEFAULT_NOTICE)
-        .catch(() => DEFAULT_NOTICE);
+    const [notice, sessionSummary] = await Promise.all([
+        prisma.siteSetting.findUnique({ where: { key: "intro_notice" } })
+            .then((setting) => setting?.value || DEFAULT_NOTICE)
+            .catch(() => DEFAULT_NOTICE),
+        getSessionSummary(),
+    ]);
     return (
       <section className="intro-section mt-16 mb-16 md:mb-12">
           {isDevAuthMockEnabled() && <DevAuthSwitcher />}
@@ -40,13 +44,16 @@ export async function Intro({ children }: { children?: ReactNode }) {
                       <div className="intro-link-item"><Link href="https://monochmo.com/">monochmo<FontAwesomeIcon icon={faCloud} /></Link></div>
                       <div className="intro-link-item"><Link href="https://note.com/koppacha">note<FontAwesomeIcon icon={faPencil} /></Link></div>
                       <div className="intro-link-item"><Link href="https://marshmallow-qa.com/902llv7nt5sunm2">marshmallow<FontAwesomeIcon icon={faCommentDots} /></Link></div>
-                      <IntroAuthAction />
+                      <IntroAuthAction authenticated={sessionSummary.authenticated} />
                       <div className="intro-link-item"><Link href="/tag/このサイトについて">about<FontAwesomeIcon icon={faCircleInfo} /></Link></div>
                   </div>
               </div>
-              <UserSummary />
+              <UserSummary summary={sessionSummary} />
           </div>
-          <GuestAccountMessage />
+          <GuestAccountMessage
+              authenticated={sessionSummary.authenticated}
+              unavailable={sessionSummary.unavailable}
+          />
       </section>
   );
 }

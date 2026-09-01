@@ -288,11 +288,18 @@ blockquote p {
     cursor: wait;
 }
 .guest-account-message {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75em;
     margin-top: 12px;
+    text-decoration: underline;
 }
-.guest-account-message a {
-    display: inline-block;
-    margin-left: 0.5em;
+.guest-account-login {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 0.35em;
 }
 .copyright {
     text-align: right;

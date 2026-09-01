@@ -84,6 +84,13 @@ export function countArticleCharacters(markdown) {
     return Array.from(countable).length;
 }
 
+export function needsFullArticleStatsRefresh(sourceArticleIds, storedArticleIds) {
+    const sourceIds = new Set(sourceArticleIds);
+    const storedIds = new Set(storedArticleIds);
+    return sourceIds.size !== storedIds.size
+        || Array.from(sourceIds).some((articleId) => !storedIds.has(articleId));
+}
+
 export async function updateArticleCharacterCounts({ recentOnly = false, now = new Date(), prisma = new PrismaClient() } = {}) {
     const ownsClient = arguments[0]?.prisma === undefined;
     const cutoff = startOfRecentPeriod(now);
@@ -91,6 +98,16 @@ export async function updateArticleCharacterCounts({ recentOnly = false, now = n
 
     try {
         const files = await getPostFiles();
+        if (recentOnly) {
+            const sourceArticleIds = files
+                .map((filePath) => getArticleInfo(filePath)?.articleId)
+                .filter((articleId) => articleId !== undefined);
+            const storedRows = await prisma.articleCharacterCount.findMany({ select: { articleId: true } });
+            if (needsFullArticleStatsRefresh(sourceArticleIds, storedRows.map((row) => row.articleId))) {
+                recentOnly = false;
+                console.log("[post-stats] incomplete stored statistics detected; running full backfill");
+            }
+        }
         for (const filePath of files) {
             const info = getArticleInfo(filePath);
             if (!info || (recentOnly && info.articleDate < cutoff)) continue;
@@ -129,15 +146,15 @@ export async function updateArticleCharacterCounts({ recentOnly = false, now = n
         if (ownsClient) await prisma.$disconnect();
     }
 
-    return records.length;
+    return { updated: records.length, scope: recentOnly ? "recent month" : "all" };
 }
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isMain) {
     const recentOnly = process.argv.includes("--recent");
     updateArticleCharacterCounts({ recentOnly })
-        .then((updated) => {
-            console.log(`[post-stats] updated ${updated} article(s) (${recentOnly ? "recent month" : "all"})`);
+        .then(({ updated, scope }) => {
+            console.log(`[post-stats] updated ${updated} article(s) (${scope})`);
         })
         .catch((error) => {
             console.error("[post-stats] failed", error);

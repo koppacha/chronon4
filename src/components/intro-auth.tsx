@@ -1,24 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightFromBracket, faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import {
     authenticatedJsonFetch,
     clearClientSessionCache,
-    getClientSession,
 } from "@/lib/client-auth";
 
-export function IntroAuthAction() {
-    const [authenticated, setAuthenticated] = useState<boolean | null>(null);
+export function IntroAuthAction({ authenticated }: { authenticated: boolean }) {
     const [busy, setBusy] = useState(false);
-
-    useEffect(() => {
-        getClientSession()
-            .then((session) => setAuthenticated(session.authenticated))
-            .catch(() => setAuthenticated(false));
-    }, []);
 
     async function logout() {
         setBusy(true);
@@ -36,7 +28,6 @@ export function IntroAuthAction() {
         }
     }
 
-    if (authenticated === null) return null;
     if (!authenticated) {
         return (
             <div className="intro-link-item">
@@ -47,28 +38,25 @@ export function IntroAuthAction() {
     return (
         <div className="intro-link-item">
             <button type="button" className="intro-link-button" disabled={busy} onClick={() => void logout()}>
-                ログアウト<FontAwesomeIcon icon={faRightFromBracket} />
+                Logout<FontAwesomeIcon icon={faRightFromBracket} />
             </button>
         </div>
     );
 }
 
-export function GuestAccountMessage() {
-    const [authenticated, setAuthenticated] = useState<boolean | null>(null);
-
-    useEffect(() => {
-        getClientSession()
-            .then((session) => setAuthenticated(session.authenticated))
-            .catch(() => setAuthenticated(false));
-    }, []);
-
-    if (authenticated !== false) return null;
+export function GuestAccountMessage({ authenticated, unavailable = false }: {
+    authenticated: boolean;
+    unavailable?: boolean;
+}) {
+    if (authenticated || unavailable) return null;
     return (
-        <div className="info-container guest-account-message">
-            アカウントを作成すると2023年以降の記事を読めるようになります。
-            <Link href="/login" aria-label="ログイン・アカウント作成" style={{ textDecoration: 'underline' }}>
-                <FontAwesomeIcon icon={faRightToBracket} />
-            </Link>
-        </div>
+        <Link
+            className="info-container guest-account-message"
+            href="/login"
+            aria-label="ログイン・アカウント作成"
+        >
+            <span>アカウントを作成すると2023年以降の記事を読めるようになります。</span>
+            <span className="guest-account-login"><FontAwesomeIcon icon={faRightToBracket} />ログイン</span>
+        </Link>
     );
 }
